@@ -1,42 +1,148 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* =============================================== */
+/* Custom properties */
+
+:root {
+  --ff-overpass: ;
+
+  --font-base: 1rem;
+
+  --fs-28: 1.75rem;
+  --fs-24: 1.5rem;
+  --fs-16: 1rem;
+  --fs-15: 0.9375rem;
+  --fs-14: 0.875rem;
+
+  --lh-35: 2.1875rem;
+  --lh-30: 1.875rem;
+  --lh-24: 1.5rem;
+  --lh-22: 1.375rem;
+  --lh-19: 1.1875rem;
+  --lh-18: 1.125rem;
+
+  --ls-0: 0px;
+  --ls-02: 0.2px;
+  --ls-017: 0.17px;
+  --ls-187: 1.87px;
+  --ls-2: 2px;
+
+  --clr-white: 255, 255, 255;
+  --clr-black: 0, 0, 0;
+
+  --clr-grey-950: 19, 21, 24;
+  --clr-grey-900: 38, 46, 56;
+  --clr-grey-500: 150, 159, 173;
+
+  --clr-orange-500: 252, 118, 20;
+
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+/* @media (min-width: 36em) {
+  :root {
+      --fs-48: 48px;
+      --lh-71: 71px;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
   }
-  to {
-    transform: rotate(360deg);
+} */
+
+/* @media (min-width: 48em) {
+  :root {
+      --fs-48: 48px;
   }
+} */
+
+/* =============================================== */
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
-.card {
-  padding: 2em;
+body {
+  /* font-size: var(--font-base);
+  font-family: var(--ff-overpass);
+  background-color: var(--clr-grey-950); */
 }
 
-.read-the-docs {
-  color: #888;
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol,
+button {
+  margin: 0;
+  padding: 0;
 }
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  text-decoration: none;
+  color: currentColor;
+}
+
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+}
+
+button {
+  border: none;
+  background: inherit;
+  cursor: pointer;
+}
+
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+:target {
+  scroll-margin-block: 5ex;
+}
+
+/* =============================================== */
+/* Utility classes */
+
+.container {
+  place-content: center;
+  margin: auto;
+  display: flex;
+}
+
+
+/* =============================================== */
+/* Components */
