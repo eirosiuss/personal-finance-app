@@ -143,6 +143,12 @@ textarea:not([rows]) {
   display: flex;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 
 /* =============================================== */
 /* Components */

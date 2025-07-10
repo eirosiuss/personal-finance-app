@@ -1,7 +1,7 @@
 const Sidebar = () => {
   return (
     <aside className="sidebar">
-      <h1>finance</h1>
+      <p>finance logo</p>
       <nav>
         <ul>
           <li>
