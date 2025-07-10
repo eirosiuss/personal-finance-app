@@ -149,6 +149,16 @@ main {
   gap: 20px;
 }
 
+.transaction-avatar {
+  display: flex;
+}
+
+.transactions img {
+  width: 40px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
 
 /* =============================================== */
 /* Components */
