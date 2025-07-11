@@ -20,12 +20,12 @@ const Overview = () => {
     "Dec",
   ];
 
-//   const lastFilledTransaction = data.transactions
-//   .map(t => new Date(t.date))
-//   .sort((a, b) => b - a)[0];
+  const lastFilledTransaction = data.transactions
+    .map((t) => new Date(t.date))
+    .sort((a, b) => b - a)[0];
 
-// const lastFilledMonth = lastFilledTransaction.getMonth();
-// const lastFilledYear = lastFilledTransaction.getFullYear();
+  const lastFilledMonth = lastFilledTransaction.getMonth();
+  const lastFilledYear = lastFilledTransaction.getFullYear();
 
   return (
     <>
@@ -44,7 +44,7 @@ const Overview = () => {
       </div>
 
       <div className="pots">
-        <div className="pots-header">
+        <div className="more-info-header">
           <h2>Pots</h2>
           <button>See Details</button>
         </div>
@@ -61,7 +61,7 @@ const Overview = () => {
       </div>
 
       <div className="transactions">
-        <div className="transactions-header">
+        <div className="more-info-header">
           <h2>Transactions</h2>
           <button>View All</button>
         </div>
@@ -91,8 +91,13 @@ const Overview = () => {
       </div>
 
       <div className="budgets">
+        <div className="more-info-header">
+          <h2>Budgets</h2>
+          <button>See Details</button>
+        </div>
         <p>
-          {/* {data.transactions
+          $
+          {data.transactions
             .filter(
               (transaction) =>
                 [
@@ -101,13 +106,13 @@ const Overview = () => {
                   "Dining Out",
                   "Personal Care",
                 ].includes(transaction.category) &&
-                !transaction.recurring &&
                 transaction.amount < 0 &&
                 lastFilledYear == parseInt(transaction.date.slice(0, 4), 10) &&
-                (parseInt(transaction.date.slice(5, 7), 10) - 1)
+                lastFilledMonth ==
+                  parseInt(transaction.date.slice(5, 7), 10) - 1
             )
             .reduce((acc, transaction) => acc + transaction.amount, 0)
-            .toFixed(2)} */}
+            .toFixed(2) * -1}
           <span>
             of ${data.budgets.reduce((acc, budget) => acc + budget.maximum, 0)}{" "}
             limit
