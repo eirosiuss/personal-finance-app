@@ -69,7 +69,7 @@ const Overview = () => {
           <article key={index}>
             <div className="transaction-avatar">
               <img
-                src={`/public${transaction.avatar.replace(".", "")}`}
+                src={`${transaction.avatar.replace(".", "")}`}
                 alt={transaction.name}
               />
               <h3>{transaction.name}</h3>
@@ -114,7 +114,11 @@ const Overview = () => {
             .reduce((acc, transaction) => acc + transaction.amount, 0)
             .toFixed(2) * -1}
           <span>
-            of ${data.budgets.reduce((acc, budget) => acc + budget.maximum, 0)}{" "}
+            {" "}
+            of ${data.budgets.reduce(
+              (acc, budget) => acc + budget.maximum,
+              0
+            )}{" "}
             limit
           </span>
         </p>
@@ -124,6 +128,21 @@ const Overview = () => {
             <p>${budget.maximum}</p>
           </article>
         ))}
+      </div>
+
+      <div className="recurring-bills">
+        <div className="more-info-header">
+          <h2>Recurring Bills</h2>
+          <button>See Details</button>
+        </div>
+        {data.transactions
+          .filter((transaction) => transaction.recurring)
+          .map((transaction, index) => (
+            <article key={index}>
+              <h3>{transaction.name}</h3>
+              <p>${transaction.amount}</p>
+            </article>
+          ))}
       </div>
     </>
   );
