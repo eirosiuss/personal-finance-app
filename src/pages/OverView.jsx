@@ -1,5 +1,4 @@
 import data from "../data.json";
-import { Link } from "react-router-dom";
 
 const Overview = () => {
   const balance = data.balance;
@@ -61,7 +60,7 @@ const Overview = () => {
         ))}
       </div>
 
-      <div className="transactions">
+      <div className="transactions-overview">
         <div className="more-info-header">
           <h2>Transactions</h2>
           <button>View All</button>
