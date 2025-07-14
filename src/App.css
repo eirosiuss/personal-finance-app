@@ -159,6 +159,23 @@ main {
   border-radius: 50%;
 }
 
+.progress-bar {
+  height: 16px;
+  /* background: rgb(var(--clr-white)); */
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-bar .progress-bar-fill {
+  /* width: 0%; */
+  height: 8px;
+  /* background: rgb(var(--clr-purple-600)); */
+  transition: 0.2s all;
+  border-radius: 20px;
+  margin: 4px;
+}
+
 
 /* =============================================== */
 /* Components */
