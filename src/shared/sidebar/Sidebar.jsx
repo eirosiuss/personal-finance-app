@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
   return (
     <aside className="sidebar">
@@ -5,19 +7,19 @@ const Sidebar = () => {
       <nav>
         <ul>
           <li>
-            <a href="/">Overview</a>
+            <Link to="/">Overview</Link>
           </li>
           <li>
-            <a href="/">Transactions</a>
+            <Link to="/transactions">Transactions</Link>
           </li>
           <li>
-            <a href="/">Budgets</a>
+            <Link to="/budgets">Budgets</Link>
           </li>
           <li>
-            <a href="/">Pots</a>
+            <Link to="/pots">Pots</Link>
           </li>
           <li>
-            <a href="/">Recurring Bills</a>
+            <Link to="/recurring-bills">Recurring Bills</Link>
           </li>
         </ul>
       </nav>
