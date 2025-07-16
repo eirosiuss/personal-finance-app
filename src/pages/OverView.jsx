@@ -30,7 +30,9 @@ const Overview = () => {
   return (
     <>
       <div className="financial-summary">
-        <h1>Overview</h1>
+        <header>
+          <h1>Overview</h1>
+        </header>
         {Object.entries(balance).map(([key, value]) => (
           <article key={key}>
             <h3>
