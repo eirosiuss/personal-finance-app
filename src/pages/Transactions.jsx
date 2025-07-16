@@ -57,56 +57,86 @@ function Transactions() {
       />
 
       {searchValue.trim() !== "" ? (
-        <div className="transactions-container">
-          {transaction.map((transaction, index) => (
-            <article key={index}>
-              <div className="transaction-avatar">
-                <img
-                  src={`${transaction.avatar.replace(".", "")}`}
-                  alt={transaction.name}
-                />
-                <h3>{transaction.name}</h3>
-              </div>
-              <div className="transaction-info">
-                <p>
-                  {transaction.amount > 0
-                    ? `+$${transaction.amount.toFixed(2)}`
-                    : `-$${Math.abs(transaction.amount).toFixed(2)}`}
-                </p>
-                <p>
+        <table className="transactions-container">
+          <thead>
+            <tr>
+              <th>Recipient / Sender</th>
+              <th>Category</th>
+              <th>Transaction Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transaction.map((transaction, index) => (
+              <tr key={index}>
+                <td>
+                  <div className="transaction-avatar">
+                    <img
+                      src={`${transaction.avatar.replace(".", "")}`}
+                      alt={transaction.name}
+                    />
+                    {transaction.name}
+                  </div>
+                </td>
+                <td>{transaction.category}</td>
+                <td>
                   {transaction.date.slice(8, 10)}{" "}
                   {months[transaction.date.slice(6, 7) - 1]}{" "}
                   {transaction.date.slice(0, 4)}
-                </p>
-              </div>
-            </article>
-          ))}
-        </div>
+                </td>
+                <td>
+                  <p>
+                    {transaction.amount > 0
+                      ? `+$${transaction.amount.toFixed(2)}`
+                      : `-$${Math.abs(transaction.amount).toFixed(2)}`}
+                  </p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <div className="transactions-container">
-          {currentTransactions.map((transaction, index) => (
-            <article key={index}>
-              <div className="transaction-avatar">
-                <img
-                  src={`${transaction.avatar.replace(".", "")}`}
-                  alt={transaction.name}
-                />
-                <h3>{transaction.name}</h3>
-              </div>
-              <div className="transaction-info">
-                <p>
-                  {transaction.amount > 0
-                    ? `+$${transaction.amount.toFixed(2)}`
-                    : `-$${Math.abs(transaction.amount).toFixed(2)}`}
-                </p>
-                <p>
-                  {transaction.date.slice(8, 10)}{" "}
-                  {months[transaction.date.slice(6, 7) - 1]}{" "}
-                  {transaction.date.slice(0, 4)}
-                </p>
-              </div>
-            </article>
-          ))}
+          <table>
+            <thead>
+              <tr>
+                <th>Recipient / Sender</th>
+                <th>Category</th>
+                <th>Transaction Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {currentTransactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td>
+                    <div className="transaction-avatar">
+                      <img
+                        src={`${transaction.avatar.replace(".", "")}`}
+                        alt={transaction.name}
+                      />
+                      {transaction.name}
+                    </div>
+                  </td>
+                  <td>{transaction.category}</td>
+                  <td>
+                    {transaction.date.slice(8, 10)}{" "}
+                    {months[transaction.date.slice(6, 7) - 1]}{" "}
+                    {transaction.date.slice(0, 4)}
+                  </td>
+                  <td>
+                    <p>
+                      {transaction.amount > 0
+                        ? `+$${transaction.amount.toFixed(2)}`
+                        : `-$${Math.abs(transaction.amount).toFixed(2)}`}
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
           <div className="pagination">
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
@@ -136,59 +166,6 @@ function Transactions() {
           </div>
         </div>
       )}
-
-      {/* <div className="transactions-container">
-        {currentTransactions.map((transaction, index) => (
-          <article key={index}>
-            <div className="transaction-avatar">
-              <img
-                src={`${transaction.avatar.replace(".", "")}`}
-                alt={transaction.name}
-              />
-              <h3>{transaction.name}</h3>
-            </div>
-            <div className="transaction-info">
-              <p>
-                {transaction.amount > 0
-                  ? `+$${transaction.amount.toFixed(2)}`
-                  : `-$${Math.abs(transaction.amount).toFixed(2)}`}
-              </p>
-              <p>
-                {transaction.date.slice(8, 10)}{" "}
-                {months[transaction.date.slice(6, 7) - 1]}{" "}
-                {transaction.date.slice(0, 4)}
-              </p>
-            </div>
-          </article>
-        ))}
-        <div className="pagination">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <div>
-            {pageNumbers.map((number) => (
-              <button
-                className={
-                  currentPage === number ? "pagination__btn--active" : ""
-                }
-                key={number}
-                onClick={() => setCurrentPage(number)}
-              >
-                {number}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
-      </div> */}
     </>
   );
 }
