@@ -1,7 +1,20 @@
 import data from "../data.json";
+import React, { useState } from "react";
 
 function Transactions() {
   const transactions = data.transactions;
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentTransactions = transactions.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(transactions.length / postsPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(transactions.length / postsPerPage); i++) {
+    pageNumbers.push(i);
+  }  
 
   const months = [
     "Jan",
@@ -21,7 +34,7 @@ function Transactions() {
   return (
     <>
       <div className="transactions-container">
-        {transactions.map((transaction, index) => (
+        {currentTransactions.map((transaction, index) => (
           <article key={index}>
             <div className="transaction-avatar">
               <img
@@ -44,6 +57,27 @@ function Transactions() {
             </div>
           </article>
         ))}
+        <div className="pagination">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <div>
+            {pageNumbers.map((number) => (
+              <button className={currentPage === number ? "pagination__btn--active" : ""} key={number} onClick={() => setCurrentPage(number)}>
+                {number}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </>
   );

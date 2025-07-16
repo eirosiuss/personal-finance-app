@@ -180,3 +180,8 @@ main {
 
 /* =============================================== */
 /* Components */
+
+.pagination__btn--active {
+  background-color: rgb(var(--clr-grey-900));
+  color: rgb(var(--clr-white));
+}
