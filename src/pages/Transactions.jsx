@@ -12,8 +12,7 @@ function Transactions() {
   const indexOfFirst = indexOfLast - postsPerPage;
   const currentTransactions = transaction.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(transaction.length / postsPerPage);
-
-
+  const uniqueCategories = [...new Set(transactions.map(t => t.category))];
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -82,6 +81,18 @@ function Transactions() {
     setTransaction(sortedTransactions);
   }
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+    if (selectedCategory === "All Transactions") {
+      setTransaction(transactions);
+    } else {
+      const filteredTransactions = transactions.filter(
+        (transaction) => transaction.category === selectedCategory
+      );
+      setTransaction(filteredTransactions);
+    }
+  };
+
   return (
     <>
       <header>
@@ -104,7 +115,15 @@ function Transactions() {
           <option value="highest">Highest</option>
           <option value="lowest">Lowest</option>
         </select>
-
+        <label htmlFor="category">Category</label>
+        <select onChange={handleCategoryChange}>
+          <option value="All Transactions">All Transactions</option>
+          {uniqueCategories.map((cat, index) => (
+            <option key={index} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
       </form>
 
       <div className="transactions-container">
