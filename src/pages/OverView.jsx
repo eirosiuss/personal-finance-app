@@ -4,6 +4,7 @@ const Overview = () => {
   const balance = data.balance;
   const pots = data.pots;
   const transactions = data.transactions;
+  const budgets = data.budgets;
 
   const months = [
     "Jan",
@@ -20,7 +21,7 @@ const Overview = () => {
     "Dec",
   ];
 
-  const lastFilledTransaction = data.transactions
+  const lastFilledTransaction = transactions
     .map((t) => new Date(t.date))
     .sort((a, b) => b - a)[0];
 
@@ -99,7 +100,7 @@ const Overview = () => {
         </div>
         <p>
           $
-          {data.transactions
+          {transactions
             .filter(
               (transaction) =>
                 [
@@ -117,14 +118,14 @@ const Overview = () => {
             .toFixed(2) * -1}
           <span>
             {" "}
-            of ${data.budgets.reduce(
+            of ${budgets.reduce(
               (acc, budget) => acc + budget.maximum,
               0
             )}{" "}
             limit
           </span>
         </p>
-        {data.budgets.map((budget, index) => (
+        {budgets.map((budget, index) => (
           <article key={index}>
             <h3>{budget.category}</h3>
             <p>${budget.maximum}</p>
@@ -137,7 +138,7 @@ const Overview = () => {
           <h2>Recurring Bills</h2>
           <button>See Details</button>
         </div>
-        {data.transactions
+        {transactions
           .filter((transaction) => transaction.recurring)
           .map((transaction, index) => (
             <article key={index}>
