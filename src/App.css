@@ -160,20 +160,37 @@ main {
   border-radius: 50%;
 }
 
+.budget-container img {
+  width: 32px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
 .progress-bar {
   height: 16px;
-  /* background: rgb(var(--clr-white)); */
   border-radius: 20px;
   display: flex;
   align-items: center;
 }
 
 .progress-bar .progress-bar-fill {
-  /* width: 0%; */
   height: 8px;
-  /* background: rgb(var(--clr-purple-600)); */
   transition: 0.2s all;
   border-radius: 20px;
+  margin: 4px;
+}
+
+.budget-progress-bar {
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.budget-progress-bar .progress-bar-fill {
+  height: 24px;
+  transition: 0.2s all;
+  border-radius: 4px;
   margin: 4px;
 }
 
