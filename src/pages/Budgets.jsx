@@ -1,6 +1,9 @@
 import data from "../data.json";
+import { useState } from "react";
+import NewBudget from "../shared/modals/NewBudget";
 
 function Budgets() {
+  const [showModal, setShowModal] = useState(false);
   const transactions = data.transactions;
   const budgets = data.budgets;
   const lastFilledTransactionDate = new Date(
@@ -10,6 +13,7 @@ function Budgets() {
   const lastFilledYear = lastFilledTransactionDate.getFullYear();
 
   const categories = budgets.map((budget) => budget.category);
+  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
 
   const getSpentForCategory = (category) => {
     return (
@@ -36,6 +40,49 @@ function Budgets() {
     <>
       <header>
         <h1>Budgets</h1>
+
+        <div>
+          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
+          {showModal && (
+            <NewBudget onClose={() => setShowModal(false)}>
+              <form action="" method="post">
+                <div className="">
+                  <h2>Add New Budget</h2>
+                  <button
+                    className="modal-close"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+                <p>
+                  Choose a category to set a spending budget. These can help
+                  monitor spending.
+                </p>
+                <div className="form-group">
+                  <label htmlFor="category">Budget Category</label>
+                  <select id="category" name="category" required>
+                    {uniqueCategories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="maximum">Maximum Spend</label>
+                  <input
+                    type="number"
+                    id="maximum"
+                    name="maximum"
+                    placeholder="$ e.g. 2000"
+                    required
+                  />
+                </div>
+              </form>
+            </NewBudget>
+          )}
+        </div>
       </header>
       <div className="budget-container">
         <div className="spending-summary">
@@ -91,11 +138,7 @@ function Budgets() {
                   <button>See Details</button>
                 </div>
                 {transactions
-                  .filter(
-                    (t) =>
-                      t.category === budget.category &&
-                      t.amount < 0
-                  )
+                  .filter((t) => t.category === budget.category && t.amount < 0)
                   .slice(0, 3)
                   .map((transaction, index) => (
                     <div key={index} className="transaction-item">
