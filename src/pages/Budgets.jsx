@@ -1,6 +1,6 @@
 import data from "../data.json";
 import { useState } from "react";
-import NewBudget from "../shared/modals/NewBudget";
+import AddNewBudget from "../shared/modals/AddNewBudget";
 
 function Budgets() {
   const [showModal, setShowModal] = useState(false);
@@ -44,43 +44,8 @@ function Budgets() {
         <div>
           <button onClick={() => setShowModal(true)}>+Add New Budget</button>
           {showModal && (
-            <NewBudget onClose={() => setShowModal(false)}>
-              <form action="" method="post">
-                <div className="">
-                  <h2>Add New Budget</h2>
-                  <button
-                    className="modal-close"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                </div>
-                <p>
-                  Choose a category to set a spending budget. These can help
-                  monitor spending.
-                </p>
-                <div className="form-group">
-                  <label htmlFor="category">Budget Category</label>
-                  <select id="category" name="category" required>
-                    {uniqueCategories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="maximum">Maximum Spend</label>
-                  <input
-                    type="number"
-                    id="maximum"
-                    name="maximum"
-                    placeholder="$ e.g. 2000"
-                    required
-                  />
-                </div>
-              </form>
-            </NewBudget>
+            <AddNewBudget data={data} onClose={() => setShowModal(false)}>
+            </AddNewBudget>
           )}
         </div>
       </header>
