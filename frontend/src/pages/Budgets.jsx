@@ -1,8 +1,9 @@
 import data from "../data.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import AddNewBudget from "../shared/modals/AddNewBudget";
 
-function Budgets() {
+function Budgets(props) {
   const [showModal, setShowModal] = useState(false);
   const transactions = data.transactions;
   const budgets = data.budgets;
