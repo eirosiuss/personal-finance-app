@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -7,19 +7,19 @@ const Sidebar = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Overview</Link>
+            <NavLink to="/">Overview</NavLink>
           </li>
           <li>
-            <Link to="/transactions">Transactions</Link>
+            <NavLink to="/transactions">Transactions</NavLink>
           </li>
           <li>
-            <Link to="/budgets">Budgets</Link>
+            <NavLink to="/budgets">Budgets</NavLink>
           </li>
           <li>
-            <Link to="/pots">Pots</Link>
+            <NavLink to="/pots">Pots</NavLink>
           </li>
           <li>
-            <Link to="/recurring-bills">Recurring Bills</Link>
+            <NavLink to="/recurring-bills">Recurring Bills</NavLink>
           </li>
         </ul>
       </nav>

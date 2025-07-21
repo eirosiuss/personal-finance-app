@@ -1,15 +1,16 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
+import HomePage from "./pages/OverView";
+import Pots from "./pages/Pots";
+import Transactions from "./pages/Transactions";
+import Budgets from "./pages/Budgets";
+import RecurringBills from "./pages/RecurringBills";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-// import Record from "./components/Record";
-// import RecordList from "./components/RecordList";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,47 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        // element: <RecordList />,
+        element: <HomePage />,
+      },
+    ],
+  },
+    {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "transactions",
+        element: <Transactions />,
+      },
+    ],
+  },
+      {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "budgets",
+        element: <Budgets />,
+      },
+    ],
+  },
+        {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "pots",
+        element: <Pots />,
+      },
+    ],
+  },
+          {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "recurring-bills",
+        element: <RecurringBills />,
       },
     ],
   },
