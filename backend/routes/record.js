@@ -12,26 +12,21 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 // This section will help you get a list of all the records.
-router.get("/test", async (req, res) => {
-  try {
-  let collection = await db.collection("personal-finance-data");
+router.get("/", async (req, res) => {
+  let collection = await db.collection("personal_finance_data");
   let results = await collection.find({}).toArray();
-  console.log("DB Results:", results);
-  res.send(results).status(200);
-} catch (err) {
-    console.error("Error fetching records:", err);
-    res.status(500).send("Server error");
-}
-  });
+  res.status(200).send(results);
+});
+
 
 // This section will help you get a single record by id
 router.get("/:id", async (req, res) => {
-  let collection = await db.collection("personal-finance-data");
+  let collection = await db.collection("personal_finance_data");
   let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
 
   if (!result) res.send("Not found").status(404);
-  else res.send(result).status(200);
+  else res.status(200).send(result);
 });
 
 // This section will help you create a new record.
@@ -42,7 +37,7 @@ router.post("/", async (req, res) => {
       position: req.body.position,
       level: req.body.level,
     };
-    let collection = await db.collection("records");
+    let collection = await db.collection("personal_finance_data");
     let result = await collection.insertOne(newDocument);
     res.send(result).status(204);
   } catch (err) {
@@ -63,9 +58,9 @@ router.patch("/:id", async (req, res) => {
       },
     };
 
-    let collection = await db.collection("records");
+    let collection = await db.collection("personal_finance_data");
     let result = await collection.updateOne(query, updates);
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error updating record");
@@ -77,7 +72,7 @@ router.delete("/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
 
-    const collection = db.collection("records");
+    const collection = db.collection("personal_finance_data");
     let result = await collection.deleteOne(query);
 
     res.send(result).status(200);
