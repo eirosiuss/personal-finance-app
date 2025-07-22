@@ -1,10 +1,9 @@
-import data from "../data.json";
+import useData from "../hooks/useData.jsx";
 
-const Overview = () => {
-  const balance = data.balance;
-  const pots = data.pots;
-  const transactions = data.transactions;
-  const budgets = data.budgets;
+export default function HomePage() {
+  const {data} = useData();
+  if (!data) return null;  
+  const { balance, pots, transactions, budgets } = data;
 
   const months = [
     "Jan",
@@ -149,6 +148,4 @@ const Overview = () => {
       </div>
     </>
   );
-};
-
-export default Overview;
+}

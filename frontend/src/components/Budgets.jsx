@@ -1,12 +1,23 @@
-import data from "../data.json";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { useState } from "react";
+// import { Link } from "react-router-dom";
 import AddNewBudget from "../shared/modals/AddNewBudget";
+import useData from "../hooks/useData.jsx";
 
-function Budgets(props) {
+export default function Budgets() {
+  const { data } = useData();
+  const transactions = React.useMemo(() => data?.transactions || [], [data]);
+  const budgets = React.useMemo(() => data?.budgets || [], [data]);
+  const [transaction, setTransaction] = useState(transactions);
+
+  React.useEffect(() => {
+    setTransaction(transactions);
+  }, [transactions]);
+
   const [showModal, setShowModal] = useState(false);
-  const transactions = data.transactions;
-  const budgets = data.budgets;
+
+  if (!data) return null;
+
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
   );
@@ -14,7 +25,7 @@ function Budgets(props) {
   const lastFilledYear = lastFilledTransactionDate.getFullYear();
 
   const categories = budgets.map((budget) => budget.category);
-  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
+  // const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
 
   const getSpentForCategory = (category) => {
     return (
@@ -45,8 +56,10 @@ function Budgets(props) {
         <div>
           <button onClick={() => setShowModal(true)}>+Add New Budget</button>
           {showModal && (
-            <AddNewBudget data={data} onClose={() => setShowModal(false)}>
-            </AddNewBudget>
+            <AddNewBudget
+              data={data}
+              onClose={() => setShowModal(false)}
+            ></AddNewBudget>
           )}
         </div>
       </header>
@@ -141,5 +154,3 @@ function Budgets(props) {
     </>
   );
 }
-
-export default Budgets;

@@ -1,6 +1,8 @@
-import data from "../data.json";
+import useData from "../hooks/useData.jsx";
 
-const Pots = () => {
+export default function Pots() {
+  const { data } = useData();
+  if (!data) return null;
   const pots = data.pots;
 
   return (
@@ -32,6 +34,4 @@ const Pots = () => {
       ))}
     </>
   );
-};
-
-export default Pots;
+}

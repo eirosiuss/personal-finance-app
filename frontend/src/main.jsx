@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import HomePage from "./pages/OverView";
-import Pots from "./pages/Pots";
-import Transactions from "./pages/Transactions";
-import Budgets from "./pages/Budgets";
-import RecurringBills from "./pages/RecurringBills";
+import HomePage from "./components/HomePage.jsx";
+import Pots from "./components/Pots.jsx";
+import Transactions from "./components/Transactions.jsx";
+import Budgets from "./components/Budgets.jsx";
+import RecurringBills from "./components/RecurringBills.jsx";
 import {
   createBrowserRouter,
   RouterProvider,

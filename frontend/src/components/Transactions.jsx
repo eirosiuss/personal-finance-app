@@ -1,18 +1,27 @@
-import data from "../data.json";
+import useData from "../hooks/useData.jsx";
 import React, { useState } from "react";
 
-function Transactions() {
-  const transactions = data.transactions;
+export default function Transactions() {
+  const { data } = useData();
+
+  const transactions = React.useMemo(() => data?.transactions || [], [data]);
+
   const [transaction, setTransaction] = useState(transactions);
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
+  React.useEffect(() => {
+    setTransaction(transactions);
+  }, [transactions]);
+
+  if (!data) return null;
+
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
   const currentTransactions = transaction.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(transaction.length / postsPerPage);
-  const uniqueCategories = [...new Set(transactions.map(t => t.category))];
+  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -50,7 +59,7 @@ function Transactions() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  }
+  };
 
   const handleSort = (e) => {
     const sortValue = e.target.value;
@@ -79,7 +88,7 @@ function Transactions() {
         break;
     }
     setTransaction(sortedTransactions);
-  }
+  };
 
   const handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
@@ -92,7 +101,6 @@ function Transactions() {
       setTransaction(filteredTransactions);
     }
   };
-
   return (
     <>
       <header>
@@ -197,5 +205,3 @@ function Transactions() {
     </>
   );
 }
-
-export default Transactions;
