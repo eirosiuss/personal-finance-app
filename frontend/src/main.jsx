@@ -69,7 +69,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/edit/:id",
-        // element: <Record />,
+        element: <Budgets />,
       },
     ],
   },
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/create",
-        // element: <Record />,
+        element: <Budgets />,
       },
     ],
   },

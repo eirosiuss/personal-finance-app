@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-// import { Link } from "react-router-dom";
 import AddNewBudget from "../shared/modals/AddNewBudget";
 import useData from "../hooks/useData.jsx";
 
@@ -25,7 +24,6 @@ export default function Budgets() {
   const lastFilledYear = lastFilledTransactionDate.getFullYear();
 
   const categories = budgets.map((budget) => budget.category);
-  // const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
 
   const getSpentForCategory = (category) => {
     return (

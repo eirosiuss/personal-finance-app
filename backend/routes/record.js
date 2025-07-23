@@ -20,29 +20,38 @@ router.get("/", async (req, res) => {
 
 
 // This section will help you get a single record by id
-router.get("/:id", async (req, res) => {
-  let collection = await db.collection("personal_finance_data");
-  let query = { _id: new ObjectId(req.params.id) };
-  let result = await collection.findOne(query);
+// router.get("/:id", async (req, res) => {
+//   let collection = await db.collection("personal_finance_data");
+//   let query = { _id: new ObjectId(req.params.id) };
+//   let result = await collection.findOne(query);
 
-  if (!result) res.send("Not found").status(404);
-  else res.status(200).send(result);
-});
+//   if (!result) res.send("Not found").status(404);
+//   else res.status(200).send(result);
+// });
 
 // This section will help you create a new record.
-router.post("/", async (req, res) => {
+router.post("/add-budget/:id", async (req, res) => {
+  const { category, maximum, theme } = req.body;
+  const userId = req.params.id;
+
   try {
-    let newDocument = {
-      name: req.body.name,
-      position: req.body.position,
-      level: req.body.level,
-    };
-    let collection = await db.collection("personal_finance_data");
-    let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
+    const result = await db.collection("personal_finance_data").updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $push: {
+          budgets: {
+            category,
+            maximum: Number(maximum),
+            theme,
+          },
+        },
+      }
+    );
+
+    res.status(200).send(result);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error adding record");
+    res.status(500).send("Failed to add budget");
   }
 });
 
