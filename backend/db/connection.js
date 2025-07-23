@@ -1,6 +1,13 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
-const uri = process.env.ATLAS_URI || "";
+const uri = process.env.ATLAS_URI;
+
+if (!uri) {
+  throw new Error("❌ MongoDB connection string (ATLAS_URI) not found.");
+}
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,

@@ -5,16 +5,17 @@ export default function useData() {
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch("http://localhost:5050/");
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        console.error(message);
-        return;
+      try {
+        const response = await fetch("http://localhost:5050/");
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setData(data[0]);
+      } catch (error) {
+        console.error("Fetch error:", error);
       }
-      const data = await response.json();
-      setData(data[0]);
     }
-
     getData();
   }, []);
 
