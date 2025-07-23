@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import AddNewBudget from "../shared/modals/AddNewBudget";
-import useData from "../hooks/useData.jsx";
+import AddNewBudget from "./budgets/AddNewBudget.jsx";
+import useData from "./hooks/useData.jsx";
 
 export default function Budgets() {
   const { data } = useData();

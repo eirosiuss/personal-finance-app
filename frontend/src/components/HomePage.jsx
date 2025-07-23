@@ -1,4 +1,4 @@
-import useData from "../hooks/useData.jsx";
+import useData from "./hooks/useData.jsx";
 
 export default function HomePage() {
   const {data} = useData();
