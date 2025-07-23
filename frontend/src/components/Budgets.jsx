@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import AddNewBudget from "./budgets/AddNewBudget.jsx";
+import DeleteBudget from "./budgets/DeleteBudget.jsx";
 import useData from "./hooks/useData.jsx";
 
 export default function Budgets() {
@@ -13,7 +14,10 @@ export default function Budgets() {
     setTransaction(transactions);
   }, [transactions]);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedCategoryToDelete, setSelectedCategoryToDelete] =
+    useState(null);
 
   if (!data) return null;
 
@@ -52,11 +56,11 @@ export default function Budgets() {
         <h1>Budgets</h1>
 
         <div>
-          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
-          {showModal && (
+          <button onClick={() => setShowAddModal(true)}>+Add New Budget</button>
+          {showAddModal && (
             <AddNewBudget
               data={data}
-              onClose={() => setShowModal(false)}
+              onClose={() => setShowAddModal(false)}
             ></AddNewBudget>
           )}
         </div>
@@ -89,6 +93,11 @@ export default function Budgets() {
           return (
             <div key={budget.category} className="budget-item">
               <h2>{budget.category}</h2>
+              <button
+                onClick={() => setSelectedCategoryToDelete(budget.category)}
+              >
+                Delete Budget
+              </button>
               <p>Maximum of ${budget.maximum.toFixed(2)}</p>
               <div className="budget-progress-bar">
                 <div
@@ -148,6 +157,14 @@ export default function Budgets() {
             </div>
           );
         })}
+
+                {selectedCategoryToDelete && (
+          <DeleteBudget
+            data={data}
+            category={selectedCategoryToDelete}
+            onClose={() => setSelectedCategoryToDelete(null)}
+          />
+        )}
       </div>
     </>
   );

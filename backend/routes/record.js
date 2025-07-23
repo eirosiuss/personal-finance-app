@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
 //   else res.status(200).send(result);
 // });
 
-// This section will help you create a new record.
+// This section will create a new budget.
 router.post("/add-budget/:id", async (req, res) => {
   const { category, maximum, theme } = req.body;
   const userId = req.params.id;
@@ -40,6 +40,7 @@ router.post("/add-budget/:id", async (req, res) => {
       {
         $push: {
           budgets: {
+             _id: new ObjectId(),
             category,
             maximum: Number(maximum),
             theme,
@@ -56,38 +57,41 @@ router.post("/add-budget/:id", async (req, res) => {
 });
 
 // This section will help you update a record by id.
-router.patch("/:id", async (req, res) => {
-  try {
-    const query = { _id: new ObjectId(req.params.id) };
-    const updates = {
-      $set: {
-        name: req.body.name,
-        position: req.body.position,
-        level: req.body.level,
-      },
-    };
+// router.patch("/:id", async (req, res) => {
+//   try {
+//     const query = { _id: new ObjectId(req.params.id) };
+//     const updates = {
+//       $set: {
+//         name: req.body.name,
+//         position: req.body.position,
+//         level: req.body.level,
+//       },
+//     };
 
-    let collection = await db.collection("personal_finance_data");
-    let result = await collection.updateOne(query, updates);
+//     let collection = await db.collection("personal_finance_data");
+//     let result = await collection.updateOne(query, updates);
+//     res.status(200).send(result);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error updating record");
+//   }
+// });
+
+// This section will delete a budget
+router.delete("/delete-budget/:id/:category", async (req, res) => {
+  const userId = req.params.id;
+  const categoryToDelete = req.params.category;
+
+  try {
+    const result = await db.collection("personal_finance_data").updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { budgets: { category: categoryToDelete } } }
+    );
+
     res.status(200).send(result);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error updating record");
-  }
-});
-
-// This section will help you delete a record
-router.delete("/:id", async (req, res) => {
-  try {
-    const query = { _id: new ObjectId(req.params.id) };
-
-    const collection = db.collection("personal_finance_data");
-    let result = await collection.deleteOne(query);
-
-    res.send(result).status(200);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error deleting record");
+    res.status(500).send("Failed to delete budget");
   }
 });
 
