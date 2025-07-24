@@ -18,6 +18,9 @@ router.get("/", async (req, res) => {
   res.status(200).send(results);
 });
 
+router.get('/transactions/:id', async (req, res) => {
+  const userId = req.params.id;)
+
 
 // This section will help you get a single record by id
 // router.get("/:id", async (req, res) => {
@@ -40,7 +43,6 @@ router.post("/add-budget/:id", async (req, res) => {
       {
         $push: {
           budgets: {
-             _id: new ObjectId(),
             category,
             maximum: Number(maximum),
             theme,

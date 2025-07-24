@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ModalWrapper from "../shared/ModalWrapper";
 
-export default function AddNewBudget({ onClose, data }) {
+export default function AddNewBudget({ onClose, data, onBudgetAdded }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     category: "",
     maximum: "",
@@ -32,10 +34,18 @@ export default function AddNewBudget({ onClose, data }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setForm({ category: "", maximum: "", theme: "" });
-      onClose();
+      const newBudget = await response.json(); // <- gautas naujas biudžetas iš backendo
+
+      if (onBudgetAdded) {
+        onBudgetAdded(newBudget); // <- iškviečiame funkciją, perduodame naują biudžetą
+      }
+
     } catch (error) {
       console.error("A problem occurred with your fetch operation: ", error);
+    } finally {
+      setForm({ category: "", maximum: "", theme: "" });
+      onClose();
+      navigate("/budgets");
     }
   };
 

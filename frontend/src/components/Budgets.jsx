@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import AddNewBudget from "./budgets/AddNewBudget.jsx";
 import DeleteBudget from "./budgets/DeleteBudget.jsx";
@@ -6,13 +6,36 @@ import useData from "./hooks/useData.jsx";
 
 export default function Budgets() {
   const { data } = useData();
-  const transactions = React.useMemo(() => data?.transactions || [], [data]);
-  const budgets = React.useMemo(() => data?.budgets || [], [data]);
-  const [transaction, setTransaction] = useState(transactions);
+  const [transactions, setTransactions] = useState([]);
+  const [budgets, setBudgets] = useState([]);
+  // React.useEffect(() => {
+  //   if (data?.budgets) {
+  //     setBudgets(data.budgets);
+  //   }
+  //   if (data?.transactions) {
+  //     setTransactions(data.transactions)
+  //   }
+  // }, [data]);
 
-  React.useEffect(() => {
-    setTransaction(transactions);
-  }, [transactions]);
+  useEffect(() => {
+    async function getTransactions() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/transactions/${data?._id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch transactions");
+        }
+        const transactions = await response.json();
+        setTransactions(transactions);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    }
+    getTransactions();
+  }, [data?._id]);
+  console.log("Transactions:", transactions);
+  
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -61,6 +84,9 @@ export default function Budgets() {
             <AddNewBudget
               data={data}
               onClose={() => setShowAddModal(false)}
+              onBudgetAdded={(newBudget) => {
+                setBudgets((prev) => [...prev, newBudget]);
+              }}
             ></AddNewBudget>
           )}
         </div>
@@ -158,7 +184,7 @@ export default function Budgets() {
           );
         })}
 
-                {selectedCategoryToDelete && (
+        {selectedCategoryToDelete && (
           <DeleteBudget
             data={data}
             category={selectedCategoryToDelete}
