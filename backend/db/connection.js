@@ -1,33 +1,12 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-const uri = process.env.ATLAS_URI;
+mongoose.connect(process.env.VITE_BACKEND_URL)
 
-if (!uri) {
-  throw new Error("❌ MongoDB connection string (ATLAS_URI) not found.");
-}
+const db = mongoose.connection;
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-try {
-  // Connect the client to the server
-  await client.connect();
-  // Send a ping to confirm a successful connection
-  await client.db("personal_finance_app").command({ ping: 1 });
-  console.log(
-   "Pinged your deployment. You successfully connected to MongoDB!"
-  );
-} catch(err) {
-  console.error(err);
-}
-
-let db = client.db("personal_finance_app");
+db.on('error', console.error.bind(console, 'Cannot connect to MongoDB'))
+db.once('open', () => console.log('Connected successfully to MongoDB'))
 
 export default db;

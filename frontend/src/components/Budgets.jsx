@@ -8,14 +8,16 @@ export default function Budgets() {
   const { data } = useData();
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
-  // React.useEffect(() => {
-  //   if (data?.budgets) {
-  //     setBudgets(data.budgets);
-  //   }
-  //   if (data?.transactions) {
-  //     setTransactions(data.transactions)
-  //   }
-  // }, [data]);
+    useEffect(() => {
+const url = import.meta.env.VITE_BACKEND_URL + '/budgets'
+console.log("Fetching budgets from:", url);
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setBudgets(data)
+            })
+    }, [])
 
   useEffect(() => {
     async function getTransactions() {
@@ -34,7 +36,7 @@ export default function Budgets() {
     }
     getTransactions();
   }, [data?._id]);
-  console.log("Transactions:", transactions);
+  // console.log("Transactions:", transactions);
   
 
   const [showAddModal, setShowAddModal] = useState(false);
