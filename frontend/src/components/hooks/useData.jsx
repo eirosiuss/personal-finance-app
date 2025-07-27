@@ -6,7 +6,7 @@ export default function useData() {
   useEffect(() => {
     async function getData() {
       try {
-        const response = await fetch("http://localhost:5050/");
+        const response = await fetch("http://localhost:6060/");
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.statusText}`);
         }
