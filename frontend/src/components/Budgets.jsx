@@ -8,21 +8,14 @@ export default function Budgets() {
   const { data } = useData();
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
-  useEffect(() => {
-    const fetchBudgets = async () => {
-      try {
-        const url = import.meta.env.VITE_BACKEND_URL + "/budgets";
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Server error");
-        const data = await response.json();
-        setBudgets(data);
-      } catch (error) {
-        console.error("Error fetching budgets:", error);
-      }
-    };
-
-    fetchBudgets();
-  }, []);
+  // React.useEffect(() => {
+  //   if (data?.budgets) {
+  //     setBudgets(data.budgets);
+  //   }
+  //   if (data?.transactions) {
+  //     setTransactions(data.transactions)
+  //   }
+  // }, [data]);
 
   useEffect(() => {
     async function fetchTransactions() {
@@ -36,9 +29,10 @@ export default function Budgets() {
         console.error("Error fetching transactions:", error);
       }
     }
-    fetchTransactions();
-  }, []);
+    getTransactions();
+  }, [data?._id]);
   console.log("Transactions:", transactions);
+  
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

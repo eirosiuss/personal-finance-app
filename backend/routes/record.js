@@ -1,10 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+import { ObjectId } from "mongodb";
+
+// This will help us connect to the database
 import db from "../db/connection.js";
 
 // This help convert the id from string to ObjectId for the _id.
-import { ObjectId } from "mongodb";
+// import { ObjectId } from "mongodb";
 
 
 // router is an instance of the express router.
@@ -32,6 +35,7 @@ const budgetSchema = new mongoose.Schema({
   maximum: Number,
   theme: String,
   _id: { type: ObjectId, default: () => new ObjectId() },
+  _id: { type: ObjectId, default: () => new ObjectId() }, // Ensure _id is an ObjectId
 }, { _id: true });
 
 const potSchema = new mongoose.Schema({
