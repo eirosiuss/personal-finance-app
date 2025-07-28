@@ -2,42 +2,43 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import AddNewBudget from "./budgets/AddNewBudget.jsx";
 import DeleteBudget from "./budgets/DeleteBudget.jsx";
-import useData from "./hooks/useData.jsx";
+// import useData from "./hooks/useData.jsx";
 
 export default function Budgets() {
   const { data } = useData();
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
-    useEffect(() => {
-const url = import.meta.env.VITE_BACKEND_URL + '/budgets'
-console.log("Fetching budgets from:", url);
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                setBudgets(data)
-            })
-    }, [])
+  useEffect(() => {
+    const fetchBudgets = async () => {
+      try {
+        const url = import.meta.env.VITE_BACKEND_URL + "/budgets";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Server error");
+        const data = await response.json();
+        setBudgets(data);
+      } catch (error) {
+        console.error("Error fetching budgets:", error);
+      }
+    };
+
+    fetchBudgets();
+  }, []);
 
   useEffect(() => {
-    async function getTransactions() {
+    async function fetchTransactions() {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/transactions/${data?._id}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch transactions");
-        }
-        const transactions = await response.json();
-        setTransactions(transactions);
+        const url = import.meta.env.VITE_BACKEND_URL + "/transactions";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Server error");
+        const data = await response.json();
+        setTransactions(data);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     }
-    getTransactions();
-  }, [data?._id]);
-  // console.log("Transactions:", transactions);
-  
+    fetchTransactions();
+  }, []);
+  console.log("Transactions:", transactions);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

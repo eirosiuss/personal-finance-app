@@ -1,31 +1,32 @@
-import useData from "./hooks/useData.jsx";
+import React, { useState, useEffect } from "react";
 
 export default function HomePage() {
-  const {data} = useData();
-  if (!data) return null;  
-  const { balance, pots, transactions, budgets } = data;
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = import.meta.env.VITE_BACKEND_URL;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Server error");
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+    fetchData();
+  }, []);
+
+  if (!data) return null;
+
+  const { balance, pots, transactions, budgets } = data;
 
   const lastFilledTransaction = transactions
     .map((t) => new Date(t.date))
     .sort((a, b) => b - a)[0];
-
-  const lastFilledMonth = lastFilledTransaction.getMonth();
-  const lastFilledYear = lastFilledTransaction.getFullYear();
+  let lastFilledMonth = lastFilledTransaction.getMonth();
+  let lastFilledYear = lastFilledTransaction.getFullYear();
 
   return (
     <>
@@ -33,16 +34,18 @@ export default function HomePage() {
         <header>
           <h1>Overview</h1>
         </header>
-        {Object.entries(balance).map(([key, value]) => (
-          <article key={key}>
-            <h3>
-              {key === "current"
-                ? `${key.charAt(0).toUpperCase() + key.slice(1)} Balance`
-                : `${key.charAt(0).toUpperCase() + key.slice(1)}`}
-            </h3>
-            <p>${value.toFixed(2)}</p>
-          </article>
-        ))}
+        {Object.entries(balance)
+          .slice(0, 3)
+          .map(([key, value]) => (
+            <article key={key}>
+              <h3>
+                {key === "current"
+                  ? `${key.charAt(0).toUpperCase() + key.slice(1)} Balance`
+                  : `${key.charAt(0).toUpperCase() + key.slice(1)}`}
+              </h3>
+              <p>${value.toFixed(2)}</p>
+            </article>
+          ))}
       </div>
 
       <div className="pots">
@@ -83,9 +86,11 @@ export default function HomePage() {
                   : `-$${Math.abs(transaction.amount).toFixed(2)}`}
               </p>
               <p>
-                {transaction.date.slice(8, 10)}{" "}
-                {months[transaction.date.slice(6, 7) - 1]}{" "}
-                {transaction.date.slice(0, 4)}
+                {new Date(transaction.date).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
               </p>
             </div>
           </article>
@@ -100,8 +105,9 @@ export default function HomePage() {
         <p>
           $
           {transactions
-            .filter(
-              (transaction) =>
+            .filter((transaction) => {
+              const transactionDate = new Date(transaction.date);
+              return (
                 [
                   "Entertainment",
                   "Bills",
@@ -109,25 +115,21 @@ export default function HomePage() {
                   "Personal Care",
                 ].includes(transaction.category) &&
                 transaction.amount < 0 &&
-                lastFilledYear == parseInt(transaction.date.slice(0, 4), 10) &&
-                lastFilledMonth ==
-                  parseInt(transaction.date.slice(5, 7), 10) - 1
-            )
+                lastFilledYear === transactionDate.getFullYear() &&
+                lastFilledMonth === transactionDate.getMonth()
+              );
+            })
             .reduce((acc, transaction) => acc + transaction.amount, 0)
             .toFixed(2) * -1}
           <span>
             {" "}
-            of ${budgets.reduce(
-              (acc, budget) => acc + budget.maximum,
-              0
-            )}{" "}
-            limit
+            of ${budgets.reduce((acc, budget) => acc + budget.maximum, 0)} limit
           </span>
         </p>
         {budgets.map((budget, index) => (
           <article key={index}>
             <h3>{budget.category}</h3>
-            <p>${budget.maximum}</p>
+            <p>${budget.maximum.toFixed(2)}</p>
           </article>
         ))}
       </div>
@@ -142,7 +144,7 @@ export default function HomePage() {
           .map((transaction, index) => (
             <article key={index}>
               <h3>{transaction.name}</h3>
-              <p>${transaction.amount}</p>
+              <p>${transaction.amount.toFixed(2)}</p>
             </article>
           ))}
       </div>

@@ -1,26 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
-import { ObjectId } from "mongodb";
-
 const { Schema, model } = mongoose;
-
-// This will help us connect to the database
 import db from "../db/connection.js";
 
 // This help convert the id from string to ObjectId for the _id.
-// import { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
+
 
 // router is an instance of the express router.
 // We use it to define our routes.
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const router = express.Router();
-
-// This section will help you get a list of all the records.
-// router.get("/", async (req, res) => {
-//   let collection = await db.collection("personal_finance_data");
-//   let results = await collection.find({}).toArray();
-//   res.status(200).send(results);
-// });
 
 const balanceSchema = new mongoose.Schema({
   current: Number,
@@ -41,7 +31,7 @@ const budgetSchema = new mongoose.Schema({
   category: String,
   maximum: Number,
   theme: String,
-  _id: { type: ObjectId, default: () => new ObjectId() }, // Ensure _id is an ObjectId
+  _id: { type: ObjectId, default: () => new ObjectId() },
 }, { _id: true });
 
 const potSchema = new mongoose.Schema({
@@ -60,6 +50,17 @@ const dataSchema = new mongoose.Schema({
 
 const Data = model("personal_finance_data", dataSchema);
 
+router.get("/", async (req, res) => {
+  try {
+    const data = await Data.findById("687c825399295d470cbff42c");
+    
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Failed to fetch data");
+  }
+});
+
 router.get("/budgets", async (req, res) => {
   try {
     const data = await Data.findById("687c825399295d470cbff42c");
@@ -68,7 +69,6 @@ router.get("/budgets", async (req, res) => {
     console.error("Error fetching budgets:", error);
     res.status(500).send("Failed to fetch budgets");
   }
-
 });
 
 router.get("/budgets/:id", async (req, res) => {
@@ -81,6 +81,17 @@ router.get("/budgets/:id", async (req, res) => {
     console.error("Error fetching specific budget:", error);
     res.status(500).send("Failed to fetch budget");
   }
+});
+
+router.get("/transactions", async (req, res) => {
+  try {
+    const data = await Data.findById("687c825399295d470cbff42c");
+    res.status(200).json(data.transactions);
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).send("Failed to fetch transactions");
+  }
+
 });
 
 // This section will help you get a single record by id
