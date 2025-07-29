@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ModalWrapper from "../shared/ModalWrapper";
 
-export default function AddNewBudget({ onClose, data, onBudgetAdded }) {
+export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onThemeSelect  }) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     category: "",
@@ -10,36 +10,39 @@ export default function AddNewBudget({ onClose, data, onBudgetAdded }) {
     theme: "",
   });
 
-  const uniqueCategories = [
-    ...new Set(data.transactions.map((t) => t.category)),
-  ];
+  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+
+        if (name === "theme" && onThemeSelect) {
+      onThemeSelect(value); // čia perduodama spalva į tėvą
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const id = data?._id;
 
     try {
-      const response = await fetch(`http://localhost:5050/add-budget/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/budgets`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const newBudget = await response.json(); // <- gautas naujas biudžetas iš backendo
+      const newBudget = await response.json();
 
       if (onBudgetAdded) {
-        onBudgetAdded(newBudget); // <- iškviečiame funkciją, perduodame naują biudžetą
+        onBudgetAdded(newBudget);
       }
-
     } catch (error) {
       console.error("A problem occurred with your fetch operation: ", error);
     } finally {
@@ -89,6 +92,35 @@ export default function AddNewBudget({ onClose, data, onBudgetAdded }) {
             value={form.maximum}
             onChange={handleChange}
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="theme">Theme</label>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                borderRadius: "50%",
+                backgroundColor: form.theme || "#277C78",
+                border: "1px solid #999",
+              }}
+            ></div>
+            <select
+              name="theme"
+              id="theme"
+              required
+              value={form.theme}
+              onChange={handleChange}
+            >
+              <option value="#277C78">Green</option>
+              <option value="#F2CDAC">Yellow</option>
+              <option value="#82C9D7">Cyan</option>
+              <option value="#626070">Navy</option>
+              <option value="#C94736">Red</option>
+              <option value="#826CB0">Purple</option>
+              <option value="#BE6C49">Orange</option>
+            </select>
+          </div>
         </div>
         <input type="submit" value="Add Budget"></input>
       </form>
