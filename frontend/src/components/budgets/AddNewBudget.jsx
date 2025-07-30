@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ModalWrapper from "../shared/ModalWrapper";
 
 export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onThemeSelect  }) {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     category: "",
     maximum: "",
@@ -17,7 +15,7 @@ export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onT
     setForm((prev) => ({ ...prev, [name]: value }));
 
         if (name === "theme" && onThemeSelect) {
-      onThemeSelect(value); // čia perduodama spalva į tėvą
+      onThemeSelect(value);
     }
   };
 
@@ -48,7 +46,6 @@ export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onT
     } finally {
       setForm({ category: "", maximum: "", theme: "" });
       onClose();
-      navigate("/budgets");
     }
   };
 

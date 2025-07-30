@@ -1,113 +1,113 @@
-// import useData from "./hooks/useData.jsx";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Transactions() {
-  const { data } = useData();
+  const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
-  const transactions = React.useMemo(() => data?.transactions || [], [data]);
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const url = import.meta.env.VITE_BACKEND_URL + "/transactions";
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Server error");
+        const data = await response.json();
+        setTransactions(data);
+        setFilteredTransactions(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const [transaction, setTransaction] = useState(transactions);
-  const [searchValue, setSearchValue] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+    fetchTransactions();
+  }, []);
+
+  if (!transactions) return null;
+
   const postsPerPage = 10;
-
-  React.useEffect(() => {
-    setTransaction(transactions);
-  }, [transactions]);
-
-  if (!data) return null;
-
+  const [currentPage, setCurrentPage] = useState(1);
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
-  const currentTransactions = transaction.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(transaction.length / postsPerPage);
+  const currentTransactions = filteredTransactions.slice(
+    indexOfFirst,
+    indexOfLast
+  );
+  const totalPages = Math.ceil(filteredTransactions.length / postsPerPage);
   const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchValue(value);
-
-    if (value.trim() === "") {
-      setTransaction(transactions);
-    } else if (value.trim() !== "") {
-      const filteredTransactions = transactions.filter((transaction) =>
-        transaction.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setTransaction(filteredTransactions);
-    }
-  };
-
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(transaction.length / postsPerPage); i++) {
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredTransactions.length / postsPerPage);
+    i++
+  ) {
     pageNumbers.push(i);
   }
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const filterTransactions = (search, category, sort) => {
+    let filtered = [...transactions];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+    if (search.trim() !== "") {
+      filtered = filtered.filter((t) =>
+        t.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
 
-  const handleSort = (e) => {
-    const sortValue = e.target.value;
-    let sortedTransactions = [...transaction];
+    if (category !== "All Transactions") {
+      filtered = filtered.filter((t) => t.category === category);
+    }
 
-    switch (sortValue) {
+    switch (sort) {
       case "latest":
-        sortedTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
         break;
       case "oldest":
-        sortedTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+        filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
       case "a-to-z":
-        sortedTransactions.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "z-to-a":
-        sortedTransactions.sort((a, b) => b.name.localeCompare(a.name));
+        filtered.sort((a, b) => b.name.localeCompare(a.name));
         break;
       case "highest":
-        sortedTransactions.sort((a, b) => b.amount - a.amount);
+        filtered.sort((a, b) => b.amount - a.amount);
         break;
       case "lowest":
-        sortedTransactions.sort((a, b) => a.amount - b.amount);
+        filtered.sort((a, b) => a.amount - b.amount);
         break;
       default:
         break;
     }
-    setTransaction(sortedTransactions);
+    setFilteredTransactions(filtered);
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedCategory = e.target.value;
-    if (selectedCategory === "All Transactions") {
-      setTransaction(transactions);
-    } else {
-      const filteredTransactions = transactions.filter(
-        (transaction) => transaction.category === selectedCategory
-      );
-      setTransaction(filteredTransactions);
-    }
+  const [searchValue, setSearchValue] = useState("");
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    filterTransactions(value, selectedCategory, selectedSort);
   };
+
+  const [selectedCategory, setSelectedCategory] = useState("All Transactions");
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    setSelectedCategory(value);
+    filterTransactions(searchValue, value, selectedSort);
+  };
+
+  const [selectedSort, setSelectedSort] = useState("latest");
+  const handleSort = (e) => {
+    const value = e.target.value;
+    setSelectedSort(value);
+    filterTransactions(searchValue, selectedCategory, value);
+  };
+
   return (
     <>
       <header>
         <h1>Transactions</h1>
       </header>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           placeholder="Search transactions"
@@ -115,7 +115,12 @@ export default function Transactions() {
           onChange={handleSearch}
         />
         <label htmlFor="sort">Sort by</label>
-        <select id="sort" name="sort" onChange={handleSort}>
+        <select
+          id="sort"
+          name="sort"
+          value={selectedSort}
+          onChange={handleSort}
+        >
           <option value="latest">Latest</option>
           <option value="oldest">Oldest</option>
           <option value="a-to-z">A to Z</option>
@@ -159,7 +164,9 @@ export default function Transactions() {
                 <td>{transaction.category}</td>
                 <td>
                   {transaction.date.slice(8, 10)}{" "}
-                  {months[transaction.date.slice(6, 7) - 1]}{" "}
+                  {new Intl.DateTimeFormat("en-US", {
+                    month: "short",
+                  }).format(new Date(transaction.date))}{" "}
                   {transaction.date.slice(0, 4)}
                 </td>
                 <td>

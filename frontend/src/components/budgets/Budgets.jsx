@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import AddNewBudget from "./budgets/AddNewBudget.jsx";
-import DeleteBudget from "./budgets/DeleteBudget.jsx";
+import AddNewBudget from "./AddNewBudget.jsx";
+import DeleteBudget from "./DeleteBudget.jsx";
 
 export default function Budgets() {
   const [transactions, setTransactions] = useState([]);
@@ -42,7 +42,6 @@ export default function Budgets() {
   if (!budgets || !transactions) return null;
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCategoryToDelete, setSelectedCategoryToDelete] =
     useState(null);
 
@@ -82,20 +81,24 @@ const handleBudgetDeleted = (categoryDeleted) => {
   setBudgets((prevBudgets) => prevBudgets.filter(b => b.category !== categoryDeleted));
 };
 
+const handleBudgetAdded = async () => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/budgets`);
+  const updatedBudgets = await res.json();
+  setBudgets(updatedBudgets);
+};
+
+
   return (
     <>
       <header>
         <h1>Budgets</h1>
-
         <div>
           <button onClick={() => setShowAddModal(true)}>+Add New Budget</button>
           {showAddModal && (
             <AddNewBudget
               transactions={transactions}
               onClose={() => setShowAddModal(false)}
-              onBudgetAdded={(newBudget) => {
-                setBudgets((prev) => [...prev, newBudget]);
-              }}
+              onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
             ></AddNewBudget>
           )}

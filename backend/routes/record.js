@@ -74,17 +74,6 @@ router.get("/budgets", async (req, res) => {
   }
 });
 
-router.get("/budgets/:id", async (req, res) => {
-  try {
-    // res.send("Budget ID: " + req.params.id);
-    const budget = await Data.findById(req.params.id);
-    return res.send(budget);
-  } catch (error) {
-    console.error("Error fetching specific budget:", error);
-    res.status(500).send("Failed to fetch budget");
-  }
-});
-
 router.post('/budgets', async (req, res) => {
   try {
     const newBudget = req.body;
@@ -123,8 +112,6 @@ router.delete("/budgets/:category", async (req, res) => {
   }
 });
 
-
-
 router.get("/transactions", async (req, res) => {
   try {
     const data = await Data.findOne();
@@ -134,82 +121,5 @@ router.get("/transactions", async (req, res) => {
     res.status(500).send("Failed to fetch transactions");
   }
 });
-
-// This section will help you get a single record by id
-// router.get("/:id", async (req, res) => {
-//   let collection = await db.collection("personal_finance_data");
-//   let query = { _id: new ObjectId(req.params.id) };
-//   let result = await collection.findOne(query);
-
-//   if (!result) res.send("Not found").status(404);
-//   else res.status(200).send(result);
-// });
-
-// This section will create a new budget.
-// router.post("/add-budget/:id", async (req, res) => {
-//   const { category, maximum, theme } = req.body;
-//   const userId = req.params.id;
-
-//   try {
-//     const result = await db.collection("personal_finance_data").updateOne(
-//       { _id: new ObjectId(userId) },
-//       {
-//         $push: {
-//           budgets: {
-//             category,
-//             maximum: Number(maximum),
-//             theme,
-//           },
-//         },
-//       }
-//     );
-
-//     res.status(200).send(result);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Failed to add budget");
-//   }
-// });
-
-// This section will help you update a record by id.
-// router.patch("/:id", async (req, res) => {
-//   try {
-//     const query = { _id: new ObjectId(req.params.id) };
-//     const updates = {
-//       $set: {
-//         name: req.body.name,
-//         position: req.body.position,
-//         level: req.body.level,
-//       },
-//     };
-
-//     let collection = await db.collection("personal_finance_data");
-//     let result = await collection.updateOne(query, updates);
-//     res.status(200).send(result);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error updating record");
-//   }
-// });
-
-// This section will delete a budget
-// router.delete("/delete-budget/:id/:category", async (req, res) => {
-//   const userId = req.params.id;
-//   const categoryToDelete = req.params.category;
-
-//   try {
-//     const result = await db
-//       .collection("personal_finance_data")
-//       .updateOne(
-//         { _id: new ObjectId(userId) },
-//         { $pull: { budgets: { category: categoryToDelete } } }
-//       );
-
-//     res.status(200).send(result);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Failed to delete budget");
-//   }
-// });
 
 export default router;
