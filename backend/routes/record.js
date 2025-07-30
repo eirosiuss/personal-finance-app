@@ -28,15 +28,11 @@ const transactionSchema = new mongoose.Schema({
   recurring: Boolean,
 });
 
-const budgetSchema = new mongoose.Schema(
-  {
-    category: String,
-    maximum: Number,
-    theme: String,
-    _id: { type: ObjectId, default: () => new ObjectId() },
-  },
-  { _id: true }
-);
+const budgetSchema = new mongoose.Schema({
+  category: String,
+  maximum: Number,
+  theme: String,
+});
 
 const potSchema = new mongoose.Schema({
   name: String,
@@ -64,6 +60,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/transactions", async (req, res) => {
+  try {
+    const data = await Data.findOne();
+    res.status(200).json(data.transactions);
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).send("Failed to fetch transactions");
+  }
+});
+
 router.get("/budgets", async (req, res) => {
   try {
     const data = await Data.findOne();
@@ -74,7 +80,7 @@ router.get("/budgets", async (req, res) => {
   }
 });
 
-router.post('/budgets', async (req, res) => {
+router.post("/budgets", async (req, res) => {
   try {
     const newBudget = req.body;
     let data = await Data.findOne();
@@ -87,7 +93,7 @@ router.post('/budgets', async (req, res) => {
     }
     res.status(201).json(data.budgets);
   } catch (err) {
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 });
 
@@ -104,21 +110,22 @@ router.delete("/budgets/:category", async (req, res) => {
     if (!updatedData) {
       return res.status(404).json({ message: "Data document not found" });
     }
-
-    res.status(200).json({ message: "Budget deleted", budgets: updatedData.budgets });
+    res
+      .status(200)
+      .json({ message: "Budget deleted", budgets: updatedData.budgets });
   } catch (err) {
     console.error("Error deleting budget:", err);
     res.status(500).json({ message: "Server error", error: err });
   }
 });
 
-router.get("/transactions", async (req, res) => {
+router.get("/pots", async (req, res) => {
   try {
     const data = await Data.findOne();
-    res.status(200).json(data.transactions);
+    res.status(200).json(data.pots);
   } catch (error) {
-    console.error("Error fetching transactions:", error);
-    res.status(500).send("Failed to fetch transactions");
+    console.error("Error fetching pots:", error);
+    res.status(500).send("Failed to fetch pots");
   }
 });
 

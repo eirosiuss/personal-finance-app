@@ -1,9 +1,25 @@
-// import useData from "./hooks/useData.jsx";
+import { useState, useEffect } from "react";
 
 export default function Pots() {
-  const { data } = useData();
-  if (!data) return null;
-  const pots = data.pots;
+  const [pots, setPots] = useState([])
+
+  useEffect(() => {
+      const fetchPots = async () => {
+        try {
+          const url = import.meta.env.VITE_BACKEND_URL + "/pots";
+          const response = await fetch(url);
+          if (!response.ok) throw new Error("Server error");
+          const data = await response.json();
+          setPots(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+  
+      fetchPots();
+    }, []);
+
+    if (!pots) return null;
 
   return (
     <>
