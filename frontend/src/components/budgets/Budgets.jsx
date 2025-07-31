@@ -1,48 +1,47 @@
 import { useState, useEffect } from "react";
-import AddNewBudget from "./AddNewBudget.jsx";
+import AddBudget from "./AddBudget.jsx";
 import DeleteBudget from "./DeleteBudget.jsx";
+import ModalEditDelete from "../shared/EditDeleteModal.jsx";
 
 export default function Budgets() {
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBudgetChange, setSelectedBudgetChange] = useState(false);
 
   useEffect(() => {
-    const fetchBudgets = async () => {
+    const fetchData = async () => {
       try {
-        const url = import.meta.env.VITE_BACKEND_URL + "/budgets";
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Server error");
-        const data = await response.json();
-        setBudgets(data);
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+        const [budgetsRes, transactionsRes] = await Promise.all([
+          fetch(`${backendUrl}/budgets`),
+          fetch(`${backendUrl}/transactions`),
+        ]);
+
+        if (!budgetsRes.ok || !transactionsRes.ok) {
+          throw new Error("Server error");
+        }
+
+        const budgetsData = await budgetsRes.json();
+        const transactionsData = await transactionsRes.json();
+
+        setBudgets(budgetsData);
+        setTransactions(transactionsData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchBudgets();
+    fetchData();
   }, []);
 
-    useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const url = import.meta.env.VITE_BACKEND_URL + "/transactions";
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Server error");
-        const data = await response.json();
-        setTransactions(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchTransactions();
-  }, []);
-
-  if (!budgets || !transactions) return null;
-
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedCategoryToDelete, setSelectedCategoryToDelete] =
-    useState(null);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
@@ -73,35 +72,35 @@ export default function Budgets() {
 
   const totalBudget = budgets.reduce((acc, b) => acc + b.maximum, 0);
 
-  const handleThemeChange = (color) => {
-};
+  const handleThemeChange = (color) => {};
 
-const handleBudgetDeleted = (categoryDeleted) => {
-  setBudgets((prevBudgets) => prevBudgets.filter(b => b.category !== categoryDeleted));
-};
+  const handleBudgetDeleted = (categoryDeleted) => {
+    setBudgets((prevBudgets) =>
+      prevBudgets.filter((b) => b.category !== categoryDeleted)
+    );
+  };
 
-const handleBudgetAdded = async () => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/budgets`);
-  const updatedBudgets = await res.json();
-  setBudgets(updatedBudgets);
-};
-
+  const handleBudgetAdded = async () => {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/budgets`);
+    const updatedBudgets = await res.json();
+    setBudgets(updatedBudgets);
+  };
 
   return (
     <>
       <header>
         <h1>Budgets</h1>
-        <div>
-          <button onClick={() => setShowAddModal(true)}>+Add New Budget</button>
-          {showAddModal && (
-            <AddNewBudget
+        <>
+          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
+          {showModal && (
+            <AddBudget
               transactions={transactions}
-              onClose={() => setShowAddModal(false)}
+              onClose={() => setShowModal(false)}
               onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
-            ></AddNewBudget>
+            ></AddBudget>
           )}
-        </div>
+        </>
       </header>
       <div className="budget-container">
         <div className="spending-summary">
@@ -110,17 +109,19 @@ const handleBudgetAdded = async () => {
             ${totalSpent.toFixed(2)} <span>of ${totalBudget} limit</span>
           </p>
           <ul>
-          {categories.map((category, index) => {
-            const budget = budgets.find((b) => b.category === category);
-            const spent = getSpentForCategory(category);
+            {categories.map((category, index) => {
+              const budget = budgets.find((b) => b.category === category);
+              const spent = getSpentForCategory(category);
 
-            return (
+              return (
                 <li key={index}>
-                  <span>{category}${spent.toFixed(2)}</span>
+                  <span>
+                    {category}${spent.toFixed(2)}
+                  </span>
                   <span> of ${budget ? budget.maximum : 0}</span>
                 </li>
-            );
-          })}
+              );
+            })}
           </ul>
         </div>
 
@@ -131,10 +132,8 @@ const handleBudgetAdded = async () => {
           return (
             <div key={index} className="budget-item">
               <h2>{budget.category}</h2>
-              <button
-                onClick={() => setSelectedCategoryToDelete(budget.category)}
-              >
-                Delete Budget
+              <button onClick={() => setSelectedBudgetChange(budget.category)}>
+                / / /
               </button>
               <p>Maximum of ${Number(budget.maximum).toFixed(2)}</p>
               <div className="budget-progress-bar">
@@ -192,17 +191,34 @@ const handleBudgetAdded = async () => {
                     </div>
                   ))}
               </div>
-        </div>
+            </div>
           );
         })}
 
-        {selectedCategoryToDelete && (
-          <DeleteBudget
-          category={selectedCategoryToDelete}
-          onClose={() => setSelectedCategoryToDelete(null)}
-          onBudgetDeleted={handleBudgetDeleted}
-          />
-        )}
+        <>
+          {selectedBudgetChange && (
+            <ModalEditDelete
+              transactions={transactions}
+              onBudgetAdded={handleBudgetAdded}
+              onThemeSelect={handleThemeChange}
+              budget={selectedBudgetChange}
+              onClose={() => setSelectedBudgetChange(false)}
+              onBudgetDeleted={handleBudgetDeleted}
+            ></ModalEditDelete>
+          )}
+        </>
+
+        {/* <div>
+          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
+          {showModal && (
+            <AddBudget
+              transactions={transactions}
+              onClose={() => setShowModal(false)}
+              onBudgetAdded={handleBudgetAdded}
+              onThemeSelect={handleThemeChange}
+            ></AddBudget>
+          )}
+        </div> */}
       </div>
     </>
   );

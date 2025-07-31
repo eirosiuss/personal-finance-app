@@ -1,7 +1,12 @@
 import { useState } from "react";
 import ModalWrapper from "../shared/ModalWrapper";
 
-export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onThemeSelect  }) {
+export default function AddBudget({
+  onClose,
+  transactions,
+  onBudgetAdded,
+  onThemeSelect,
+}) {
   const [form, setForm] = useState({
     category: "",
     maximum: "",
@@ -14,7 +19,7 @@ export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onT
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
 
-        if (name === "theme" && onThemeSelect) {
+    if (name === "theme" && onThemeSelect) {
       onThemeSelect(value);
     }
   };
@@ -54,7 +59,7 @@ export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onT
       <form onSubmit={handleSubmit}>
         <div className="modal-header">
           <h2>Add New Budget</h2>
-          <button className="modal-close" onClick={onClose}>
+          <button onClick={onClose}>
             Close
           </button>
         </div>
@@ -115,6 +120,13 @@ export default function AddNewBudget({ onClose, transactions, onBudgetAdded, onT
               <option value="#626070">Navy</option>
               <option value="#C94736">Red</option>
               <option value="#826CB0">Purple</option>
+              <option value="#597C7C">Turquoise</option>
+              <option value="#93674F">Brown</option>
+              <option value="#934F6F">Magenta</option>
+              <option value="#3F82B2">Blue</option>
+              <option value="#97A0AC">Grey</option>
+              <option value="#7F9161">Army</option>
+              <option value="#CAB361">Gold</option>
               <option value="#BE6C49">Orange</option>
             </select>
           </div>
