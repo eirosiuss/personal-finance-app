@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import AddBudget from "./AddBudget.jsx";
 import DeleteBudget from "./DeleteBudget.jsx";
-import ModalEditDelete from "../shared/EditDeleteModal.jsx";
+import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [selectedBudgetChange, setSelectedBudgetChange] = useState(false);
+  const [selectBudget, setSelectBudget] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,7 +132,7 @@ export default function Budgets() {
           return (
             <div key={index} className="budget-item">
               <h2>{budget.category}</h2>
-              <button onClick={() => setSelectedBudgetChange(budget.category)}>
+              <button onClick={() => setSelectBudget(budget)}>
                 / / /
               </button>
               <p>Maximum of ${Number(budget.maximum).toFixed(2)}</p>
@@ -196,29 +196,18 @@ export default function Budgets() {
         })}
 
         <>
-          {selectedBudgetChange && (
+          {selectBudget && (
             <ModalEditDelete
               transactions={transactions}
               onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
-              budget={selectedBudgetChange}
-              onClose={() => setSelectedBudgetChange(false)}
+              budget={selectBudget}
+              onClose={() => setSelectBudget(false)}
               onBudgetDeleted={handleBudgetDeleted}
+              onBudgetEdited={handleBudgetAdded}
             ></ModalEditDelete>
           )}
         </>
-
-        {/* <div>
-          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
-          {showModal && (
-            <AddBudget
-              transactions={transactions}
-              onClose={() => setShowModal(false)}
-              onBudgetAdded={handleBudgetAdded}
-              onThemeSelect={handleThemeChange}
-            ></AddBudget>
-          )}
-        </div> */}
       </div>
     </>
   );

@@ -7,8 +7,8 @@ import records from "./routes/record.js";
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(cors({origin: process.env.FRONTEND_URL}));
 app.use(express.json());
+app.use(cors({origin: process.env.FRONTEND_URL}));
 app.use("/", records);
 
 // start the Express server

@@ -1,18 +1,17 @@
-import { useState } from "react";
 import ModalWrapper from "../shared/ModalWrapper";
 
 export default function DeleteBudget({ onClose, onBudgetDeleted, budget }) {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/budgets/${budget}`,
+        `${import.meta.env.VITE_BACKEND_URL}/budgets/${budget.category}`,
         { method: "DELETE" }
       );
 
       if (!response.ok)
         throw new Error(`Failed to delete budget: ${response.statusText}`);
       if (onBudgetDeleted) {
-        onBudgetDeleted(budget);
+        onBudgetDeleted(budget.category);
       }
       onClose();
     } catch (err) {
@@ -24,11 +23,10 @@ export default function DeleteBudget({ onClose, onBudgetDeleted, budget }) {
     <ModalWrapper onClose={onClose}>
       <h2>Delete Budget</h2>
       <p>
-        Are you sure you want to delete the budget for budget:{" "}
-        <strong>{budget}</strong>?
+        Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever.
       </p>
-      <button onClick={handleDelete}>Delete</button>
-      <button onClick={onClose}>Cancel</button>
+      <button onClick={handleDelete}>Yes, Confirm Deletion</button>
+      <button onClick={onClose}>No, Go Back</button>
     </ModalWrapper>
   );
 }

@@ -119,6 +119,35 @@ router.delete("/budgets/:category", async (req, res) => {
   }
 });
 
+router.put("/budgets/:oldCategory", async (req, res) => {
+  const { newTitle, newMaximum, newTheme } = req.body;
+
+  try {
+    const updatedData = await Data.findOneAndUpdate(
+      { "budgets.category": req.params.oldCategory },
+      {
+        $set: {
+          "budgets.$.category": newTitle,
+          "budgets.$.maximum": newMaximum,
+          "budgets.$.theme": newTheme,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedData) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+    res.status(200).json({
+      message: "Budget updated",
+      budgets: updatedData.budgets,
+    });
+  } catch (err) {
+    console.error("Error updating budget:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
 router.get("/pots", async (req, res) => {
   try {
     const data = await Data.findOne();
