@@ -1,10 +1,10 @@
-import AddBudget from "../budgets/AddBudget";
 import DeleteBudget from "../budgets/DeleteBudget";
 import { useState } from "react";
 import EditBudget from "../budgets/EditBudget";
 
 const ModalEditDelete = ({
   budget,
+  categories,
   onClose,
   onBudgetDeleted,
   transactions,
@@ -23,8 +23,8 @@ const ModalEditDelete = ({
         {showEdit && (
           <EditBudget
             budget={budget}
-            oldCategory={budget}
             transactions={transactions}
+            categories={categories}
             onClose={() => {
               setShowEdit(false);
               onClose();

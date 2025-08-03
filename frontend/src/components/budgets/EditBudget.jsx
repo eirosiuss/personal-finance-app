@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export default function EditBudget({
   budget,
+  categories,
   onClose,
   transactions,
   onBudgetEdited,
@@ -15,7 +16,14 @@ export default function EditBudget({
   theme: budget.theme
   });
  
-  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
+  const uniqueCategories = [...new Set(transactions.map((t) => t.category)), ...categories];
+  const counts = uniqueCategories.reduce((acc, val) => {
+  acc[val] = (acc[val] || 0) + 1;
+  return acc;
+}, {});
+
+  const uniqueCombinedCategories = Object.keys(counts).filter(
+  (key) => counts[key] === 1);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,7 +85,7 @@ export default function EditBudget({
             value={form.category}
             onChange={handleChange}
           >
-            {uniqueCategories.map((category) => (
+            {uniqueCombinedCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>

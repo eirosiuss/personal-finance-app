@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import AddBudget from "./AddBudget.jsx";
-import DeleteBudget from "./DeleteBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
@@ -13,11 +12,11 @@ export default function Budgets() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const url = import.meta.env.VITE_BACKEND_URL;
 
         const [budgetsRes, transactionsRes] = await Promise.all([
-          fetch(`${backendUrl}/budgets`),
-          fetch(`${backendUrl}/transactions`),
+          fetch(`${url}/budgets`),
+          fetch(`${url}/transactions`),
         ]);
 
         if (!budgetsRes.ok || !transactionsRes.ok) {
@@ -95,6 +94,7 @@ export default function Budgets() {
           {showModal && (
             <AddBudget
               transactions={transactions}
+              categories={categories}
               onClose={() => setShowModal(false)}
               onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
@@ -199,6 +199,7 @@ export default function Budgets() {
           {selectBudget && (
             <ModalEditDelete
               transactions={transactions}
+              categories={categories}
               onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
               budget={selectBudget}
