@@ -3,6 +3,24 @@ import { useState, useEffect } from "react";
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const postsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentTransactions = filteredTransactions.slice(
+    indexOfFirst,
+    indexOfLast
+  );
+  const totalPages = Math.ceil(filteredTransactions.length / postsPerPage);
+  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredTransactions.length / postsPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
+  }
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -22,25 +40,6 @@ export default function Transactions() {
   }, []);
 
   if (!transactions) return null;
-
-  const postsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentTransactions = filteredTransactions.slice(
-    indexOfFirst,
-    indexOfLast
-  );
-  const totalPages = Math.ceil(filteredTransactions.length / postsPerPage);
-  const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
-  const pageNumbers = [];
-  for (
-    let i = 1;
-    i <= Math.ceil(filteredTransactions.length / postsPerPage);
-    i++
-  ) {
-    pageNumbers.push(i);
-  }
 
   const filterTransactions = (search, category, sort) => {
     let filtered = [...transactions];

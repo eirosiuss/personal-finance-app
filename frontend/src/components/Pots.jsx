@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function Pots() {
-  const [pots, setPots] = useState([])
+  const [pots, setPots] = useState()
 
   useEffect(() => {
       const fetchPots = async () => {

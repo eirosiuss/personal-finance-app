@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +52,7 @@ export default function HomePage() {
       <div className="pots">
         <div className="more-info-header">
           <h2>Pots</h2>
-          <button>See Details</button>
+          <Link to="/pots">See Details</Link>
         </div>
         <div>
           <h3>Total Saved</h3>
@@ -68,7 +69,7 @@ export default function HomePage() {
       <div className="transactions-overview">
         <div className="more-info-header">
           <h2>Transactions</h2>
-          <button>View All</button>
+          <Link to='/transactions'>View All</Link>
         </div>
         {transactions.slice(0, 5).map((transaction, index) => (
           <article key={index}>
@@ -100,7 +101,7 @@ export default function HomePage() {
       <div className="budgets">
         <div className="more-info-header">
           <h2>Budgets</h2>
-          <button>See Details</button>
+          <Link to='/budgets'>See Details</Link>
         </div>
         <p>
           $
@@ -137,7 +138,7 @@ export default function HomePage() {
       <div className="recurring-bills">
         <div className="more-info-header">
           <h2>Recurring Bills</h2>
-          <button>See Details</button>
+          <Link to='/recurring-bills'>See Details</Link>
         </div>
         {transactions
           .filter((transaction) => transaction.recurring)

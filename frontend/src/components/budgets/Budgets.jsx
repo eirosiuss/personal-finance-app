@@ -5,7 +5,6 @@ import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 export default function Budgets() {
   const [transactions, setTransactions] = useState([]);
   const [budgets, setBudgets] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectBudget, setSelectBudget] = useState(false);
 
@@ -30,17 +29,13 @@ export default function Budgets() {
         setTransactions(transactionsData);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (!budgets && !transactions) return null;
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
