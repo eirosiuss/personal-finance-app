@@ -1,25 +1,23 @@
 import React from "react";
-import { AuthProvider } from "react-auth-kit";
-import Router from "./components/Router.jsx";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router";
 import HomePage from "./components/HomePage.jsx";
+import Main from "./components/Main.jsx";
+import Profile from "./components/Profile.jsx";
 
+// Import the context provider to manage global user state
+import { ProfileProvider } from "./components/ProfileContext.jsx";
 
 function App() {
   return (
     <>
-      <AuthProvider
-        authName="_auth"
-        authType="cookie"
-        cookieDomain={window.location.hostname}
-        cookieSecure={false}
-      >
-        <BrowserRouter>
+      <Router>
+        <ProfileProvider>
           <Routes>
-            <Route path="/" element={<HomePage/>} />
+            <Route path="/" element={<Main />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </ProfileProvider>
+      </Router>
     </>
   );
 }

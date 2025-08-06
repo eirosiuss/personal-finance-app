@@ -1,10 +1,7 @@
 import React from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from "react-router-dom";
-import { RequireAuth } from "react-auth-kit";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
+import RequireAuth from '@auth-kit/react-router/RequireAuth'
 import HomePage from "./HomePage.jsx";
 import Pots from "./Pots.jsx";
 import Transactions from "./Transactions.jsx";
@@ -13,14 +10,6 @@ import RecurringBills from "./RecurringBills.jsx";
 import Login from "./Login.jsx";
 import SignUp from "./SignUp.jsx";
 import MainLayout from "./shared/MainLayout.jsx";
-
-// import ProtectedRoute from "./ProtectedRoute.jsx";
-import { useIsAuthenticated } from "react-auth-kit";
-
-function PublicRoute({ children }) {
-  const isAuthenticated = useIsAuthenticated();
-  return isAuthenticated() ? <Navigate to="/" replace /> : children;
-}
 
 const router = createBrowserRouter([
   {
