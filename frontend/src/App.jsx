@@ -1,25 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router";
-import HomePage from "./components/HomePage.jsx";
-import Main from "./components/Main.jsx";
-import Profile from "./components/Profile.jsx";
+import { Routes, Route, Navigate } from "react-router";
+import Login from "./components/Login.jsx";
+import Register from "./components/Register.jsx";
+import Dashboard from "./components/Dashboard.jsx";
+import HomePage from "./components/HomePage.jsx"
+import { useAuth } from "./components/context/AuthContext.jsx";
 
-// Import the context provider to manage global user state
-import { ProfileProvider } from "./components/ProfileContext.jsx";
+export default function App() {
+  const { user } = useAuth();
 
-function App() {
   return (
-    <>
-      <Router>
-        <ProfileProvider>
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </ProfileProvider>
-      </Router>
-    </>
+    <Routes>
+      <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
 }
-
-export default App;
