@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
     const user = new User({ email, password });
     await user.save();
     const token = createToken(user);
-    res.cookie("token", token, { httpOnly: true, sameSite: "Lax",secure: false });
+    res.cookie("token", token, { httpOnly: true, sameSite: "lax" ,secure: false });
     res.status(201).json({ email: user.email });
   } catch (err) {
     res.status(400).json({ message: "Registration failed", error: err.message });
@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = createToken(user);
-    res.cookie("token", token, { httpOnly: true, sameSite: "Lax", secure: false });
+    res.cookie("token", token, { httpOnly: true, sameSite: "lax", secure: false });
     res.json({ email: user.email });
   } catch (err) {
     res.status(500).json({ message: "Login failed", error: err.message });
