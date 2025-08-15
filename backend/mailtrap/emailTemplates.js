@@ -49,14 +49,11 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
         <td align="center">
           <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:6px; padding:20px;">
             <tr>
-              <td style="font-size:18px; font-weight:bold;">{{app_name}}</td>
-            </tr>
-            <tr>
-              <td style="padding-top:10px; font-size:22px; font-weight:bold;">Hi {{user_name}},</td>
+              <td style="padding-top:10px; font-size:22px; font-weight:bold;">Forgot Password</td>
             </tr>
             <tr>
               <td style="padding-top:15px; font-size:14px; color:#333;">
-                We received a request to reset your {{app_name}} password. Click the button below to set a new password.
+                Enter your email address and we'll send you a link to reset your password.
               </td>
             </tr>
             <tr>
@@ -69,18 +66,6 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
                 <a href="{{reset_link}}" style="background:#4f46e5; color:#ffffff; padding:10px 20px; text-decoration:none; border-radius:4px;">
                   Reset Password
                 </a>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding-top:15px; font-size:12px; color:#777;">
-                If the button doesn’t work, paste this link into your browser:<br>
-                <a href="{{reset_link}}" style="color:#2563eb;">{{reset_link}}</a>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding-top:20px; font-size:12px; color:#999;">
-                Need help? Contact <a href="mailto:{{support_email}}">{{support_email}}</a>.<br>
-                © {{current_year}} {{app_name}}. All rights reserved.
               </td>
             </tr>
           </table>
