@@ -16,8 +16,8 @@ export default function SignUp() {
     setPasswordLengthError(false);
   };
   return (
-    <div className="max-w-md w-full">
-      <div className="p-8">
+    <div className="text-center">
+      <div>
         <h2>Sign Up</h2>
 
         <form onSubmit={handleSignUp}>
@@ -58,10 +58,12 @@ export default function SignUp() {
           </button>
         </form>
       </div>
-      <p>
-        Need to create an account?
-        <Link to={"/login"}>Login</Link>
-      </p>
+      <div>
+        <p>
+          Need to create an account?
+          <Link to={"/login"}> Login</Link>
+        </p>
+      </div>
     </div>
   );
 }

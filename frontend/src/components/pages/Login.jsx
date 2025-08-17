@@ -10,8 +10,8 @@ const Login = () => {
     e.preventDefault();
   };
   return (
-    <div className="max-w-md w-full">
-      <div className="p-8">
+    <div className="text-center">
+      <div>
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <label htmlFor="email">Email</label>
@@ -33,9 +33,11 @@ const Login = () => {
             }}
           />
           <Link to="/forgot-password">Forgot password?</Link>
-          <button type="submit" className="cursor-pointer block">
-            Login
-          </button>
+          <div>
+            <button type="submit" className="cursor-pointer">
+              Login
+            </button>
+          </div>
           <p>
             Already have an account?
             <Link to={"/signup"}> Sign Up</Link>
