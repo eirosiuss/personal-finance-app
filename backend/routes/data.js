@@ -1,34 +1,33 @@
 import express from "express";
 import Data from "../models/Data.js";
-import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/budgets", protect, async (req, res) => {
-  try {
-    const data = await Data.findOne({ user: req.user.id });
-    if (!data) return res.status(404).json({ message: "No data found" });
-    res.status(200).json(data.budgets);
-  } catch (err) {
-    console.error("Error fetching budgets:", err);
-    res.status(500).send("Server error");
-  }
-});
+// router.get("/budgets", async (req, res) => {
+//   try {
+//     const data = await Data.findOne({ user: req.user.id });
+//     if (!data) return res.status(404).json({ message: "No data found" });
+//     res.status(200).json(data.budgets);
+//   } catch (err) {
+//     console.error("Error fetching budgets:", err);
+//     res.status(500).send("Server error");
+//   }
+// });
 
-router.post("/budgets", protect, async (req, res) => {
-  try {
-    let data = await Data.findOne({ user: req.user.id });
-    if (!data) {
-      data = new Data({ user: req.user.id, budgets: [req.body] });
-    } else {
-      data.budgets.push(req.body);
-    }
-    await data.save();
-    res.status(201).json(data.budgets);
-  } catch (err) {
-    res.status(500).send("Server error");
-  }
-});
+// router.post("/budgets", async (req, res) => {
+//   try {
+//     let data = await Data.findOne({ user: req.user.id });
+//     if (!data) {
+//       data = new Data({ user: req.user.id, budgets: [req.body] });
+//     } else {
+//       data.budgets.push(req.body);
+//     }
+//     await data.save();
+//     res.status(201).json(data.budgets);
+//   } catch (err) {
+//     res.status(500).send("Server error");
+//   }
+// });
 
 // router.get("/", async (req, res) => {
 //   try {
