@@ -18,7 +18,7 @@ export default function SignUp() {
   return (
     <div className="max-w-md w-full">
       <div className="p-8">
-        <h2 className="text-center">Sign Up</h2>
+        <h2>Sign Up</h2>
 
         <form onSubmit={handleSignUp}>
           <label htmlFor="name">Name</label>
@@ -58,12 +58,10 @@ export default function SignUp() {
           </button>
         </form>
       </div>
-      <div>
-        <p>
-          Already have an account?
-          <Link to={"/login"}>Login</Link>
-        </p>
-      </div>
+      <p>
+        Need to create an account?
+        <Link to={"/login"}>Login</Link>
+      </p>
     </div>
   );
 }
