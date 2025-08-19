@@ -4,8 +4,8 @@ import SignUp from "./components/pages/SignUp.jsx";
 import EmailVerification from "./components/pages/EmailVerification.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Transactions from "./components/Transactions.jsx";
-
 import MainLayout from "./components/shared/MainLayout.jsx";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
@@ -19,6 +19,7 @@ export default function App() {
           <Route path="/transactions" element={<Transactions />}></Route>
         </Route>
       </Routes>
+      <Toaster />
     </>
   );
 }

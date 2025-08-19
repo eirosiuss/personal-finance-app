@@ -1,11 +1,14 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore";
+import toast from "react-hot-toast";
 
 const EmailVerification = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
-  const isLoading = false;
+
+  const { error, isLoading, verifyEmail } = useAuthStore();
 
   const handleChange = (index, value) => {
     const newCode = [...code];
@@ -36,10 +39,17 @@ const EmailVerification = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const verificationCode = code.join("");
-    alert(`Verification code submitted: ${verificationCode}`);
+
+    try {
+      await verifyEmail( verificationCode);
+      navigate("/");
+      toast.success("Email verified successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Auto submit the form when all fields are filled
@@ -47,7 +57,7 @@ const EmailVerification = () => {
     if (code.every((digit) => digit !== "")) {
       handleSubmit(new Event("submit"));
     }
-  });
+  }, [code]);
 
   return (
     <div className="text-center">
@@ -69,6 +79,7 @@ const EmailVerification = () => {
               />
             ))}
           </div>
+          {error && <p className="text-red-500">{error}</p>}
           <button type="submit" className="cursor-pointer">
             {isLoading ? "Verifying..." : "Verify Email"}
           </button>

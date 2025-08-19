@@ -52,10 +52,9 @@ export const signup = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { email, code } = req.body;
+  const { code } = req.body;
   try {
     const user = await User.findOne({
-      email: email,
       verificationToken: code,
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
