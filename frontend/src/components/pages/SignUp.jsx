@@ -1,19 +1,30 @@
 import { useState } from "react";
 import Input from "../Input.jsx";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../../../store/authStore.js";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordLengthError, setPasswordLengthError] = useState(false);
-  const handleSignUp = (e) => {
+  const navigate = useNavigate();
+  const { signup, error, isLoading } = useAuthStore();
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (password.length < 8) {
       setPasswordLengthError(true);
       return;
     }
     setPasswordLengthError(false);
+    try {
+      await signup(email, password, name);
+      navigate('/verify-email');
+    } catch (error) {
+      console.log(error);
+      
+    }
   };
   return (
     <div className="text-center">
@@ -53,14 +64,15 @@ export default function SignUp() {
               Password must be at least 8 characters
             </p>
           )}
-          <button type="submit" className="cursor-pointer">
-            Create Account
+          {error && <p className="text-red-500">{error}</p>}
+          <button type="submit" className="cursor-pointer" disabled={isLoading}>
+            {isLoading ? "Signing Up..." : "Create Account"}
           </button>
         </form>
       </div>
       <div>
         <p>
-          Need to create an account?
+          Already have an account?
           <Link to={"/login"}> Login</Link>
         </p>
       </div>
