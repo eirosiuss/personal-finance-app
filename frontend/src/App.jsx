@@ -40,8 +40,6 @@ export default function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-  console.log("isAuthenticated:", isAuthenticated);
-  console.log("user:", user);
 
   return (
     <>
