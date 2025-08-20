@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/authStore.js";
+import formData from "../utils/date.js";
 
 export default function HomePage() {
+  const { user } = useAuthStore();
   const [data, setData] = useState();
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +36,11 @@ export default function HomePage() {
     <>
       <div className="financial-summary">
         <header>
-          <h1>Overview</h1>
+          <h1>Finance Overview for {user.name}</h1>
+          <p>
+            <span>Last Login: </span>
+            {formData(user.lastLogin)}
+          </p>
         </header>
         {Object.entries(balance)
           .slice(0, 3)
@@ -69,7 +76,7 @@ export default function HomePage() {
       <div className="transactions-overview">
         <div className="more-info-header">
           <h2>Transactions</h2>
-          <Link to='/transactions'>View All</Link>
+          <Link to="/transactions">View All</Link>
         </div>
         {transactions.slice(0, 5).map((transaction, index) => (
           <article key={index}>
@@ -101,7 +108,7 @@ export default function HomePage() {
       <div className="budgets">
         <div className="more-info-header">
           <h2>Budgets</h2>
-          <Link to='/budgets'>See Details</Link>
+          <Link to="/budgets">See Details</Link>
         </div>
         <p>
           $
@@ -138,7 +145,7 @@ export default function HomePage() {
       <div className="recurring-bills">
         <div className="more-info-header">
           <h2>Recurring Bills</h2>
-          <Link to='/recurring-bills'>See Details</Link>
+          <Link to="/recurring-bills">See Details</Link>
         </div>
         {transactions
           .filter((transaction) => transaction.recurring)

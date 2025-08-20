@@ -6,8 +6,9 @@ import EmailVerification from "./components/pages/EmailVerification.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Transactions from "./components/Transactions.jsx";
 import MainLayout from "./components/shared/MainLayout.jsx";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import { Toaster } from "react-hot-toast";
-import { useAuthStore } from "../store/authStore.js";
+import { useAuthStore } from "./store/authStore.js";
 import { useEffect } from "react";
 
 //protect routes that require authentication
@@ -40,6 +41,8 @@ export default function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  if (isCheckingAuth) return <LoadingSpinner />
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 import toast from "react-hot-toast";
 
 const EmailVerification = () => {
