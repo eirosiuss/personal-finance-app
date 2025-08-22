@@ -45,7 +45,7 @@ const Login = () => {
             </button>
           </div>
           <p>
-            Already have an account?
+            Need to create an account?
             <Link to={"/signup"}> Sign Up</Link>
           </p>
         </form>

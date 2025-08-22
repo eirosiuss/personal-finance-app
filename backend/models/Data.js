@@ -30,13 +30,13 @@ const potSchema = new Schema({
   theme: String,
 });
 
-const dataSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+const DataSchema = new Schema({
+  // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   balance: balanceSchema,
   transactions: [transactionSchema],
   budgets: [budgetSchema],
   pots: [potSchema],
+  user: { type: String, required: true }
 });
 
-const Data = model("Data", dataSchema);
-export default Data;
+export const Data = model("Data", DataSchema);

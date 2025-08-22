@@ -1,7 +1,28 @@
 import express from "express";
-import Data from "../models/Data.js";
+import { Data } from "../models/Data.js";
+import { User } from "../models/User.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+import { checkAuth } from "../controllers/auth.controller.js";
 
 const router = express.Router();
+
+router.get("/check-auth", verifyToken, checkAuth);
+
+
+
+router.get("/data", async (req, res) => {
+  // res.status(501).send('Get data')
+  console.log('asdf');
+  
+  
+  try {
+    const data = await Data.findOne();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Failed to fetch data");
+  }
+});
 
 // router.get("/budgets", async (req, res) => {
 //   try {
@@ -28,16 +49,6 @@ const router = express.Router();
 //     res.status(500).send("Server error");
 //   }
 // });
-
-router.get("/", async (req, res) => {
-  try {
-    const data = await Data.findOne();
-    res.status(200).json(data);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Failed to fetch data");
-  }
-});
 
 // router.get("/transactions", async (req, res) => {
 //   try {

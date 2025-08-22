@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/connection.js";
 import authRoutes from "./routes/auth.route.js";
+import dataRoutes from "./routes/data.route.js"
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -13,6 +14,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true })); // allow
 app.use(cookieParser()); // allows to parse incoming cookies
 
 app.use("/api/auth", authRoutes);
+app.use("/api/finance", dataRoutes)
 
 await connectDB();
 

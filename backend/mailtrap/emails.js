@@ -65,7 +65,7 @@ export const sendResetSuccessEmail = async (email) => {
   const recipients = [{ email }];
 
   try {
-    const responce = await mailtrapClient.send({
+    const response = await mailtrapClient.send({
       from: sender,
       to: recipients,
       template_uuid: "c044f0ad-974d-40f2-98b0-b1532ceb4e50",
