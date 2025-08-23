@@ -14,7 +14,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true })); // allow
 app.use(cookieParser()); // allows to parse incoming cookies
 
 app.use("/api/auth", authRoutes);
-app.use("/api/finance", dataRoutes)
+app.use("/api/data", dataRoutes)
 
 await connectDB();
 

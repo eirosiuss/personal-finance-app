@@ -3,6 +3,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 import { User } from "../models/User.js";
+import { Data } from "../models/Data.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import {
   sendVerificationEmail,
@@ -70,6 +71,14 @@ export const verifyEmail = async (req, res) => {
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
+
+    await Data.create({
+      user: user._id,
+      balance: { current: 0, income: 0, expenses: 0 },
+      transactions: [],
+      budgets: [],
+      pots: [],
+    });
 
     await sendWelcomeEmail(user.email, user.name);
 

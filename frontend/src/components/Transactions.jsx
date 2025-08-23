@@ -1,10 +1,21 @@
 import { useState, useEffect } from "react";
+import { useDataStore } from "../store/dataStore.js";
+import axios from "axios";
 
 export default function Transactions() {
-  const [transactions, setTransactions] = useState([]);
+  const { fetchTransactions, transactions, error } = useDataStore();
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const postsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
+
+  useEffect(() => {
+    setFilteredTransactions(transactions);
+  }, [transactions]);
+
+  const postsPerPage = 10;
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
   const currentTransactions = filteredTransactions.slice(
@@ -21,25 +32,6 @@ export default function Transactions() {
   ) {
     pageNumbers.push(i);
   }
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const url = import.meta.env.VITE_BACKEND_URL + "/transactions";
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Server error");
-        const data = await response.json();
-        setTransactions(data);
-        setFilteredTransactions(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchTransactions();
-  }, []);
-
-  if (!transactions) return null;
 
   const filterTransactions = (search, category, sort) => {
     let filtered = [...transactions];
@@ -100,6 +92,8 @@ export default function Transactions() {
     filterTransactions(searchValue, selectedCategory, value);
   };
 
+  if (error) return <p className="text-red-500">{error}</p>;
+
   return (
     <>
       <header>
@@ -150,7 +144,7 @@ export default function Transactions() {
           </thead>
           <tbody>
             {currentTransactions.map((transaction, index) => (
-              <tr key={index}>
+              <tr key={transaction._id}>
                 <td>
                   <div className="transaction-avatar">
                     <img

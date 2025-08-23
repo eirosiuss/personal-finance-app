@@ -31,7 +31,6 @@ const potSchema = new Schema({
 });
 
 const DataSchema = new Schema({
-  // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   balance: balanceSchema,
   transactions: [transactionSchema],
   budgets: [budgetSchema],
@@ -39,4 +38,4 @@ const DataSchema = new Schema({
   user: { type: String, required: true }
 });
 
-export const Data = model("Data", DataSchema);
+export const Data = model("Personal_finance_data", DataSchema);

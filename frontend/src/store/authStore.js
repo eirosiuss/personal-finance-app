@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import axios from "axios";
-import ForgotPassword from "../components/pages/ForgotPassword";
 
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/auth`;
 axios.defaults.withCredentials = true;
@@ -125,7 +124,7 @@ export const useAuthStore = create((set) => ({
       throw error;
     }
   },
-  
+
   resetPassword: async (token, password) => {
     set({ isLoading: true, error: null });
     try {
