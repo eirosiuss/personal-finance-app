@@ -13,7 +13,7 @@ const Sidebar = () => {
       <nav>
         <ul>
           <li>
-            <NavLink to="/">Overview</NavLink>
+            <NavLink to="/home-page">Overview</NavLink>
           </li>
           <li>
             <NavLink to="/transactions">Transactions</NavLink>

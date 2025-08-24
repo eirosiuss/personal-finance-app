@@ -3,13 +3,14 @@ import { Navigate } from "react-router-dom";
 import Login from "./components/pages/Login.jsx";
 import SignUp from "./components/pages/SignUp.jsx";
 import EmailVerification from "./components/pages/EmailVerification.jsx";
+import MainLayout from "./components/shared/MainLayout.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Transactions from "./components/Transactions.jsx";
 import Budgets from "./components/budgets/Budgets.jsx";
-import MainLayout from "./components/shared/MainLayout.jsx";
+import Pots from "./components/Pots.jsx"
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
-import ResetPassword from './components/pages/ResetPassword.jsx'
+import ResetPassword from "./components/pages/ResetPassword.jsx";
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore.js";
 import { useEffect } from "react";
@@ -51,39 +52,6 @@ export default function App() {
     <>
       <Routes>
         <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route
-            path="/home-page"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/transactions"
-            element={
-              <ProtectedRoute>
-                <Transactions />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/budgets"
-            element={
-              <ProtectedRoute>
-                <Budgets />
-              </ProtectedRoute>
-            }
-          ></Route>
-        </Route>
-        <Route
           path="/signup"
           element={
             <RedirectAuthenticatedUser>
@@ -116,6 +84,46 @@ export default function App() {
             </RedirectAuthenticatedUser>
           }
         />
+        <Route
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route
+            path="/home-page"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <Transactions />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/budgets"
+            element={
+              <ProtectedRoute>
+                <Budgets />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/pots"
+            element={
+              <ProtectedRoute>
+                <Pots />
+              </ProtectedRoute>
+            }
+          ></Route>
+        </Route>
       </Routes>
       <Toaster />
     </>

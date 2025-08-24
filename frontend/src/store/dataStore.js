@@ -7,6 +7,7 @@ axios.defaults.withCredentials = true;
 export const useDataStore = create((set) => ({
   transactions: [],
   budgets: [],
+  pots: [],
   error: null,
 
   fetchTransactions: async () => {
@@ -16,9 +17,9 @@ export const useDataStore = create((set) => ({
       set({
         transactions: res.data,
       });
-    } catch (err) {
+    } catch (error) {
       set({
-        error: err.response?.data?.message || "Failed to fetch transactions",
+        error: error.response?.data?.message || "Failed to fetch transactions",
       });
     }
   },
@@ -30,9 +31,23 @@ export const useDataStore = create((set) => ({
       set({
         budgets: res.data,
       });
-    } catch (err) {
+    } catch (error) {
       set({
-        error: err.response?.data?.message || "Failed to fetch budgets",
+        error: error.response?.data?.message || "Failed to fetch budgets",
+      });
+    }
+  },
+
+  fetchPots: async () => {
+    set({ error: null });
+    try {
+      const res = await axios.get(`${API_URL}/pots`);
+      set({
+        pots: res.data,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch pots",
       });
     }
   },

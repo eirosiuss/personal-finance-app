@@ -1,11 +1,12 @@
 import express from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
-import { transactions, budgets } from "../controllers/data.controller.js";
+import { transactions, budgets, pots } from "../controllers/data.controller.js";
 
 const router = express.Router();
 
 router.get("/transactions", verifyToken, transactions);
 router.get("/budgets", verifyToken, budgets);
+router.get("/pots", verifyToken, pots);
 
 // router.get("/budgets", async (req, res) => {
 //   try {
