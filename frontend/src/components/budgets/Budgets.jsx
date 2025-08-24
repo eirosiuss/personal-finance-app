@@ -1,41 +1,52 @@
 import { useState, useEffect } from "react";
+import { useDataStore } from "../../store/dataStore.js";
 import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const [transactions, setTransactions] = useState([]);
-  const [budgets, setBudgets] = useState([]);
+  const { fetchTransactions, fetchBudgets, transactions, budgets, error } =
+    useDataStore();
+  // const [transactions, setTransactions] = useState([]);
+  // const [budgets, setBudgets] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectBudget, setSelectBudget] = useState(false);
+  const [selectBudget, setSelectBudget] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = import.meta.env.VITE_BACKEND_URL;
+    fetchTransactions();
+  }, [fetchTransactions]);
 
-        const [budgetsRes, transactionsRes] = await Promise.all([
-          fetch(`${url}/budgets`),
-          fetch(`${url}/transactions`),
-        ]);
+    useEffect(() => {
+    fetchBudgets();
+  }, [fetchBudgets]);
 
-        if (!budgetsRes.ok || !transactionsRes.ok) {
-          throw new Error("Server error");
-        }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const url = import.meta.env.VITE_BACKEND_URL;
 
-        const budgetsData = await budgetsRes.json();
-        const transactionsData = await transactionsRes.json();
+  //       const [budgetsRes, transactionsRes] = await Promise.all([
+  //         fetch(`${url}/budgets`),
+  //         fetch(`${url}/transactions`),
+  //       ]);
 
-        setBudgets(budgetsData);
-        setTransactions(transactionsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  //       if (!budgetsRes.ok || !transactionsRes.ok) {
+  //         throw new Error("Server error");
+  //       }
 
-    fetchData();
-  }, []);
+  //       const budgetsData = await budgetsRes.json();
+  //       const transactionsData = await transactionsRes.json();
 
-  if (!budgets && !transactions) return null;
+  //       setBudgets(budgetsData);
+  //       setTransactions(transactionsData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // if (!budgets && !transactions) return null;
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
@@ -68,17 +79,21 @@ export default function Budgets() {
 
   const handleThemeChange = (color) => {};
 
-  const handleBudgetDeleted = (categoryDeleted) => {
-    setBudgets((prevBudgets) =>
-      prevBudgets.filter((b) => b.category !== categoryDeleted)
-    );
-  };
+  // const handleBudgetDeleted = (categoryDeleted) => {
+  //   setBudgets((prevBudgets) =>
+  //     prevBudgets.filter((b) => b.category !== categoryDeleted)
+  //   );
+  // };
 
   const handleBudgetAdded = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/budgets`);
-    const updatedBudgets = await res.json();
-    setBudgets(updatedBudgets);
+  try {
+    await fetchBudgets();
+  } catch (error) {
+    console.error("Error adding budget:", error);
+  }
   };
+
+    if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
@@ -127,9 +142,7 @@ export default function Budgets() {
           return (
             <div key={index} className="budget-item">
               <h2>{budget.category}</h2>
-              <button onClick={() => setSelectBudget(budget)}>
-                / / /
-              </button>
+              <button onClick={() => setSelectBudget(budget)}>/ / /</button>
               <p>Maximum of ${Number(budget.maximum).toFixed(2)}</p>
               <div className="budget-progress-bar">
                 <div
@@ -200,7 +213,7 @@ export default function Budgets() {
               budget={selectBudget}
               onClose={() => setSelectBudget(false)}
               onBudgetDeleted={handleBudgetDeleted}
-              onBudgetEdited={handleBudgetAdded}
+              onBudgetEdited={fetchBudgets}
             ></ModalEditDelete>
           )}
         </>

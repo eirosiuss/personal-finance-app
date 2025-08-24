@@ -5,6 +5,7 @@ import SignUp from "./components/pages/SignUp.jsx";
 import EmailVerification from "./components/pages/EmailVerification.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Transactions from "./components/Transactions.jsx";
+import Budgets from "./components/budgets/Budgets.jsx";
 import MainLayout from "./components/shared/MainLayout.jsx";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
@@ -70,6 +71,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Transactions />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/budgets"
+            element={
+              <ProtectedRoute>
+                <Budgets />
               </ProtectedRoute>
             }
           ></Route>

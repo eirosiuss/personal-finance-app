@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useDataStore } from "../store/dataStore.js";
-import axios from "axios";
 
 export default function Transactions() {
   const { fetchTransactions, transactions, error } = useDataStore();
