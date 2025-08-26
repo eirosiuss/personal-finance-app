@@ -6,32 +6,53 @@ import formData from "../utils/date.js";
 
 export default function HomePage() {
   const { user } = useAuthStore();
-  const [data, setData] = useState();
+  const {
+    fetchTransactions,
+    fetchBudgets,
+    fetchPots,
+    transactions,
+    budgets,
+    pots,
+    error,
+  } = useDataStore();
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = import.meta.env.VITE_BACKEND_URL;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Server error");
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    fetchTransactions();
+  }, [fetchTransactions]);
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    fetchBudgets();
+  }, [fetchBudgets]);
 
-  if (!data) return null;
-
-  const { balance, pots, transactions, budgets } = data;
+  useEffect(() => {
+    fetchPots();
+  }, [fetchPots]);
 
   const lastFilledTransaction = transactions
     .map((t) => new Date(t.date))
     .sort((a, b) => b - a)[0];
-  let lastFilledMonth = lastFilledTransaction.getMonth();
-  let lastFilledYear = lastFilledTransaction.getFullYear();
+  let lastFilledMonth = lastFilledTransaction?.getMonth();
+  let lastFilledYear = lastFilledTransaction?.getFullYear();
+  const currentBalance = transactions.reduce(
+    (sum, transaction) => sum + transaction.amount,
+    0
+  );
+  const lastMonthTransactions = transactions.filter((t) => {
+    const date = new Date(t.date);
+    return (
+      date.getMonth() === lastFilledMonth &&
+      date.getFullYear() === lastFilledYear
+    );
+  });
+  const currentMonthIncome = lastMonthTransactions
+    .filter((transaction) => transaction.amount > 0)
+    .reduce((sum, transaction) => sum + transaction.amount, 0);
+  const currentMonthExpances =
+    lastMonthTransactions
+      .filter((transaction) => transaction.amount < 0)
+      .reduce((sum, transaction) => sum + transaction.amount, 0) * -1;
+
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
@@ -43,18 +64,18 @@ export default function HomePage() {
             {formData(user.lastLogin)}
           </p>
         </header>
-        {Object.entries(balance)
-          .slice(0, 3)
-          .map(([key, value]) => (
-            <article key={key}>
-              <h3>
-                {key === "current"
-                  ? `${key.charAt(0).toUpperCase() + key.slice(1)} Balance`
-                  : `${key.charAt(0).toUpperCase() + key.slice(1)}`}
-              </h3>
-              <p>${value.toFixed(2)}</p>
-            </article>
-          ))}
+        <article>
+          <h3>Current Balance</h3>
+          <p>${currentBalance.toFixed(2)}</p>
+        </article>
+        <article>
+          <h3>Income</h3>
+          <p>${currentMonthIncome.toFixed(2)}</p>
+        </article>
+        <article>
+          <h3>Expanses</h3>
+          <p>${currentMonthExpances.toFixed(2)}</p>
+        </article>
       </div>
 
       <div className="pots">

@@ -4,7 +4,7 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const { fetchTransactions, fetchBudgets, transactions, budgets, error } =
+  const { fetchBudgets, transactions, budgets, error } =
     useDataStore();
   // const [transactions, setTransactions] = useState([]);
   // const [budgets, setBudgets] = useState([]);
@@ -12,41 +12,8 @@ export default function Budgets() {
   const [selectBudget, setSelectBudget] = useState(null);
 
   useEffect(() => {
-    fetchTransactions();
-  }, [fetchTransactions]);
-
-    useEffect(() => {
-    fetchBudgets();
-  }, [fetchBudgets]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const url = import.meta.env.VITE_BACKEND_URL;
-
-  //       const [budgetsRes, transactionsRes] = await Promise.all([
-  //         fetch(`${url}/budgets`),
-  //         fetch(`${url}/transactions`),
-  //       ]);
-
-  //       if (!budgetsRes.ok || !transactionsRes.ok) {
-  //         throw new Error("Server error");
-  //       }
-
-  //       const budgetsData = await budgetsRes.json();
-  //       const transactionsData = await transactionsRes.json();
-
-  //       setBudgets(budgetsData);
-  //       setTransactions(transactionsData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // if (!budgets && !transactions) return null;
+  fetchBudgets();
+}, [fetchBudgets]);
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))

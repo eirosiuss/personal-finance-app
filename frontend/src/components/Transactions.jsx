@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useDataStore } from "../store/dataStore.js";
 
 export default function Transactions() {
-  const { fetchTransactions, transactions, error } = useDataStore();
+  const {fetchTransactions, transactions, error } = useDataStore();
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    fetchTransactions();
-  }, [fetchTransactions]);
+    useEffect(() => {
+  fetchTransactions();
+}, [fetchTransactions]);
 
   useEffect(() => {
     setFilteredTransactions(transactions);
@@ -142,7 +142,7 @@ export default function Transactions() {
             </tr>
           </thead>
           <tbody>
-            {currentTransactions.map((transaction, index) => (
+            {currentTransactions.map((transaction) => (
               <tr key={transaction._id}>
                 <td>
                   <div className="transaction-avatar">

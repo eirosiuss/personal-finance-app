@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useDataStore } from "../store/dataStore.js";
 
 export default function Pots() {
-    const { fetchPots, pots, error } = useDataStore();
+    const {fetchPots, pots, error } = useDataStore();
 
       useEffect(() => {
-    fetchPots();
-  }, [fetchPots]);
+      fetchPots();
+    }, [fetchPots]);
 
   if (error) return <p className="text-red-500">{error}</p>;
 

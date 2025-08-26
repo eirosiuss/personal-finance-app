@@ -1,5 +1,4 @@
-import { Routes, Route } from "react-router";
-import { Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/pages/Login.jsx";
 import SignUp from "./components/pages/SignUp.jsx";
 import EmailVerification from "./components/pages/EmailVerification.jsx";
@@ -7,7 +6,7 @@ import MainLayout from "./components/shared/MainLayout.jsx";
 import HomePage from "./components/HomePage.jsx";
 import Transactions from "./components/Transactions.jsx";
 import Budgets from "./components/budgets/Budgets.jsx";
-import Pots from "./components/Pots.jsx"
+import Pots from "./components/Pots.jsx";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
 import ResetPassword from "./components/pages/ResetPassword.jsx";
@@ -91,38 +90,11 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          <Route
-            path="/home-page"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/transactions"
-            element={
-              <ProtectedRoute>
-                <Transactions />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/budgets"
-            element={
-              <ProtectedRoute>
-                <Budgets />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/pots"
-            element={
-              <ProtectedRoute>
-                <Pots />
-              </ProtectedRoute>
-            }
-          ></Route>
+          <Route path="/" element={<Navigate to="/home-page" replace />} />
+          <Route path="/home-page" element={<HomePage />} />
+          <Route path="/transactions" element={<Transactions />}></Route>
+          <Route path="/budgets" element={<Budgets />}></Route>
+          <Route path="/pots" element={<Pots />}></Route>
         </Route>
       </Routes>
       <Toaster />
