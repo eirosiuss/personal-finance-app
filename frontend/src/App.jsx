@@ -96,6 +96,7 @@ export default function App() {
           <Route path="/budgets" element={<Budgets />}></Route>
           <Route path="/pots" element={<Pots />}></Route>
         </Route>
+        <Route path="*" element={<Navigate to="/home-page" replace />} />
       </Routes>
       <Toaster />
     </>
