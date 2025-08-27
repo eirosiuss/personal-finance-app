@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/data`;
+const API_URL = import.meta.env.MODE === "development" ? `${import.meta.env.VITE_BACKEND_URL}/api/data` : "/api/data";
 axios.defaults.withCredentials = true;
 
 export const useDataStore = create((set) => ({
