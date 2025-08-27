@@ -2,14 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const balanceSchema = new Schema({
-  current: Number,
-  income: Number,
-  expenses: Number,
-});
-
 const transactionSchema = new Schema({
-  avatar: String,
   name: String,
   category: String,
   date: Date,
@@ -31,7 +24,6 @@ const potSchema = new Schema({
 });
 
 const DataSchema = new Schema({
-  balance: balanceSchema,
   transactions: [transactionSchema],
   budgets: [budgetSchema],
   pots: [potSchema],

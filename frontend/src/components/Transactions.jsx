@@ -146,10 +146,6 @@ export default function Transactions() {
               <tr key={transaction._id}>
                 <td>
                   <div className="transaction-avatar">
-                    <img
-                      src={`${transaction.avatar.replace(".", "")}`}
-                      alt={transaction.name}
-                    />
                     {transaction.name}
                   </div>
                 </td>

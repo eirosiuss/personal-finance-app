@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore.js";
 import { useDataStore } from "../store/dataStore.js";
@@ -87,8 +87,8 @@ export default function HomePage() {
           <h3>Total Saved</h3>
           {<p>${pots.reduce((acc, pot) => acc + pot.total, 0)}</p>}
         </div>
-        {pots.slice(0, 4).map((pot, index) => (
-          <article key={index}>
+        {pots.slice(0, 4).map((pot) => (
+          <article key={pot._id}>
             <h3>{pot.name}</h3>
             <p>${pot.total}</p>
           </article>
@@ -100,13 +100,9 @@ export default function HomePage() {
           <h2>Transactions</h2>
           <Link to="/transactions">View All</Link>
         </div>
-        {transactions.slice(0, 5).map((transaction, index) => (
-          <article key={index}>
-            <div className="transaction-avatar">
-              <img
-                src={`${transaction.avatar.replace(".", "")}`}
-                alt={transaction.name}
-              />
+        {transactions.slice(0, 5).map((transaction) => (
+          <article key={transaction._id}>
+            <div>
               <h3>{transaction.name}</h3>
             </div>
             <div className="transaction-info">
@@ -156,8 +152,8 @@ export default function HomePage() {
             of ${budgets.reduce((acc, budget) => acc + budget.maximum, 0)} limit
           </span>
         </p>
-        {budgets.map((budget, index) => (
-          <article key={index}>
+        {budgets.map((budget) => (
+          <article key={budget._id}>
             <h3>{budget.category}</h3>
             <p>${budget.maximum.toFixed(2)}</p>
           </article>
@@ -171,8 +167,8 @@ export default function HomePage() {
         </div>
         {transactions
           .filter((transaction) => transaction.recurring)
-          .map((transaction, index) => (
-            <article key={index}>
+          .map((transaction) => (
+            <article key={transaction._id}>
               <h3>{transaction.name}</h3>
               <p>${transaction.amount.toFixed(2)}</p>
             </article>

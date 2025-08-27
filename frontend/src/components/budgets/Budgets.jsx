@@ -4,16 +4,13 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const { fetchBudgets, transactions, budgets, error } =
-    useDataStore();
-  // const [transactions, setTransactions] = useState([]);
-  // const [budgets, setBudgets] = useState([]);
+  const { fetchBudgets, transactions, budgets, error } = useDataStore();
   const [showModal, setShowModal] = useState(false);
   const [selectBudget, setSelectBudget] = useState(null);
 
   useEffect(() => {
-  fetchBudgets();
-}, [fetchBudgets]);
+    fetchBudgets();
+  }, [fetchBudgets]);
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
@@ -53,14 +50,14 @@ export default function Budgets() {
   // };
 
   const handleBudgetAdded = async () => {
-  try {
-    await fetchBudgets();
-  } catch (error) {
-    console.error("Error adding budget:", error);
-  }
+    try {
+      await fetchBudgets();
+    } catch (error) {
+      console.error("Error adding budget:", error);
+    }
   };
 
-    if (error) return <p className="text-red-500">{error}</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
@@ -102,12 +99,12 @@ export default function Budgets() {
           </ul>
         </div>
 
-        {budgets.map((budget, index) => {
+        {budgets.map((budget) => {
           const spent = getSpentForCategory(budget.category);
           const remaining = budget.maximum - spent;
 
           return (
-            <div key={index} className="budget-item">
+            <div key={budget._id} className="budget-item">
               <h2>{budget.category}</h2>
               <button onClick={() => setSelectBudget(budget)}>/ / /</button>
               <p>Maximum of ${Number(budget.maximum).toFixed(2)}</p>
@@ -138,17 +135,9 @@ export default function Budgets() {
                 {transactions
                   .filter((t) => t.category === budget.category && t.amount < 0)
                   .slice(0, 3)
-                  .map((transaction, index) => (
-                    <div key={index} className="transaction-item">
-                      <div>
-                        <div>
-                          <img
-                            src={`${transaction.avatar.replace(".", "")}`}
-                            alt={transaction.name}
-                          />
-                        </div>
-                        <p>{transaction.name}</p>
-                      </div>
+                  .map((transaction) => (
+                    <div key={transaction._id} className="transaction-item">
+                      <p>{transaction.name}</p>
                       <div className="transaction-details">
                         <p>
                           {transaction.amount > 0
