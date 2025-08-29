@@ -1,11 +1,11 @@
 import { useState } from "react";
 import ModalWrapper from "../shared/ModalWrapper";
+import { useDataStore } from "../../store/dataStore";
 
 export default function AddBudget({
   onClose,
   transactions,
   categories,
-  onBudgetAdded,
   onThemeSelect,
 }) {
   const [form, setForm] = useState({
@@ -14,16 +14,20 @@ export default function AddBudget({
     theme: "",
   });
 
-  // const uniqueCategories = [...new Set(transactions.map((t) => t.category))];
+  const { addBudget, error } = useDataStore();
 
-    const uniqueCategories = [...new Set(transactions.map((t) => t.category)), ...categories];
+  const uniqueCategories = [
+    ...new Set(transactions.map((t) => t.category)),
+    ...categories,
+  ];
   const counts = uniqueCategories.reduce((acc, val) => {
-  acc[val] = (acc[val] || 0) + 1;
-  return acc;
-}, {});
+    acc[val] = (acc[val] || 0) + 1;
+    return acc;
+  }, {});
 
   const uniqueCombinedCategories = Object.keys(counts).filter(
-  (key) => counts[key] === 1);
+    (key) => counts[key] === 1
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,40 +42,24 @@ export default function AddBudget({
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/budgets`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const newBudget = await response.json();
-
-      if (onBudgetAdded) {
-        onBudgetAdded(newBudget);
-      }
+      await addBudget(form);
     } catch (error) {
-      console.error("A problem occurred with your fetch operation: ", error);
-    } finally {
-      setForm({ category: "", maximum: "", theme: "" });
-      onClose();
+      console.error(error);
+      return;
     }
+
+    setForm({ category: "", maximum: "", theme: "" });
+    onClose();
   };
+
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <ModalWrapper onClose={onClose}>
       <form onSubmit={handleSubmit}>
         <div className="modal-header">
           <h2>Add New Budget</h2>
-          <button onClick={onClose}>
-            Close
-          </button>
+          <button onClick={onClose}>Close</button>
         </div>
         <p>
           Choose a category to set a spending budget. These can help monitor

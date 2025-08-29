@@ -36,9 +36,12 @@ export const pots = async (req, res) => {
 
 export const addBudget = async (req, res) => {
   try {
-    const data = await Data.findOne({ user: req.userId });
-    if (!data) data = new Data({ user: req.userId, budgets: [req.body] });
-    data.budgets.push(req.body);
+    let data = await Data.findOne({ user: req.userId });
+    if (!data) {
+      data = new Data({ user: req.userId, budgets: [req.body] });
+    } else {
+      data.budgets.push(req.body);
+    }
     await data.save();
     res.status(200).json(data?.budgets);
   } catch (error) {
@@ -51,7 +54,7 @@ export const deleteBudget = async (req, res) => {
   const category = req.params.category;
   try {
     const updatedData = await Data.findOneAndUpdate(
-      {},
+      { user: req.userId },
       { $pull: { budgets: { category: category } } },
       { new: true }
     );

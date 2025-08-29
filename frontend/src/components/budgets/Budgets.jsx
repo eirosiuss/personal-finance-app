@@ -43,18 +43,9 @@ export default function Budgets() {
 
   const handleThemeChange = (color) => {};
 
-  // const handleBudgetDeleted = (categoryDeleted) => {
-  //   setBudgets((prevBudgets) =>
-  //     prevBudgets.filter((b) => b.category !== categoryDeleted)
-  //   );
-  // };
-
-  const handleBudgetAdded = async () => {
-    try {
-      await fetchBudgets();
-    } catch (error) {
-      console.error("Error adding budget:", error);
-    }
+  const handleBudgetDeleted = async (categoryDeleted) => {
+    await fetchBudgets();
+    setSelectBudget(null);
   };
 
   if (error) return <p className="text-red-500">{error}</p>;
@@ -70,7 +61,6 @@ export default function Budgets() {
               transactions={transactions}
               categories={categories}
               onClose={() => setShowModal(false)}
-              onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
             ></AddBudget>
           )}
@@ -164,7 +154,6 @@ export default function Budgets() {
             <ModalEditDelete
               transactions={transactions}
               categories={categories}
-              onBudgetAdded={handleBudgetAdded}
               onThemeSelect={handleThemeChange}
               budget={selectBudget}
               onClose={() => setSelectBudget(false)}

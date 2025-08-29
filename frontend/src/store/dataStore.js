@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const API_URL = import.meta.env.MODE === "development" ? `${import.meta.env.VITE_BACKEND_URL}/api/data` : "/api/data";
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? `${import.meta.env.VITE_BACKEND_URL}/api/data`
+    : "/api/data";
 axios.defaults.withCredentials = true;
 
 export const useDataStore = create((set) => ({
@@ -48,6 +51,34 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to fetch pots",
+      });
+    }
+  },
+
+  addBudget: async (budget) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/add-budget`, budget);
+      set({
+        budgets: res.data,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to add budget",
+      });
+    }
+  },
+
+  deleteBudget: async (category) => {
+    set({ error: null });
+    try {
+      const res = await axios.delete(`${API_URL}/delete-budget/${category}`);
+      set({
+      budgets: res.data.budgets,
+    });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to add budget",
       });
     }
   },
