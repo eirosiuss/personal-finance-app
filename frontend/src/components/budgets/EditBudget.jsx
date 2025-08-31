@@ -7,8 +7,6 @@ export default function EditBudget({
   categories,
   onClose,
   transactions,
-  onBudgetEdited,
-  onThemeSelect,
 }) {
   const [form, setForm] = useState({
     category: budget.category,
@@ -30,10 +28,6 @@ export default function EditBudget({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "theme" && onThemeSelect) {
-      onThemeSelect(value);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -45,14 +39,6 @@ export default function EditBudget({
         newMaximum: Number(form.maximum),
         newTheme: form.theme,
       });
-
-      if (onBudgetEdited) {
-        onBudgetEdited({
-          newTitle: form.category,
-          newMaximum: Number(form.maximum),
-          newTheme: form.theme,
-        });
-      }
 
       setForm({ category: "", maximum: "", theme: "" });
       onClose();

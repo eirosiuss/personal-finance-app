@@ -43,16 +43,6 @@ export default function Budgets() {
 
   const handleThemeChange = (color) => {};
 
-  const handleBudgetEdited = async () => {
-  await fetchBudgets();
-  setSelectBudget(null);
-};
-
-  const handleBudgetDeleted = async () => {
-    await fetchBudgets();
-    setSelectBudget(null);
-  };
-
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
@@ -159,11 +149,8 @@ export default function Budgets() {
             <ModalEditDelete
               transactions={transactions}
               categories={categories}
-              onThemeSelect={handleThemeChange}
               budget={selectBudget}
               onClose={() => setSelectBudget(null)}
-              onBudgetDeleted={handleBudgetDeleted}
-              onBudgetEdited={handleBudgetEdited}
             ></ModalEditDelete>
           )}
         </>

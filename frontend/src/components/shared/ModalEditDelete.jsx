@@ -7,7 +7,6 @@ const ModalEditDelete = ({
   categories,
   onClose,
   transactions,
-  onThemeSelect,
 }) => {
   const [mode, setMode] = useState("menu");
 
@@ -32,7 +31,6 @@ const ModalEditDelete = ({
           budget={budget}
           categories={categories}
           transactions={transactions}
-          onThemeSelect={onThemeSelect}
           onClose={onClose}
         />
       )}
