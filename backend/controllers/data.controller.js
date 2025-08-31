@@ -71,10 +71,11 @@ export const deleteBudget = async (req, res) => {
 
 export const editBudget = async (req, res) => {
   const { newTitle, newMaximum, newTheme } = req.body;
+  const { oldCategory } = req.params;
 
   try {
     const updatedData = await Data.findOneAndUpdate(
-      { "budgets.category": req.params.oldCategory },
+      { "budgets.category": oldCategory, user: req.userId },
       {
         $set: {
           "budgets.$.category": newTitle,

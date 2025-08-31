@@ -43,7 +43,12 @@ export default function Budgets() {
 
   const handleThemeChange = (color) => {};
 
-  const handleBudgetDeleted = async (categoryDeleted) => {
+  const handleBudgetEdited = async () => {
+  await fetchBudgets();
+  setSelectBudget(null);
+};
+
+  const handleBudgetDeleted = async () => {
     await fetchBudgets();
     setSelectBudget(null);
   };
@@ -156,9 +161,9 @@ export default function Budgets() {
               categories={categories}
               onThemeSelect={handleThemeChange}
               budget={selectBudget}
-              onClose={() => setSelectBudget(false)}
+              onClose={() => setSelectBudget(null)}
               onBudgetDeleted={handleBudgetDeleted}
-              onBudgetEdited={fetchBudgets}
+              onBudgetEdited={handleBudgetEdited}
             ></ModalEditDelete>
           )}
         </>

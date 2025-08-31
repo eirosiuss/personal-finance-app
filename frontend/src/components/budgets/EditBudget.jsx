@@ -1,5 +1,6 @@
 import ModalWrapper from "../shared/ModalWrapper";
 import { useState } from "react";
+import { useDataStore } from "../../store/dataStore";
 
 export default function EditBudget({
   budget,
@@ -9,21 +10,22 @@ export default function EditBudget({
   onBudgetEdited,
   onThemeSelect,
 }) {
-
   const [form, setForm] = useState({
-  category: budget.category,
-  maximum: budget.maximum,
-  theme: budget.theme
+    category: budget.category,
+    maximum: budget.maximum,
+    theme: budget.theme,
   });
- 
-  const uniqueCategories = [...new Set(transactions.map((t) => t.category)), ...categories];
-  const counts = uniqueCategories.reduce((acc, val) => {
-  acc[val] = (acc[val] || 0) + 1;
-  return acc;
-}, {});
+  const { editBudget, error, budgets } = useDataStore();
 
-  const uniqueCombinedCategories = Object.keys(counts).filter(
-  (key) => counts[key] === 1);
+  const allCategories = [
+    ...new Set([...transactions.map((t) => t.category), ...categories]),
+  ];
+
+  const existingBudgets = budgets.map((b) => b.category);
+
+  let uniqueCombinedCategories = allCategories.filter(
+    (c) => !existingBudgets.includes(c) || c === budget.category
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,35 +40,28 @@ export default function EditBudget({
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/budgets/${budget.category}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            newTitle: form.category,
-            newMaximum: Number(form.maximum),
-            newTheme: form.theme,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const updated = await response.json();
+      await editBudget(budget.category, {
+        newTitle: form.category,
+        newMaximum: Number(form.maximum),
+        newTheme: form.theme,
+      });
 
       if (onBudgetEdited) {
-        onBudgetEdited(updated);
+        onBudgetEdited({
+          newTitle: form.category,
+          newMaximum: Number(form.maximum),
+          newTheme: form.theme,
+        });
       }
-    } catch (error) {
-      console.error("A problem occurred with your fetch operation: ", error);
-    } finally {
+
       setForm({ category: "", maximum: "", theme: "" });
       onClose();
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <ModalWrapper onClose={onClose}>

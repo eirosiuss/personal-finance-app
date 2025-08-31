@@ -6,44 +6,40 @@ const ModalEditDelete = ({
   budget,
   categories,
   onClose,
-  onBudgetDeleted,
   transactions,
-  onBudgetEdited,
+  onThemeSelect,
 }) => {
-  const [showDelete, setShowDelete] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
+  const [mode, setMode] = useState("menu");
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div
-        className="modal-content-edit-delete"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button onClick={() => setShowEdit(true)}>Edit Budget</button>
-        {showEdit && (
-          <EditBudget
-            budget={budget}
-            transactions={transactions}
-            categories={categories}
-            onClose={() => {
-              setShowEdit(false);
-              onClose();
-            }}
-            onBudgetEdited={onBudgetEdited}
-          />
-        )}
-        <button onClick={() => setShowDelete(true)}>Delete Budget</button>
-        {showDelete && (
-          <DeleteBudget
-            budget={budget}
-            onClose={() => {
-              setShowDelete(false);
-              onClose();
-            }}
-            onBudgetDeleted={onBudgetDeleted}
-          />
-        )}
-      </div>
+    <div onClose={onClose}>
+      {mode === "menu" && (
+        <div>
+          <button className="cursor-pointer" onClick={() => setMode("edit")}>
+            Edit budget
+          </button>
+          <button
+            className="cursor-pointer"
+            onClick={() => setMode("confirm-delete")}
+          >
+            Delete budget
+          </button>
+        </div>
+      )}
+
+      {mode === "edit" && (
+        <EditBudget
+          budget={budget}
+          categories={categories}
+          transactions={transactions}
+          onThemeSelect={onThemeSelect}
+          onClose={onClose}
+        />
+      )}
+
+      {mode === "confirm-delete" && (
+        <DeleteBudget budget={budget} onClose={onClose} />
+      )}
     </div>
   );
 };

@@ -78,8 +78,22 @@ export const useDataStore = create((set) => ({
     });
     } catch (error) {
       set({
-        error: error.response?.data?.message || "Failed to add budget",
+        error: error.response?.data?.message || "Failed to delete budget",
       });
+    }
+  },
+  
+  editBudget: async (oldCategory, updatedBudget) => {
+    set({ error: null });
+    try {
+      const res = await axios.put(`${API_URL}/edit-budget/${oldCategory}`, {
+        newTitle: updatedBudget.newTitle,
+        newMaximum: updatedBudget.newMaximum,
+        newTheme: updatedBudget.newTheme,
+      });
+      set({ budgets: res.data.budgets });
+    } catch (error) {
+      set({ error: error.response?.data?.message || "Failed to update budget" });
     }
   },
 }));

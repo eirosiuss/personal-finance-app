@@ -1,17 +1,16 @@
 import ModalWrapper from "../shared/ModalWrapper";
 import { useDataStore } from "../../store/dataStore";
 
-export default function DeleteBudget({ onClose, onBudgetDeleted, budget }) {
-  const { deleteBudget, error } = useDataStore();
-  const handleDelete = async (e) => {
-    e.preventDefault();
+export default function DeleteBudget({ onClose, budget }) {
+  const { deleteBudget, fetchBudgets, error } = useDataStore();
+  
+  const handleDelete = async () => {
     try {
       await deleteBudget(budget.category);
-      if (onBudgetDeleted) onBudgetDeleted(budget.category);
+      await fetchBudgets();
       onClose();
     } catch (error) {
-      console.error(error);
-      return;
+      console.error("Error deleting budget:", error);
     }
   };
 
