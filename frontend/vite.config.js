@@ -6,9 +6,6 @@ dotenv.config();
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
-    server: {
-      port: process.env.PORT,
-    },
+    plugins: [react(), tailwindcss()]
   };
 });
