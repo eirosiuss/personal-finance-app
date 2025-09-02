@@ -4,13 +4,20 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const { fetchBudgets, transactions, budgets, error } = useDataStore();
+  const {
+    fetchBudgets,
+    fetchTransactions,
+    budgets,
+    transactions,
+    error,
+  } = useDataStore();
   const [showModal, setShowModal] = useState(false);
   const [selectBudget, setSelectBudget] = useState(null);
 
   useEffect(() => {
     fetchBudgets();
-  }, [fetchBudgets]);
+    fetchTransactions();
+  }, [fetchBudgets, fetchTransactions]);
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))

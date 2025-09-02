@@ -1,1 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+  /* Font family */
+  --font-public-sans: "Public Sans", sans-serif;
+
+  /* Text Presets */
+  --text-preset-1: 32px;
+  --leading-preset-1: 120%;
+  --font-weight-preset-1: 700;
+
+  --text-preset-2: 20px;
+  --leading-preset-2: 120%;
+  --font-weight-preset-2: 700;
+
+  --text-preset-3: 16px;
+  --leading-preset-3: 150%;
+  --font-weight-preset-3: 700;
+
+  --text-preset-4: 14px;
+  --leading-preset-4: 150%;
+  --font-weight-preset-4: 400;
+
+  --text-preset-4-bold: 14px;
+  --leading-preset-4-bold: 150%;
+  --font-weight-preset-4-bold: 700;
+
+  --text-preset-5: 12px;
+  --leading-preset-5: 150%;
+  --font-weight-preset-5: 400;
+
+  --text-preset-5-bold: 12px;
+  --leading-preset-5-bold: 150%;
+  --font-weight-preset-5-bold: 700;
+
+    /* Neutral / Greys */
+  --color-grey-100: #F2F2F2;
+  --color-grey-300: #B3B3B3;
+  --color-grey-500: #696868;
+  --color-grey-900: #201F24;
+
+  /* Primary / Beige */
+  --color-beige-100: #F8F4F0;
+  --color-beige-500: #98908B;
+  --color-slate-600: #666CA3;
+
+  /* Secondary Colors */
+  --color-green: #277C78;
+  --color-yellow: #F2CDAC;
+  --color-cyan: #82C9D7;
+  --color-navy: #626070;
+  --color-red: #C94736;
+  --color-purple: #826CB0;
+
+  /* Other Colors */
+  --color-purple-light: #AF81BA;
+  --color-turquoise: #597C7C;
+  --color-brown: #93674F;
+  --color-magenta: #934F6F;
+  --color-blue: #3F82B2;
+  --color-navy-grey: #97A0AC;
+  --color-army-green: #7F9161;
+  --color-gold: #CAB361;
+  --color-orange: #BE6C49;
+
+  /* White */
+  --color-white: #FFFFFF;
+}
+
+@layer components {
+  .preset-1 {
+    @apply font-public-sans text-preset-1 leading-preset-1 font-preset-1;
+  }
+
+  .preset-2 {
+    @apply font-public-sans text-preset-2 leading-preset-2 font-preset-2;
+  }
+
+  .preset-3 {
+    @apply font-public-sans text-preset-3 leading-preset-3 font-preset-3;
+  }
+
+  .preset-4 {
+    @apply font-public-sans text-preset-4 leading-preset-4 font-preset-4;
+  }
+
+  .preset-4-bold {
+    @apply font-public-sans text-preset-4-bold leading-preset-4-bold font-preset-4-bold;
+  }
+
+  .preset-5 {
+    @apply font-public-sans text-preset-5 leading-preset-5 font-preset-5;
+  }
+
+  .preset-5-bold {
+    @apply font-public-sans text-preset-5-bold leading-preset-5-bold font-preset-5-bold;
+  }
+}
+
+body {
+  @apply bg-beige-100;
+}
