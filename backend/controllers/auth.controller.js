@@ -106,13 +106,13 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+        .json({ success: false, message: "Invalid email or password" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+        .json({ success: false, message: "Invalid email or password" });
     }
 
     generateTokenAndSetCookie(res, user._id);
@@ -130,7 +130,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in login", error);
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

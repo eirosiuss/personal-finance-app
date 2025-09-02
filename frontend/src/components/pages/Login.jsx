@@ -7,21 +7,69 @@ import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, isLoading, error } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [emailError, setEmailError] = useState();
+  const [passwordError, setPasswordError] = useState();
 
-  const { login, isloading, error } = useAuthStore();
+  const handleChange = (e) => {
+    useAuthStore.setState({ error: null });
+    setEmailError(false);
+    setPasswordError(false);
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    await login(email, password);
+
+    if (!formData.email && !formData.password) {
+      setEmailError("Please enter your email");
+      setPasswordError("Please enter your password");
+      return;
+    }
+
+    if (!formData.email) {
+      setEmailError("Please enter your email");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+
+    if (!formData.password) {
+      setPasswordError("Please enter your password");
+      return;
+    }
+
+    useAuthStore.setState({ isLoading: true });
+
+    await login(formData.email, formData.password);
   };
 
   return (
     <>
       <div className="bg-grey-900 h-16 max-md:block hidden rounded-b-xl relative">
-        <img className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" src={LogoFinance} alt="Logo Finance" />
+        <img
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          src={LogoFinance}
+          alt="Logo Finance"
+        />
       </div>
       <div className="flex items-center justify-between min-h-screen">
         <div className="relative md:block hidden">
@@ -47,8 +95,8 @@ const Login = () => {
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
           <h2 className="preset-1 text-grey-900">Login</h2>
-          <form onSubmit={handleLogin}>
-            <div className="w-full mt-8 mb-4">
+          <form onSubmit={handleLogin} noValidate>
+            <div className="w-full mt-8">
               <label className="preset-5-bold text-grey-500" htmlFor="email">
                 Email
               </label>
@@ -56,10 +104,15 @@ const Login = () => {
                 id="email"
                 type="email"
                 name="email"
-                value={email}
+                value={formData.email}
                 className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 font-preset-4"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleChange}
               />
+              <div className="h-4">
+                {emailError && (
+                  <p className="text-red-500 preset-4-bold">{emailError}</p>
+                )}
+              </div>
             </div>
             <div>
               <label className="preset-5-bold text-grey-500" htmlFor="password">
@@ -70,20 +123,23 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
-                  value={password}
+                  value={formData.password}
                   className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 font-preset-4"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
+                  onChange={handleChange}
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute top-1/2 right-5 -translate-y-1/2 text-black"
                 >
-                  {" "}
                   {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
+              </div>
+              <div className="h-4">
+                {passwordError && (
+                  <p className="text-red-500 preset-4-bold">{passwordError}</p>
+                )}
               </div>
             </div>
             <Link
@@ -92,13 +148,19 @@ const Login = () => {
             >
               Forgot password?
             </Link>
-            {error && <p className="text-red-500">{error}</p>}
+            <div className="h-4">
+              <div>
+                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
+              </div>
+            </div>
             <div>
               <button
                 type="submit"
-                className="preset-4-bold cursor-pointer w-full mt-8 mb-8 py-4 bg-grey-900 text-white rounded-lg hover:bg-black transition duration-150 ease-in-out hover:scale-105"
+                className={`preset-4-bold text-white cursor-pointer w-full mt-3 mb-8 py-4 rounded-lg 
+    ${isLoading ? "bg-black" : "bg-grey-900 hover:bg-black"}`}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? "Loading..." : "Login"}
               </button>
             </div>
             <p className="preset-4 text-grey-500 text-center">
