@@ -14,13 +14,13 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [emailError, setEmailError] = useState();
-  const [passwordError, setPasswordError] = useState();
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   const handleChange = (e) => {
     useAuthStore.setState({ error: null });
-    setEmailError(false);
-    setPasswordError(false);
+    setEmailError(null);
+    setPasswordError(null);
     const name = e.target.name;
     const value = e.target.value;
     setFormData({
