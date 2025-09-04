@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDataStore } from "../store/dataStore.js";
+import { useDataStore } from "../../store/dataStore.js";
 
 export default function Pots() {
     const {fetchPots, pots, error } = useDataStore();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { useNavigate, useParams } from "react-router";
-import Input from "../Input.jsx";
+import Input from "../shared/Input.jsx";
 import toast from "react-hot-toast";
 
 const ResetPassword = () => {

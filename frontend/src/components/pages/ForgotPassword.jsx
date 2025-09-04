@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Input from "../Input.jsx";
-import LoadingSpinner from "../LoadingSpinner";
+import Input from "../shared/Input.jsx";
+import LoadingSpinner from "../shared/LoadingSpinner";
 import { useAuthStore } from "../../store/authStore.js";
 import { Link } from "react-router-dom";
 

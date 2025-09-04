@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Input from "../Input.jsx";
+import Input from "../shared/Input.jsx";
+import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import { useAuthStore } from "../../store/authStore.js";
 import LogoLogin from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
@@ -40,19 +41,13 @@ const Login = () => {
       setEmailError("Please enter your email");
       setPasswordError("Please enter your password");
       return;
-    }
-
-    if (!formData.email) {
+    } else if (!formData.email) {
       setEmailError("Please enter your email");
       return;
-    }
-
-    if (!validateEmail(formData.email)) {
+    } else if (!validateEmail(formData.email)) {
       setEmailError("Please enter a valid email address");
       return;
-    }
-
-    if (!formData.password) {
+    } else if (!formData.password) {
       setPasswordError("Please enter your password");
       return;
     }
@@ -64,7 +59,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="bg-grey-900 h-16 max-md:block hidden rounded-b-xl relative">
+      <div className="bg-grey-900 h-16 block lg:hidden rounded-b-xl relative">
         <img
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           src={LogoFinance}
@@ -72,7 +67,7 @@ const Login = () => {
         />
       </div>
       <div className="flex items-center justify-between min-h-screen">
-        <div className="relative md:block hidden">
+        <div className="relative lg:block hidden">
           <img
             className="absolute top-16 left-16"
             src={LogoFinance}
@@ -105,7 +100,6 @@ const Login = () => {
                 type="email"
                 name="email"
                 value={formData.email}
-                className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 font-preset-4"
                 onChange={handleChange}
               />
               <div className="h-4">
@@ -124,10 +118,8 @@ const Login = () => {
                   id="password"
                   name="password"
                   value={formData.password}
-                  className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 font-preset-4"
                   onChange={handleChange}
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -140,40 +132,34 @@ const Login = () => {
                 {passwordError && (
                   <p className="text-red-500 preset-4-bold">{passwordError}</p>
                 )}
+                <div>
+                  {error && (
+                    <p className="text-red-500 preset-4-bold">{error}</p>
+                  )}
+                </div>
               </div>
             </div>
             <Link
-              className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-900"
+              className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-900 hover:text-grey-500"
               to="/forgot-password"
             >
               Forgot password?
             </Link>
-            <div className="h-4">
-              <div>
-                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
-              </div>
-            </div>
             <div>
-              <button
-                type="submit"
-                className={`preset-4-bold text-white cursor-pointer w-full mt-3 mb-8 py-4 rounded-lg 
-    ${isLoading ? "bg-black" : "bg-grey-900 hover:bg-black"}`}
-                disabled={isLoading}
-              >
+              <ButtonPrimary type="submit" disabled={isLoading}>
                 {isLoading ? "Loading..." : "Login"}
-              </button>
+              </ButtonPrimary>
             </div>
-            <p className="preset-4 text-grey-500 text-center">
-              Need to create an account?
-              <Link
-                className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-900"
-                to={"/signup"}
-              >
-                {" "}
-                Sign Up
-              </Link>
-            </p>
           </form>
+          <p className="preset-4 text-grey-500 text-center">
+            Need to create an account?{" "}
+            <Link
+              className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-500 hover:text-gray-500"
+              to={"/signup"}
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </>

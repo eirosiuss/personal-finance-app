@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authStore.js";
-import { useDataStore } from "../store/dataStore.js";
-import formData from "../utils/date.js";
+import { useAuthStore } from "../../store/authStore.js";
+import { useDataStore } from "../../store/dataStore.js";
+import formData from "../../utils/date.js";
 
 export default function HomePage() {
   const { user } = useAuthStore();
