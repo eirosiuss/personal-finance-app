@@ -132,11 +132,9 @@ const Login = () => {
                 {passwordError && (
                   <p className="text-red-500 preset-4-bold">{passwordError}</p>
                 )}
-                <div>
                   {error && (
                     <p className="text-red-500 preset-4-bold">{error}</p>
                   )}
-                </div>
               </div>
             </div>
             <Link
@@ -145,11 +143,9 @@ const Login = () => {
             >
               Forgot password?
             </Link>
-            <div>
-              <ButtonPrimary type="submit" disabled={isLoading}>
-                {isLoading ? "Loading..." : "Login"}
-              </ButtonPrimary>
-            </div>
+            <ButtonPrimary type="submit" disabled={isLoading}>
+              {isLoading ? "Loading..." : "Login"}
+            </ButtonPrimary>
           </form>
           <p className="preset-4 text-grey-500 text-center">
             Need to create an account?{" "}

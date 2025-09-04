@@ -158,7 +158,7 @@ export default function SignUp() {
                     {formError.password}
                   </p>
                 )}
-                {error && <p className="text-red-500">{error}</p>}
+                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
             <ButtonPrimary type="submit" disabled={isLoading}>
