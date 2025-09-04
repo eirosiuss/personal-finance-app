@@ -1,7 +1,5 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-// import dotenv from "dotenv";
-// dotenv.config();
 import { User } from "../models/User.js";
 import { Data } from "../models/Data.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
@@ -136,39 +134,73 @@ export const logout = async (req, res) => {
   res.status(200).json({ success: true, message: "Logged out successfully" });
 };
 
+// export const forgotPassword = async (req, res) => {
+//   const { email } = req.body;
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+
+//     const resetToken = crypto.randomBytes(20).toString("hex");
+//     const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+//     user.resetPasswordToken = resetToken;
+//     user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+//     await user.save();
+
+//     await sendPasswordResetEmail(
+//       user.name,
+//       user.email,
+//       `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Password reset link sent to your email",
+//     });
+//   } catch (error) {
+//     console.log("Error in forgotPassword", error);
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
+
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "User not found",
-      });
+
+    if (user) {
+      const resetToken = crypto.randomBytes(20).toString("hex");
+      const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpiresAt = resetTokenExpiresAt;
+      await user.save();
+
+      await sendPasswordResetEmail(
+        user.name,
+        user.email,
+        `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+      );
     }
-
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpiresAt = resetTokenExpiresAt;
-
-    await user.save();
-
-    await sendPasswordResetEmail(
-      user.name,
-      user.email,
-      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
-    );
 
     res.status(200).json({
       success: true,
-      message: "Password reset link sent to your email",
+      message:
+        "If an account exists for this email, you will receive a password reset link shortly.",
     });
   } catch (error) {
     console.log("Error in forgotPassword", error);
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({
+      success: false,
+      message: "Something went wrong. Please try again.",
+    });
   }
 };
+
 
 export const resetPassword = async (req, res) => {
   try {

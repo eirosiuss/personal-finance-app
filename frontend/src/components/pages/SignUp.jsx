@@ -165,10 +165,16 @@ export default function SignUp() {
               {isLoading ? "Signing Up..." : "Create Account"}
             </ButtonPrimary>
           </form>
-        <p className="preset-4 text-grey-500 text-center">
-          Already have an account?{" "}
-          <Link className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-500 hover:text-gray-500" to={"/login"}> Login</Link>
-        </p>
+          <p className="preset-4 text-grey-500 text-center">
+            Already have an account?{" "}
+            <Link
+              className="preset-4-bold underline [text-decoration-skip-ink:none] text-grey-500 hover:text-gray-500"
+              to={"/login"}
+            >
+              {" "}
+              Login
+            </Link>
+          </p>
         </div>
       </div>
     </>
