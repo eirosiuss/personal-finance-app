@@ -102,7 +102,7 @@ const EmailVerification = () => {
               <p className="preset-5-bold text-grey-500">
                 Enter the 6-digit code sent to your email address
               </p>
-              <div className="flex justify-between">
+              <div className="flex sm:gap-10 gap-0.5">
                 {code.map((digit, index) => (
                   <Input
                     key={index}
@@ -112,7 +112,7 @@ const EmailVerification = () => {
                     value={digit}
                     onChange={(e) => handleChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className="w-12 h-12 text-center border preset-4  border-beige-500 rounded-lg"
+                    className="w-12 h-12 p-0 m-0"
                   />
                 ))}
               </div>

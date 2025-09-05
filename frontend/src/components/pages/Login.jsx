@@ -5,7 +5,7 @@ import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import { useAuthStore } from "../../store/authStore.js";
 import LogoLogin from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
-import { Eye, EyeOff } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 const Login = () => {
   const { login, isLoading, error } = useAuthStore();
@@ -125,16 +125,18 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute top-1/2 right-5 -translate-y-1/2 text-black"
                 >
-                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                  {showPassword ? (
+                    <Icon icon="mdi-eye" width="16" height="16" />
+                  ) : (
+                    <Icon icon="mdi:eye-off" width="16" height="16" />
+                  )}
                 </button>
               </div>
               <div className="h-4">
                 {passwordError && (
                   <p className="text-red-500 preset-4-bold">{passwordError}</p>
                 )}
-                  {error && (
-                    <p className="text-red-500 preset-4-bold">{error}</p>
-                  )}
+                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
             <Link

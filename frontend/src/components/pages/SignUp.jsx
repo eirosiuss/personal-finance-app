@@ -6,7 +6,7 @@ import { useAuthStore } from "../../store/authStore.js";
 import { useNavigate } from "react-router-dom";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import LogoSignUp from "../../../src/assets/images/login-and-signup-illustration-image.svg";
-import { Eye, EyeOff } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -149,7 +149,11 @@ export default function SignUp() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute top-1/2 right-5 -translate-y-1/2 text-black"
                 >
-                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                  {showPassword ? (
+                    <Icon icon="mdi-eye" width="16" height="16" />
+                  ) : (
+                    <Icon icon="mdi:eye-off" width="16" height="16" />
+                  )}
                 </button>
               </div>
               <div className="h-4">

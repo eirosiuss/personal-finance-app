@@ -81,7 +81,7 @@ const ResetPassword = () => {
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
           <h2 className="preset-1 text-grey-900">Reset Password</h2>
-          <form onSubmit={handleSubmit}>
+          <form className="w-full mt-8" onSubmit={handleSubmit}>
             <Input
               type="password"
               placeholder="New Password"
