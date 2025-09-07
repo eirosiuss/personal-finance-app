@@ -18,8 +18,8 @@ const Sidebar = () => {
       {({ isActive }) => (
         <div
           className={`${
-              sidebarMinimized ? "lg:py-4" : "py-2"
-            } px-5 md:px-10 md:pt-3 md:flex md:flex-col  md:justify-between md:items-center lg:py-0 lg:px-0 lg:flex-row lg:justify-center lg:items-center ${
+            sidebarMinimized ? "lg:py-4" : "py-2"
+          } px-5 md:px-10 md:pt-3 md:flex md:flex-col  md:justify-between md:items-center lg:py-0 lg:px-0 lg:flex-row lg:justify-center lg:items-center ${
             isActive
               ? "bg-beige-100 rounded-t-lg border-b-4 border-green group-hover:border-grey-300 lg:rounded-t-none lg:rounded-r-xl lg:border-b-0 lg:border-l-4"
               : "bg-transparent"
@@ -60,11 +60,16 @@ const Sidebar = () => {
       >
         <div className="w-full">
           <div className="hidden lg:block py-10 pl-8 pb-16">
-            <img src={sidebarMinimized ? LogoFinanceSmall : LogoFinance} alt="Logo Finance" />
+            <img
+              src={sidebarMinimized ? LogoFinanceSmall : LogoFinance}
+              alt="Logo Finance"
+            />
           </div>
-          <ul className={`flex flex-row justify-between items-center pt-2 px-4 md:px-10 lg:flex-col lg:justify-start lg:pt-0 lg:px-0 ${
-          sidebarMinimized ? "lg:pr-2" : "lg:pr-6"
-        }`}>
+          <ul
+            className={`flex flex-row justify-between items-center pt-2 px-4 md:px-10 lg:flex-col lg:justify-start lg:pt-0 lg:px-0 ${
+              sidebarMinimized ? "lg:pr-2" : "lg:pr-6"
+            }`}
+          >
             <li className="md:w-[104px] lg:w-full">
               <SidebarLink to="/home-page" icon="mdi-house" label="Overview" />
             </li>
@@ -113,9 +118,12 @@ const Sidebar = () => {
           </ul>
         </div>
 
+        {/* add spin on click */}
         <div
           onClick={() => setSidebarMinimized(!sidebarMinimized)}
-          className="hidden preset-3 mb-16 py-5 lg:flex gap-5 items-center text-grey-300 group hover:grey-100 cursor-pointer"
+          className={`${
+            sidebarMinimized ? "rotate" : "rotate"
+          } hidden preset-3 mb-16 py-5 lg:flex gap-5 items-center text-grey-300 group hover:grey-100 cursor-pointer`}
         >
           <Icon
             icon={`${
@@ -127,9 +135,11 @@ const Sidebar = () => {
             height="24"
             className="ml-8 group-hover:text-grey-100"
           />
-          <button className={`preset-3 cursor-pointer group-hover:text-grey-100 ${
-                  sidebarMinimized ? "lg:hidden" : ""
-                }`}>
+          <button
+            className={`preset-3 cursor-pointer group-hover:text-grey-100 ${
+              sidebarMinimized ? "lg:hidden" : ""
+            }`}
+          >
             Minimize Menu
           </button>
         </div>

@@ -4,11 +4,11 @@ import Sidebar from "../shared/Sidebar";
 
 export default function MainLayout() {
   return (
-    <>
+    <div>
       <Sidebar />
       <main>
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }

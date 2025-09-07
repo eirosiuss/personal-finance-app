@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore.js";
 import { useDataStore } from "../../store/dataStore.js";
 import formData from "../../utils/date.js";
+import { Icon } from "@iconify/react";
 
 export default function HomePage() {
   const { user } = useAuthStore();
@@ -55,35 +56,44 @@ export default function HomePage() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <>
-      <div className="financial-summary">
-        <header>
-          <h1>Finance Overview for {user.name}</h1>
-          <p>
-            <span>Last Login: </span>
-            {formData(user.lastLogin)}
+    <div className="px-4 mx-auto">
+      <div className="mb-8">
+        <header className="mt-6 mb-8">
+          <h1 className="preset-1 text-balance">Overview</h1>
+          <p className="preset-4 text-balance px-5 py-6 bg-white rounded-xl">
+            Welcome back, {user?.name}!
+            <span className="block">
+              Last Login: {formData(user.lastLogin)}
+            </span>
           </p>
         </header>
-        <article>
-          <h3>Current Balance</h3>
-          <p>${currentBalance.toFixed(2)}</p>
+        <article className="py-5 px-5 mb-3 bg-grey-900 rounded-2xl text-white">
+          <h3 className="preset-4">Current Balance</h3>
+          <p className="preset-1 pt-3">${currentBalance.toFixed(2)}</p>
         </article>
-        <article>
-          <h3>Income</h3>
-          <p>${currentMonthIncome.toFixed(2)}</p>
+        <article className="py-5 px-5 mb-3 text-grey-900 rounded-2xl bg-white">
+          <h3 className="preset-4 text-grey-500">Income</h3>
+          <p className="preset-1 pt-3">${currentMonthIncome.toFixed(2)}</p>
         </article>
-        <article>
-          <h3>Expanses</h3>
-          <p>${currentMonthExpances.toFixed(2)}</p>
+        <article className="py-5 px-5 mb-3 text-grey-900 rounded-2xl bg-white">
+          <h3 className="preset-4 text-grey-500">Expanses</h3>
+          <p className="preset-1 pt-3">${currentMonthExpances.toFixed(2)}</p>
         </article>
       </div>
 
-      <div className="pots">
-        <div className="more-info-header">
-          <h2>Pots</h2>
-          <Link to="/pots">See Details</Link>
+      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+        <div className="pb-6 flex items-center justify-between">
+          <h2 className="preset-2 text-grey-900">Pots</h2>
+          <Link
+            className="preset-4 flex items-center gap-3 text-grey-500"
+            to="/pots"
+          >
+            See Details
+            <Icon icon="tabler:caret-right-filled" width="12" height="12" />
+          </Link>
         </div>
-        <div>
+        <div className="bg-beige-100">
+          <Icon icon="ph:tip-jar-fill"></Icon>
           <h3>Total Saved</h3>
           {<p>${pots.reduce((acc, pot) => acc + pot.total, 0)}</p>}
         </div>
@@ -95,10 +105,16 @@ export default function HomePage() {
         ))}
       </div>
 
-      <div className="transactions-overview">
-        <div className="more-info-header">
-          <h2>Transactions</h2>
-          <Link to="/transactions">View All</Link>
+      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+        <div className="pb-6 flex items-center justify-between">
+          <h2 className="preset-2 text-grey-900">Transactions</h2>
+          <Link
+            className="preset-4 flex items-center gap-3 text-grey-500"
+            to="/transactions"
+          >
+            View All
+            <Icon icon="tabler:caret-right-filled" width="12" height="12" />
+          </Link>
         </div>
         {transactions.slice(0, 5).map((transaction) => (
           <article key={transaction._id}>
@@ -123,10 +139,16 @@ export default function HomePage() {
         ))}
       </div>
 
-      <div className="budgets">
-        <div className="more-info-header">
-          <h2>Budgets</h2>
-          <Link to="/budgets">See Details</Link>
+      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+        <div className="pb-6 flex items-center justify-between">
+          <h2 className="preset-2 text-grey-900">Budgets</h2>
+          <Link
+            className="preset-4 flex items-center gap-3 text-grey-500"
+            to="/budgets"
+          >
+            See Details
+            <Icon icon="tabler:caret-right-filled" width="12" height="12" />
+          </Link>
         </div>
         <p>
           $
@@ -160,10 +182,16 @@ export default function HomePage() {
         ))}
       </div>
 
-      <div className="recurring-bills">
-        <div className="more-info-header">
-          <h2>Recurring Bills</h2>
-          <Link to="/recurring-bills">See Details</Link>
+      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+        <div className="pb-6 flex items-center justify-between">
+          <h2 className="preset-2 text-grey-900">Recurring Bills</h2>
+          <Link
+            className="preset-4 flex items-center gap-3 text-grey-500"
+            to="/recurring-bills"
+          >
+            See Details
+            <Icon icon="tabler:caret-right-filled" width="12" height="12" />
+          </Link>
         </div>
         {transactions
           .filter((transaction) => transaction.recurring)
@@ -174,6 +202,6 @@ export default function HomePage() {
             </article>
           ))}
       </div>
-    </>
+    </div>
   );
 }
