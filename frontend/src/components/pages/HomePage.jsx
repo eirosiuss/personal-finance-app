@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 
 export default function HomePage() {
   const { user } = useAuthStore();
+
   const {
     fetchTransactions,
     fetchBudgets,
@@ -32,12 +33,16 @@ export default function HomePage() {
   const lastFilledTransaction = transactions
     .map((t) => new Date(t.date))
     .sort((a, b) => b - a)[0];
+
   let lastFilledMonth = lastFilledTransaction?.getMonth();
+
   let lastFilledYear = lastFilledTransaction?.getFullYear();
+
   const currentBalance = transactions.reduce(
     (sum, transaction) => sum + transaction.amount,
     0
   );
+
   const lastMonthTransactions = transactions.filter((t) => {
     const date = new Date(t.date);
     return (
@@ -45,13 +50,65 @@ export default function HomePage() {
       date.getFullYear() === lastFilledYear
     );
   });
+
   const currentMonthIncome = lastMonthTransactions
     .filter((transaction) => transaction.amount > 0)
     .reduce((sum, transaction) => sum + transaction.amount, 0);
+
   const currentMonthExpances =
     lastMonthTransactions
       .filter((transaction) => transaction.amount < 0)
       .reduce((sum, transaction) => sum + transaction.amount, 0) * -1;
+  const spent =
+    transactions
+      .filter((t) => {
+        const transactionDate = new Date(t.date);
+        return (
+          ["Entertainment", "Bills", "Dining Out", "Personal Care"].includes(
+            t.category
+          ) &&
+          t.amount < 0 &&
+          transactionDate.getMonth() === lastFilledMonth &&
+          transactionDate.getFullYear() === lastFilledYear
+        );
+      })
+      .reduce((sum, t) => sum + t.amount, 0) * -1;
+
+  const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
+
+  const budgetSpent = budgets.map((budget) => {
+    const spentAmount =
+      transactions
+        .filter(
+          (t) =>
+            t.category === budget.category &&
+            t.amount < 0 &&
+            new Date(t.date).getMonth() === lastFilledMonth &&
+            new Date(t.date).getFullYear() === lastFilledYear
+        )
+        .reduce((sum, t) => sum + t.amount, 0) * -1;
+
+    const percentage = totalBudget ? (spentAmount / totalBudget) * 100 : 0;
+    return { ...budget, spent: spentAmount, percentage };
+  });
+
+  // Tailwind colors for each budget category
+  const colors = ["#4f46e5", "#f59e0b", "#10b981", "#ef4444", "#0ea5e9"];
+
+  const gradientString = budgetSpent
+    .map((b, i) => {
+      const start = budgetSpent
+        .slice(0, i)
+        .reduce((acc, prev) => acc + prev.percentage, 0);
+      const end = start + b.percentage;
+      return `${colors[i % colors.length]} ${start * 3.6}deg ${end * 3.6}deg`;
+    })
+    .join(", ");
+
+  const spentTotal = budgetSpent.reduce((acc, b) => acc + b.spent, 0);
+  const spentPercentageTotal = totalBudget
+    ? (spentTotal / totalBudget) * 100
+    : 0;
 
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -92,17 +149,45 @@ export default function HomePage() {
             <Icon icon="tabler:caret-right-filled" width="12" height="12" />
           </Link>
         </div>
-        <div className="bg-beige-100">
-          <Icon icon="ph:tip-jar-fill"></Icon>
-          <h3>Total Saved</h3>
-          {<p>${pots.reduce((acc, pot) => acc + pot.total, 0)}</p>}
+        <div className="bg-beige-100 flex items-center gap-4 rounded-xl">
+          <Icon
+            icon="ph:tip-jar"
+            width="40"
+            height="40"
+            className="text-green ml-4"
+          ></Icon>
+          <div className="py-5">
+            <h3 className="text-grey-500 preset-4 mb-2.5">Total Saved</h3>
+            {
+              <p className="text-grey-900 preset-1">
+                ${pots.reduce((acc, pot) => acc + pot.total, 0)}
+              </p>
+            }
+          </div>
         </div>
-        {pots.slice(0, 4).map((pot) => (
-          <article key={pot._id}>
-            <h3>{pot.name}</h3>
-            <p>${pot.total}</p>
-          </article>
-        ))}
+        <div className="mt-5 grid grid-cols-2 gap-4">
+          {pots.slice(0, 4).map((pot, index) => {
+            const borderColors = [
+              "bg-green",
+              "bg-navy",
+              "bg-cyan",
+              "bg-yellow",
+            ];
+            return (
+              <article key={pot._id} className="flex gap-4 items-center">
+                <div
+                  className={`w-1 h-full rounded-xl ${
+                    borderColors[index] || ""
+                  }`}
+                ></div>
+                <div>
+                  <h3 className="mb-1 text-grey-500 preset-5">{pot.name}</h3>
+                  <p className="text-grey-900 preset-4-bold">${pot.total}</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
 
       <div className="mb-6 px-5 py-6 bg-white rounded-xl">
@@ -116,18 +201,30 @@ export default function HomePage() {
             <Icon icon="tabler:caret-right-filled" width="12" height="12" />
           </Link>
         </div>
-        {transactions.slice(0, 5).map((transaction) => (
-          <article key={transaction._id}>
-            <div>
-              <h3>{transaction.name}</h3>
-            </div>
-            <div className="transaction-info">
-              <p>
+        {transactions.slice(0, 5).map((transaction, index, arr) => (
+          <article
+            key={transaction._id}
+            className={`flex justify-between items-center ${
+              index !== arr.length - 1
+                ? "border-b border-b-grey-100 mb-5 pb-5"
+                : ""
+            }`}
+          >
+            <h3 className="preset-4-bold text-grey-900">{transaction.name}</h3>
+
+            <div className="text-right">
+              <p
+                className={`${
+                  transaction.amount > 0
+                    ? "preset-4-bold text-green"
+                    : "preset-4-bold text-grey-900"
+                }`}
+              >
                 {transaction.amount > 0
                   ? `+$${transaction.amount.toFixed(2)}`
                   : `-$${Math.abs(transaction.amount).toFixed(2)}`}
               </p>
-              <p>
+              <p className="preset-5 text-grey-500">
                 {new Date(transaction.date).toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "short",
@@ -150,32 +247,23 @@ export default function HomePage() {
             <Icon icon="tabler:caret-right-filled" width="12" height="12" />
           </Link>
         </div>
-        <p>
-          $
-          {transactions
-            .filter((transaction) => {
-              const transactionDate = new Date(transaction.date);
-              return (
-                [
-                  "Entertainment",
-                  "Bills",
-                  "Dining Out",
-                  "Personal Care",
-                ].includes(transaction.category) &&
-                transaction.amount < 0 &&
-                lastFilledYear === transactionDate.getFullYear() &&
-                lastFilledMonth === transactionDate.getMonth()
-              );
-            })
-            .reduce((acc, transaction) => acc + transaction.amount, 0)
-            .toFixed(2) * -1}
-          <span>
-            {" "}
-            of ${budgets.reduce((acc, budget) => acc + budget.maximum, 0)} limit
-          </span>
+
+        {/* Doughnut Chart */}
+        <div className="mt-7 mx-auto relative w-[240px] h-[240px] rounded-full">
+          <div
+            className="w-full h-full rounded-full"
+            style={{ background: `conic-gradient(${gradientString})` }}
+          ></div>
+          {/* Vidinė skylė doughnut */}
+          <div className="absolute inset-1/4 bg-white rounded-full"></div>
+        </div>
+
+        <p className="mt-4 text-center">
+          ${spentTotal.toFixed(2)} of ${totalBudget} limit
         </p>
+
         {budgets.map((budget) => (
-          <article key={budget._id}>
+          <article key={budget._id} className="mt-2 flex justify-between">
             <h3>{budget.category}</h3>
             <p>${budget.maximum.toFixed(2)}</p>
           </article>
