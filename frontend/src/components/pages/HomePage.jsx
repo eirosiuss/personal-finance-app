@@ -59,20 +59,6 @@ export default function HomePage() {
     lastMonthTransactions
       .filter((transaction) => transaction.amount < 0)
       .reduce((sum, transaction) => sum + transaction.amount, 0) * -1;
-  const spent =
-    transactions
-      .filter((t) => {
-        const transactionDate = new Date(t.date);
-        return (
-          ["Entertainment", "Bills", "Dining Out", "Personal Care"].includes(
-            t.category
-          ) &&
-          t.amount < 0 &&
-          transactionDate.getMonth() === lastFilledMonth &&
-          transactionDate.getFullYear() === lastFilledYear
-        );
-      })
-      .reduce((sum, t) => sum + t.amount, 0) * -1;
 
   const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
 
@@ -92,8 +78,7 @@ export default function HomePage() {
     return { ...budget, spent: spentAmount, percentage };
   });
 
-  // Tailwind colors for each budget category
-  const colors = ["#4f46e5", "#f59e0b", "#10b981", "#ef4444", "#0ea5e9"];
+  const colors = budgets.map((b) => b.theme);
 
   const gradientString = budgetSpent
     .map((b, i) => {
@@ -106,9 +91,19 @@ export default function HomePage() {
     .join(", ");
 
   const spentTotal = budgetSpent.reduce((acc, b) => acc + b.spent, 0);
-  const spentPercentageTotal = totalBudget
-    ? (spentTotal / totalBudget) * 100
-    : 0;
+
+  function lightenHex(hex, percent) {
+    let num = parseInt(hex.replace("#", ""), 16);
+    let r = (num >> 16) & 0xff;
+    let g = (num >> 8) & 0xff;
+    let b = num & 0xff;
+
+    r = Math.min(255, Math.floor(r + (255 - r) * percent));
+    g = Math.min(255, Math.floor(g + (255 - g) * percent));
+    b = Math.min(255, Math.floor(b + (255 - b) * percent));
+
+    return `rgb(${r},${g},${b})`;
+  }
 
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -248,22 +243,42 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Doughnut Chart */}
         <div className="mt-7 mx-auto relative w-[240px] h-[240px] rounded-full">
           <div
             className="w-full h-full rounded-full"
             style={{ background: `conic-gradient(${gradientString})` }}
           ></div>
-          {/* Vidinė skylė doughnut */}
-          <div className="absolute inset-1/4 bg-white rounded-full"></div>
+          <div
+            className="absolute inset-1/8 rounded-full p-2.5"
+            style={{
+              background: `conic-gradient(${budgetSpent
+                .map((b, i) => {
+                  const start = budgetSpent
+                    .slice(0, i)
+                    .reduce((acc, prev) => acc + prev.percentage, 0);
+                  const end = start + b.percentage;
+                  // 50% lighten
+                  const color = colors[i % colors.length];
+                  const lightColor = lightenHex(color, 0.5);
+                  return `${lightColor} ${start * 3.6}deg ${end * 3.6}deg`;
+                })
+                .join(", ")})`,
+            }}
+          >
+            <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-center">
+              <p className="text-balance">
+                ${spentTotal.toFixed(2)} of ${totalBudget} limit
+              </p>
+            </div>
+          </div>
         </div>
-
-        <p className="mt-4 text-center">
-          ${spentTotal.toFixed(2)} of ${totalBudget} limit
-        </p>
 
         {budgets.map((budget) => (
           <article key={budget._id} className="mt-2 flex justify-between">
+            <div
+              className="w-2"
+              style={{ backgroundColor: budget.theme }}
+            ></div>
             <h3>{budget.category}</h3>
             <p>${budget.maximum.toFixed(2)}</p>
           </article>
