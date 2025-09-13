@@ -3,15 +3,12 @@ import { useAuthStore } from "../../store/authStore.js";
 import { Icon } from "@iconify/react";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import LogoFinanceSmall from "../../../src/assets/images/logo-small.svg";
-import { useState } from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
   const { logout } = useAuthStore();
   const hangleLogout = () => {
     logout();
   };
-
-  const [sidebarMinimized, setSidebarMinimized] = useState(false);
 
   const SidebarLink = ({ to, icon, label }) => (
     <NavLink to={to} className="group">
@@ -19,7 +16,7 @@ const Sidebar = () => {
         <div
           className={`${
             sidebarMinimized ? "lg:py-4" : "py-2"
-          } px-5 md:px-10 md:pt-3 md:flex md:flex-col  md:justify-between md:items-center lg:py-0 lg:px-0 lg:flex-row lg:justify-center lg:items-center ${
+          } px-5 md:px-10 md:pt-3 md:flex md:flex-col  md:justify-between md:items-center lg:py-0 lg:px-0 lg:flex-row lg:justify-start lg:items-center lg:gap-4 ${
             isActive
               ? "bg-beige-100 rounded-t-lg border-b-4 border-green group-hover:border-grey-300 lg:rounded-t-none lg:rounded-r-xl lg:border-b-0 lg:border-l-4"
               : "bg-transparent"
@@ -29,7 +26,7 @@ const Sidebar = () => {
             icon={icon}
             width="24"
             height="24"
-            className={`md:pb-1 lg:pb-0 ${
+            className={`md:pb-1 lg:pb-0 lg:ml-8 ${
               isActive
                 ? "text-green group-hover:text-grey-300"
                 : "text-grey-300 group-hover:text-grey-100"
@@ -56,7 +53,7 @@ const Sidebar = () => {
       <nav
         className={`${
           sidebarMinimized ? "lg:w-[88px]" : "lg:w-[300px]"
-        } w-full lg:flex lg:justify-between fixed z-20 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl`}
+        } w-full lg:flex lg:justify-between fixed z-20 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl lg:transition-all lg:duration-700` }
       >
         <div className="w-full">
           <div className="hidden lg:block py-10 pl-8 pb-16">
@@ -95,7 +92,7 @@ const Sidebar = () => {
               <Icon icon="ph:receipt-fill" width="24" height="24" className="hover:text-grey-100" />
             </NavLink>
           </li> */}
-            <li className="cursor-pointer py-2 px-5 h-10 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:w-full group lg:py-4">
+            <li className="cursor-pointer py-2 px-5 h-10 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start">
               <button
                 className="text-grey-300 group-hover:text-grey-100"
                 onClick={hangleLogout}
@@ -104,7 +101,7 @@ const Sidebar = () => {
                   icon="material-symbols:logout"
                   width="24"
                   height="24"
-                  className="group-hover:text-grey-100"
+                  className="group-hover:text-grey-100 lg:ml-8"
                 />
               </button>
               <p
@@ -118,7 +115,7 @@ const Sidebar = () => {
           </ul>
         </div>
 
-        {/* add spin on click */}
+        {/* task add spin on click */}
         <div
           onClick={() => setSidebarMinimized(!sidebarMinimized)}
           className={`${
