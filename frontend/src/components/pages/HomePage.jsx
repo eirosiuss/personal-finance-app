@@ -108,10 +108,10 @@ export default function HomePage() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="px-4 mx-auto">
+    <div className="px-4 mx-auto my-6">
       <div className="mb-8">
-        <header className="mt-6 mb-8">
-          <h1 className="preset-1 text-balance">Overview</h1>
+        <header className="mb-8">
+          <h1 className="preset-1 text-balance mb-8">Overview</h1>
           <p className="preset-4 text-balance px-5 py-6 bg-white rounded-xl">
             Welcome back, {user?.name}!
             <span className="block">
@@ -231,7 +231,7 @@ export default function HomePage() {
         ))}
       </div>
 
-      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+      <div className="mb-20 px-5 py-6 bg-white rounded-xl">
         <div className="pb-6 flex items-center justify-between">
           <h2 className="preset-2 text-grey-900">Budgets</h2>
           <Link
@@ -249,7 +249,7 @@ export default function HomePage() {
             style={{ background: `conic-gradient(${gradientString})` }}
           ></div>
           <div
-            className="absolute inset-1/8 rounded-full p-2.5"
+            className="absolute z-10 inset-1/8 rounded-full p-2.5"
             style={{
               background: `conic-gradient(${budgetSpent
                 .map((b, i) => {
@@ -257,7 +257,6 @@ export default function HomePage() {
                     .slice(0, i)
                     .reduce((acc, prev) => acc + prev.percentage, 0);
                   const end = start + b.percentage;
-                  // 50% lighten
                   const color = colors[i % colors.length];
                   const lightColor = lightenHex(color, 0.5);
                   return `${lightColor} ${start * 3.6}deg ${end * 3.6}deg`;
@@ -266,26 +265,34 @@ export default function HomePage() {
             }}
           >
             <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-center">
-              <p className="text-balance">
-                ${spentTotal.toFixed(2)} of ${totalBudget} limit
+              <p className="text-balance preset-1 text-grey-900">
+                ${spentTotal.toFixed(0)}
+                <span className="preset-5 text-grey-500">
+                  {" "}
+                  of ${totalBudget} limit
+                </span>
               </p>
             </div>
           </div>
         </div>
 
-        {budgets.map((budget) => (
-          <article key={budget._id} className="mt-2 flex justify-between">
-            <div
-              className="w-2"
-              style={{ backgroundColor: budget.theme }}
-            ></div>
-            <h3>{budget.category}</h3>
-            <p>${budget.maximum.toFixed(2)}</p>
-          </article>
-        ))}
+        <div className="grid grid-cols-2 mt-4 mb-2 gap-4">
+          {budgets.map((budget) => (
+            <article key={budget._id} className="flex gap-4">
+              <div
+                className="w-2 rounded-xl"
+                style={{ backgroundColor: budget.theme }}
+              ></div>
+              <div>
+                <h3>{budget.category}</h3>
+                <p>${budget.maximum.toFixed(2)}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
 
-      <div className="mb-6 px-5 py-6 bg-white rounded-xl">
+      {/* <div className="mb-6 px-5 py-6 bg-white rounded-xl">
         <div className="pb-6 flex items-center justify-between">
           <h2 className="preset-2 text-grey-900">Recurring Bills</h2>
           <Link
@@ -304,7 +311,7 @@ export default function HomePage() {
               <p>${transaction.amount.toFixed(2)}</p>
             </article>
           ))}
-      </div>
+      </div> */}
     </div>
   );
 }
