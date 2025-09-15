@@ -137,7 +137,7 @@ export default function HomePage() {
 
       <div className="lg:grid lg:grid-cols-2 lg:gap-6">
         <div>
-          <div className="mb-6 px-5 py-6 md:py-8 bg-white rounded-xl md:px-8 ">
+          <div className="mb-6 px-5 py-6 bg-white rounded-xl md:px-8 ">
             <div className="pb-5 flex items-center justify-between">
               <h2 className="preset-2 text-grey-900">Pots</h2>
               <Link
