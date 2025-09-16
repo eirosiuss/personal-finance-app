@@ -104,10 +104,10 @@ export default function Transactions() {
         <h1 className="preset-1 text-grey-900 my-2">Transactions</h1>
       </header>
 
-      <div className="bg-white rounded-xl py-6 px-5">
+      <div className="bg-white rounded-xl py-6 mb-20 px-5">
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="mb-6 flex items-center gap-6"
+          className="flex items-center gap-6"
         >
           <div className="relative">
             <span className="absolute inset-y-0 right-0 flex items-center mr-5 text-grey-900">
@@ -226,10 +226,24 @@ export default function Transactions() {
                     className="fixed inset-0 bg-black/50 z-0"
                     onClick={() => setShowCategoryOptions(false)}
                   ></div>
-                  <select value={selectedCategory} size={8} onChange={handleCategoryChange} className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4">
-                    <option className="border-b border-b-grey-100 pb-3 mb-3" value="All Transactions">All Transactions</option>
+                  <select
+                    value={selectedCategory}
+                    size={8}
+                    onChange={handleCategoryChange}
+                    className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
+                  >
+                    <option
+                      className="border-b border-b-grey-100 pb-3 mb-3"
+                      value="All Transactions"
+                    >
+                      All Transactions
+                    </option>
                     {uniqueCategories.map((cat, index) => (
-                      <option className="border-b border-b-grey-100 pb-3 mb-3 last:border-b-0 last:mb-0" key={index} value={cat}>
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3 last:border-b-0 last:mb-0"
+                        key={index}
+                        value={cat}
+                      >
                         {cat}
                       </option>
                     ))}
@@ -240,8 +254,8 @@ export default function Transactions() {
           </div>
         </form>
 
-        <div>
-          <table>
+        <div className="w-full">
+          <table className="w-full my-6">
             <thead className="hidden">
               <tr>
                 <th>Recipient / Sender</th>
@@ -252,55 +266,117 @@ export default function Transactions() {
             </thead>
             <tbody>
               {currentTransactions.map((transaction) => (
-                <tr key={transaction._id}>
-                  <td>
-                    <div>{transaction.name}</div>
-                  </td>
-                  <td>{transaction.category}</td>
-                  <td>
-                    {transaction.date.slice(8, 10)}{" "}
-                    {new Intl.DateTimeFormat("en-US", {
-                      month: "short",
-                    }).format(new Date(transaction.date))}{" "}
-                    {transaction.date.slice(0, 4)}
-                  </td>
-                  <td>
-                    <p>
-                      {transaction.amount > 0
-                        ? `+$${transaction.amount.toFixed(2)}`
-                        : `-$${Math.abs(transaction.amount).toFixed(2)}`}
-                    </p>
-                  </td>
+                <tr
+                  className="flex justify-between pb-4 mb-4 last:mb-0 last:pb-0 border-b border-grey-100 last:border-b-0"
+                  key={transaction._id}
+                >
+                  <div className="flex flex-col gap-1">
+                    <td className="text-grey-900 preset-4-bold">
+                      {transaction.name}
+                    </td>
+                    <td className="text-grey-500 preset-5">
+                      {transaction.category}
+                    </td>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <td className="preset-4-bold">
+                      {transaction.amount > 0 ? (
+                        <span className="text-grey-900">
+                          +${transaction.amount.toFixed(2)}
+                        </span>
+                      ) : (
+                        <span className="text-green">
+                          -${Math.abs(transaction.amount).toFixed(2)}
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-grey-500 preset-5">
+                      {transaction.date.slice(8, 10)}{" "}
+                      {new Intl.DateTimeFormat("en-US", {
+                        month: "short",
+                      }).format(new Date(transaction.date))}{" "}
+                      {transaction.date.slice(0, 4)}
+                    </td>
+                  </div>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <div className="pagination">
+          <div className="flex pt-6 justify-between items-center">
             <button
+              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center"
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
             >
-              Previous
+              <Icon
+                className="text-grey-500"
+                icon="ph:caret-left-fill"
+                width="16"
+                height="16"
+              />
+
+              <span className="hidden">Previous</span>
             </button>
-            <div>
-              {pageNumbers.map((number) => (
+
+            <div className="flex gap-2 justify-center">
+              <button
+                onClick={() => setCurrentPage(1)}
+                className={
+                  currentPage === 1
+                    ? "bg-grey-900 text-white w-10 h-10 rounded-lg"
+                    : "border border-beige-500 rounded-lg w-10 h-10"
+                }
+              >
+                1
+              </button>
+
+              {currentPage > 1 && currentPage < totalPages && (
                 <button
-                  className={
-                    currentPage === number ? "pagination__btn--active" : ""
-                  }
-                  key={number}
-                  onClick={() => setCurrentPage(number)}
+                  onClick={() => setCurrentPage(currentPage)}
+                  className="bg-grey-900 text-white w-10 h-10 rounded-lg"
                 >
-                  {number}
+                  {currentPage}
                 </button>
-              ))}
+              )}
+
+              {currentPage < totalPages - 1 && (
+                <button
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(p + 1, totalPages - 1))
+                  }
+                  className="border border-beige-500 rounded-lg w-10 h-10"
+                >
+                  …
+                </button>
+              )}
+
+              {totalPages > 1 && (
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  className={
+                    currentPage === totalPages
+                      ? "bg-grey-900 text-white w-10 h-10 rounded-lg"
+                      : "border border-beige-500 rounded-lg w-10 h-10"
+                  }
+                >
+                  {totalPages}
+                </button>
+              )}
             </div>
+
             <button
+              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center"
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
             >
-              Next
+              <Icon
+                className="text-grey-500"
+                icon="ph:caret-right-fill"
+                width="16"
+                height="16"
+              />
+              <span className="hidden">Next</span>
             </button>
           </div>
         </div>
