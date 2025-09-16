@@ -97,6 +97,10 @@
   .preset-5-bold {
     @apply font-public-sans text-preset-5-bold leading-preset-5-bold font-preset-5-bold;
   }
+
+  select option:checked {
+    @apply font-bold bg-inherit;
+  }
 }
 
 body {
