@@ -99,12 +99,12 @@ export default function Transactions() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="mx-auto px-4">
-      <header className="mt-6 mb-8">
+    <div className="mx-auto px-4 md:px-10">
+      <header className="mt-6 mb-8 md:mt-8">
         <h1 className="preset-1 text-grey-900 my-2">Transactions</h1>
       </header>
 
-      <div className="bg-white rounded-xl py-6 mb-20 px-5">
+      <div className="bg-white rounded-xl py-6 mb-20 px-5 md:px-8 md:py-8">
         <form
           onSubmit={(e) => e.preventDefault()}
           className="flex items-center gap-6"
@@ -120,15 +120,19 @@ export default function Transactions() {
               onChange={handleSearch}
             ></Input>
           </div>
-          <div>
-            <label className="sr-only" htmlFor="sort">
+          <div className="md:flex md:items-center md:gap-2">
+            <label
+              className="sr-only md:not-sr-only md:whitespace-nowrap preset-4 text-grey-500"
+              htmlFor="sort"
+            >
               Sort by
             </label>
-            {/* <select
+            <select
               id="sort"
               name="sort"
               value={selectedSort}
               onChange={handleSort}
+              className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
             >
               <option value="latest">Latest</option>
               <option value="oldest">Oldest</option>
@@ -136,10 +140,11 @@ export default function Transactions() {
               <option value="z-to-a">Z to A</option>
               <option value="highest">Highest</option>
               <option value="lowest">Lowest</option>
-            </select> */}
+            </select>
             <button
               onClick={() => setShowSortingOptions(!showSortingOptions)}
               type="button"
+              className="md:hidden"
             >
               <Icon
                 icon="ph:sort-ascending-fill"
@@ -198,21 +203,28 @@ export default function Transactions() {
               )}
             </button>
           </div>
-          <div>
-            <label htmlFor="category" className="sr-only">
+          <div className="md:flex md:items-center md:gap-2">
+            <label
+              htmlFor="category"
+              className="sr-only md:not-sr-only preset-4 text-grey-500"
+            >
               Category
             </label>
-            {/* <select onChange={handleCategoryChange}>
+            <select
+              onChange={handleCategoryChange}
+              className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
+            >
               <option value="All Transactions">All Transactions</option>
-            {uniqueCategories.map((cat, index) => (
-              <option key={index} value={cat}>
-                {cat}
-              </option>
+              {uniqueCategories.map((cat, index) => (
+                <option key={index} value={cat}>
+                  {cat}
+                </option>
               ))}
-              </select> */}
+            </select>
             <button
               onClick={() => setShowCategoryOptions(!showCategoryOptions)}
               type="button"
+              className="md:hidden"
             >
               <Icon
                 className="text-grey-900"
@@ -255,57 +267,48 @@ export default function Transactions() {
         </form>
 
         <div className="w-full">
-          <table className="w-full my-6">
-            <thead className="hidden">
-              <tr>
-                <th>Recipient / Sender</th>
-                <th>Category</th>
-                <th>Transaction Date</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentTransactions.map((transaction) => (
-                <tr
-                  className="flex justify-between pb-4 mb-4 last:mb-0 last:pb-0 border-b border-grey-100 last:border-b-0"
-                  key={transaction._id}
-                >
-                  <div className="flex flex-col gap-1">
-                    <td className="text-grey-900 preset-4-bold">
-                      {transaction.name}
-                    </td>
-                    <td className="text-grey-500 preset-5">
-                      {transaction.category}
-                    </td>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <td className="preset-4-bold">
-                      {transaction.amount > 0 ? (
-                        <span className="text-grey-900">
-                          +${transaction.amount.toFixed(2)}
-                        </span>
-                      ) : (
-                        <span className="text-green">
-                          -${Math.abs(transaction.amount).toFixed(2)}
-                        </span>
-                      )}
-                    </td>
-                    <td className="text-grey-500 preset-5">
-                      {transaction.date.slice(8, 10)}{" "}
-                      {new Intl.DateTimeFormat("en-US", {
-                        month: "short",
-                      }).format(new Date(transaction.date))}{" "}
-                      {transaction.date.slice(0, 4)}
-                    </td>
-                  </div>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="hidden md:grid md:grid-cols-6 border-b border-grey-100 py-4 my-6 text-grey-500 preset-5">
+            <p className="md:col-span-3">Recipient / Sender</p>
+            <p>Category</p>
+            <p className="justify-self-end">
+              <span className="block">Transaction</span>
+              <span className="block">Date</span>
+            </p>
+            <p className="justify-self-end">Amount</p>
+          </div>
+          <div className="w-full my-6 divide-y divide-grey-100">
+            {currentTransactions.map((t) => (
+              <div
+                key={t._id}
+                className="w-full grid grid-cols-2 gap-1 not-first:pt-4 not-last:pb-4 md:grid md:grid-cols-6 md:items-center"
+              >
+                <p className="text-grey-900 preset-4-bold md:col-span-3">
+                  {t.name}
+                </p>
+                <p className="preset-4-bold justify-self-end md:order-4">
+                  {t.amount > 0 ? (
+                    <span className="text-green">+${t.amount.toFixed(2)}</span>
+                  ) : (
+                    <span className="text-grey-900">
+                      -${Math.abs(t.amount).toFixed(2)}
+                    </span>
+                  )}
+                </p>
+                <p className="text-grey-500 preset-5">{t.category}</p>
+                <p className="text-grey-500 preset-5 justify-self-end">
+                  {t.date.slice(8, 10)}{" "}
+                  {new Intl.DateTimeFormat("en-US", { month: "short" }).format(
+                    new Date(t.date)
+                  )}{" "}
+                  {t.date.slice(0, 4)}
+                </p>
+              </div>
+            ))}
+          </div>
 
           <div className="flex pt-6 justify-between items-center">
             <button
-              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center"
+              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center disabled:opacity-50 cursor-pointer md:flex md:gap-4"
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
             >
@@ -315,68 +318,68 @@ export default function Transactions() {
                 width="16"
                 height="16"
               />
-
-              <span className="hidden">Previous</span>
+              <span className="hidden md:block">Previous</span>
             </button>
 
             <div className="flex gap-2 justify-center">
-              <button
-                onClick={() => setCurrentPage(1)}
-                className={
-                  currentPage === 1
-                    ? "bg-grey-900 text-white w-10 h-10 rounded-lg"
-                    : "border border-beige-500 rounded-lg w-10 h-10"
-                }
-              >
-                1
-              </button>
-
-              {currentPage > 1 && currentPage < totalPages && (
-                <button
-                  onClick={() => setCurrentPage(currentPage)}
-                  className="bg-grey-900 text-white w-10 h-10 rounded-lg"
-                >
-                  {currentPage}
-                </button>
-              )}
-
-              {currentPage < totalPages - 1 && (
-                <button
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(p + 1, totalPages - 1))
+              {(() => {
+                const getPageNumbers = (current, total, isDesktop) => {
+                  if (!isDesktop) {
+                    let pages = [1];
+                    if (current > 1 && current < total) pages.push(current);
+                    if (total > 1) pages.push(total);
+                    return [...new Set(pages)];
                   }
-                  className="border border-beige-500 rounded-lg w-10 h-10"
-                >
-                  …
-                </button>
-              )}
 
-              {totalPages > 1 && (
-                <button
-                  onClick={() => setCurrentPage(totalPages)}
-                  className={
-                    currentPage === totalPages
-                      ? "bg-grey-900 text-white w-10 h-10 rounded-lg"
-                      : "border border-beige-500 rounded-lg w-10 h-10"
+                  const delta = 2;
+                  let start = Math.max(1, current - delta);
+                  let end = Math.min(total, current + delta);
+
+                  while (end - start < 4 && (start > 1 || end < total)) {
+                    if (start > 1) start--;
+                    else if (end < total) end++;
                   }
-                >
-                  {totalPages}
-                </button>
-              )}
+
+                  let pages = [];
+                  for (let i = start; i <= end; i++) {
+                    pages.push(i);
+                  }
+                  return pages;
+                };
+
+                const isDesktop =
+                  typeof window !== "undefined" && window.innerWidth >= 768;
+
+                return getPageNumbers(currentPage, totalPages, isDesktop).map(
+                  (num) => (
+                    <button
+                      key={num}
+                      onClick={() => setCurrentPage(num)}
+                      className={
+                        currentPage === num
+                          ? "bg-grey-900 text-white w-10 h-10 rounded-lg cursor-pointer"
+                          : "border border-beige-500 rounded-lg w-10 h-10 cursor-pointer"
+                      }
+                    >
+                      {num}
+                    </button>
+                  )
+                );
+              })()}
             </div>
 
             <button
-              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center"
+              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center disabled:opacity-50 cursor-pointer md:flex md:gap-4"
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
             >
+              <span className="hidden md:block">Next</span>
               <Icon
                 className="text-grey-500"
                 icon="ph:caret-right-fill"
                 width="16"
                 height="16"
               />
-              <span className="hidden">Next</span>
             </button>
           </div>
         </div>
