@@ -53,7 +53,7 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
       <nav
         className={`${
           sidebarMinimized ? "lg:w-[88px]" : "lg:w-[300px]"
-        } w-full lg:flex lg:justify-between fixed z-20 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl lg:transition-all lg:duration-700` }
+        } w-full lg:flex lg:justify-between fixed z-20 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl lg:transition-all lg:duration-700`}
       >
         <div className="w-full">
           <div className="hidden lg:block py-10 pl-8 pb-16">
@@ -92,11 +92,11 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
               <Icon icon="ph:receipt-fill" width="24" height="24" className="hover:text-grey-100" />
             </NavLink>
           </li> */}
-            <li className="cursor-pointer py-2 px-5 h-10 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start">
-              <button
-                className="text-grey-300 group-hover:text-grey-100"
-                onClick={hangleLogout}
-              >
+            <li
+              className="cursor-pointer py-2 px-5 h-10 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start"
+              onClick={hangleLogout}
+            >
+              <button className="text-grey-300 group-hover:text-grey-100">
                 <Icon
                   icon="material-symbols:logout"
                   width="24"

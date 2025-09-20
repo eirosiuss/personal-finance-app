@@ -107,7 +107,7 @@ export default function Transactions() {
       <div className="bg-white rounded-xl py-6 mb-20 px-5 md:px-8 md:py-8">
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="flex items-center gap-6"
+          className="flex items-center md:gap-6 justify-between"
         >
           <div className="relative">
             <span className="absolute inset-y-0 right-0 flex items-center mr-5 text-grey-900">
@@ -118,151 +118,154 @@ export default function Transactions() {
               placeholder="Search transactions"
               value={searchValue}
               onChange={handleSearch}
+              className="lg:w-80"
             ></Input>
           </div>
-          <div className="md:flex md:items-center md:gap-2">
-            <label
-              className="sr-only md:not-sr-only md:whitespace-nowrap preset-4 text-grey-500"
-              htmlFor="sort"
-            >
-              Sort by
-            </label>
-            <select
-              id="sort"
-              name="sort"
-              value={selectedSort}
-              onChange={handleSort}
-              className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
-            >
-              <option value="latest">Latest</option>
-              <option value="oldest">Oldest</option>
-              <option value="a-to-z">A to Z</option>
-              <option value="z-to-a">Z to A</option>
-              <option value="highest">Highest</option>
-              <option value="lowest">Lowest</option>
-            </select>
-            <button
-              onClick={() => setShowSortingOptions(!showSortingOptions)}
-              type="button"
-              className="md:hidden"
-            >
-              <Icon
-                icon="ph:sort-ascending-fill"
-                className="text-grey-900"
-                width="20"
-                height="20"
-              />
-              {showSortingOptions && (
-                <>
-                  <div
-                    className="fixed inset-0 bg-black/50 z-0"
-                    onClick={() => setShowSortingOptions(false)}
-                  ></div>
+          <div className="flex items-center gap-2 md:gap-6 md:justify-between">
+            <div className="md:flex md:items-center md:gap-2">
+              <label
+                className="sr-only md:not-sr-only md:whitespace-nowrap preset-4 text-grey-500"
+                htmlFor="sort"
+              >
+                Sort by
+              </label>
+              <select
+                id="sort"
+                name="sort"
+                value={selectedSort}
+                onChange={handleSort}
+                className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
+              >
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="a-to-z">A to Z</option>
+                <option value="z-to-a">Z to A</option>
+                <option value="highest">Highest</option>
+                <option value="lowest">Lowest</option>
+              </select>
+              <button
+                onClick={() => setShowSortingOptions(!showSortingOptions)}
+                type="button"
+                className="md:hidden"
+              >
+                <Icon
+                  icon="ph:sort-ascending-fill"
+                  className="text-grey-900"
+                  width="20"
+                  height="20"
+                />
+                {showSortingOptions && (
+                  <>
+                    <div
+                      className="fixed inset-0 bg-black/50 z-0"
+                      onClick={() => setShowSortingOptions(false)}
+                    ></div>
 
-                  <select
-                    size={8}
-                    id="sort"
-                    name="sort"
-                    value={selectedSort}
-                    onChange={handleSort}
-                    className="w-30 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
-                  >
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="latest"
+                    <select
+                      size={8}
+                      id="sort"
+                      name="sort"
+                      value={selectedSort}
+                      onChange={handleSort}
+                      className="w-30 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
                     >
-                      Latest
-                    </option>
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="oldest"
-                    >
-                      Oldest
-                    </option>
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="a-to-z"
-                    >
-                      A to Z
-                    </option>
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="z-to-a"
-                    >
-                      Z to A
-                    </option>
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="highest"
-                    >
-                      Highest
-                    </option>
-                    <option value="lowest">Lowest</option>
-                  </select>
-                </>
-              )}
-            </button>
-          </div>
-          <div className="md:flex md:items-center md:gap-2">
-            <label
-              htmlFor="category"
-              className="sr-only md:not-sr-only preset-4 text-grey-500"
-            >
-              Category
-            </label>
-            <select
-              onChange={handleCategoryChange}
-              className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
-            >
-              <option value="All Transactions">All Transactions</option>
-              {uniqueCategories.map((cat, index) => (
-                <option key={index} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={() => setShowCategoryOptions(!showCategoryOptions)}
-              type="button"
-              className="md:hidden"
-            >
-              <Icon
-                className="text-grey-900"
-                icon="tabler:filter-filled"
-                width="20"
-                height="20"
-              />
-              {showCategoryOptions && (
-                <>
-                  <div
-                    className="fixed inset-0 bg-black/50 z-0"
-                    onClick={() => setShowCategoryOptions(false)}
-                  ></div>
-                  <select
-                    value={selectedCategory}
-                    size={8}
-                    onChange={handleCategoryChange}
-                    className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
-                  >
-                    <option
-                      className="border-b border-b-grey-100 pb-3 mb-3"
-                      value="All Transactions"
-                    >
-                      All Transactions
-                    </option>
-                    {uniqueCategories.map((cat, index) => (
                       <option
-                        className="border-b border-b-grey-100 pb-3 mb-3 last:border-b-0 last:mb-0"
-                        key={index}
-                        value={cat}
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="latest"
                       >
-                        {cat}
+                        Latest
                       </option>
-                    ))}
-                  </select>
-                </>
-              )}
-            </button>
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="oldest"
+                      >
+                        Oldest
+                      </option>
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="a-to-z"
+                      >
+                        A to Z
+                      </option>
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="z-to-a"
+                      >
+                        Z to A
+                      </option>
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="highest"
+                      >
+                        Highest
+                      </option>
+                      <option value="lowest">Lowest</option>
+                    </select>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="md:flex md:items-center md:gap-2">
+              <label
+                htmlFor="category"
+                className="sr-only md:not-sr-only preset-4 text-grey-500"
+              >
+                Category
+              </label>
+              <select
+                onChange={handleCategoryChange}
+                className="hidden md:block border border-beige-500 px-5 pt-3 rounded-lg text-grey-900 preset-4 md:py-3 md:px-5 md:bg-white"
+              >
+                <option value="All Transactions">All Transactions</option>
+                {uniqueCategories.map((cat, index) => (
+                  <option key={index} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => setShowCategoryOptions(!showCategoryOptions)}
+                type="button"
+                className="md:hidden"
+              >
+                <Icon
+                  className="text-grey-900"
+                  icon="tabler:filter-filled"
+                  width="20"
+                  height="20"
+                />
+                {showCategoryOptions && (
+                  <>
+                    <div
+                      className="fixed inset-0 bg-black/50 z-0"
+                      onClick={() => setShowCategoryOptions(false)}
+                    ></div>
+                    <select
+                      value={selectedCategory}
+                      size={8}
+                      onChange={handleCategoryChange}
+                      className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
+                    >
+                      <option
+                        className="border-b border-b-grey-100 pb-3 mb-3"
+                        value="All Transactions"
+                      >
+                        All Transactions
+                      </option>
+                      {uniqueCategories.map((cat, index) => (
+                        <option
+                          className="border-b border-b-grey-100 pb-3 mb-3 last:border-b-0 last:mb-0"
+                          key={index}
+                          value={cat}
+                        >
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
 
@@ -308,7 +311,7 @@ export default function Transactions() {
 
           <div className="flex pt-6 justify-between items-center">
             <button
-              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center disabled:opacity-50 cursor-pointer md:flex md:gap-4"
+              className="border border-beige-500 rounded-lg px-4 h-10 flex justify-center items-center disabled:opacity-50 disabled:cursor-auto cursor-pointer md:flex md:gap-4"
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
             >
