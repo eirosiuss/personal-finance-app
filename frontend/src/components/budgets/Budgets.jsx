@@ -4,13 +4,8 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const {
-    fetchBudgets,
-    fetchTransactions,
-    budgets,
-    transactions,
-    error,
-  } = useDataStore();
+  const { fetchBudgets, fetchTransactions, budgets, transactions, error } =
+    useDataStore();
   const [showModal, setShowModal] = useState(false);
   const [selectBudget, setSelectBudget] = useState(null);
 
@@ -53,11 +48,16 @@ export default function Budgets() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <>
-      <header>
-        <h1>Budgets</h1>
+    <div className="mx-auto px-4 md:px-10">
+      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center">
+        <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
         <>
-          <button onClick={() => setShowModal(true)}>+Add New Budget</button>
+          <button
+            className="bg-grey-900 preset-4-bold text-white px-4 py-4 rounded-xl"
+            onClick={() => setShowModal(true)}
+          >
+            + Add New Budget
+          </button>
           {showModal && (
             <AddBudget
               transactions={transactions}
@@ -162,6 +162,6 @@ export default function Budgets() {
           )}
         </>
       </div>
-    </>
+    </div>
   );
 }

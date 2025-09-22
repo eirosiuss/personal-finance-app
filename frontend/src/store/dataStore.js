@@ -11,6 +11,7 @@ export const useDataStore = create((set) => ({
   transactions: [],
   budgets: [],
   pots: [],
+  themes: [],
   error: null,
 
   fetchTransactions: async () => {
@@ -55,6 +56,20 @@ export const useDataStore = create((set) => ({
     }
   },
 
+  fetchThemes: async () => {
+    set({ error: null });
+    try {
+      const res = await axios.get(`${API_URL}/themes`);
+      set({
+        themes: res.data,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch themes",
+      });
+    }
+  },
+
   addBudget: async (budget) => {
     set({ error: null });
     try {
@@ -74,15 +89,15 @@ export const useDataStore = create((set) => ({
     try {
       const res = await axios.delete(`${API_URL}/delete-budget/${category}`);
       set({
-      budgets: res.data.budgets,
-    });
+        budgets: res.data.budgets,
+      });
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to delete budget",
       });
     }
   },
-  
+
   editBudget: async (oldCategory, updatedBudget) => {
     set({ error: null });
     try {
@@ -93,7 +108,9 @@ export const useDataStore = create((set) => ({
       });
       set({ budgets: res.data.budgets });
     } catch (error) {
-      set({ error: error.response?.data?.message || "Failed to update budget" });
+      set({
+        error: error.response?.data?.message || "Failed to update budget",
+      });
     }
   },
 }));

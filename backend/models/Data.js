@@ -23,10 +23,16 @@ const potSchema = new Schema({
   theme: String,
 });
 
+const themesSchema = new Schema({
+  theme: String,
+  color: String,
+});
+
 const DataSchema = new Schema({
   transactions: [transactionSchema],
   budgets: [budgetSchema],
   pots: [potSchema],
+  themes: [themesSchema],
   user: { type: String, required: true }
 });
 

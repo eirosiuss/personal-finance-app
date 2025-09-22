@@ -34,6 +34,17 @@ export const pots = async (req, res) => {
   }
 };
 
+export const themes = async (req, res) => {
+  try {
+    const data = await Data.findOne({ user: req.userId });
+    if (!data) return res.status(404).json({ message: "Themes not found" });
+    res.status(200).json(data.themes);
+  } catch (error) {
+    console.error("Error fetching themes:", error);
+    res.status(500).send("Failed to fetch themes");
+  }
+};
+
 export const addBudget = async (req, res) => {
   try {
     let data = await Data.findOne({ user: req.userId });
