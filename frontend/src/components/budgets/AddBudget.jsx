@@ -8,6 +8,7 @@ export default function AddBudget({
   transactions,
   categories,
   onThemeSelect,
+  budgets,
 }) {
   const [form, setForm] = useState({
     category: "",
@@ -16,6 +17,8 @@ export default function AddBudget({
   });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [formError, setFormError] = useState({});
 
   const dropdownRef = useRef(null);
 
@@ -41,11 +44,7 @@ export default function AddBudget({
     };
   }, []);
 
-  const { addBudget, fetchThemes, themes, error } = useDataStore();
-
-  useEffect(() => {
-    fetchThemes();
-  }, [fetchThemes]);
+  const { addBudget, themes, error } = useDataStore();
 
   const uniqueCategories = [
     ...new Set(transactions.map((t) => t.category)),
@@ -60,17 +59,39 @@ export default function AddBudget({
     (key) => counts[key] === 1
   );
 
+  const usedThemes = budgets.map((budget) => budget.theme);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    setFormError((prev) => ({ ...prev, [name]: null }));
 
     if (name === "theme" && onThemeSelect) {
       onThemeSelect(value);
     }
   };
 
+  const validate = () => {
+    const errors = {};
+    if (!form.category) {
+      errors.category = "Please select budget category";
+    }
+    if (!form.maximum) {
+      errors.maximum = "Please enter maximum spending";
+    }
+    if (!form.theme) {
+      errors.theme = "Please select color tag";
+    }
+    return errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length) {
+      setFormError(errors);
+      return;
+    }
 
     try {
       await addBudget(form);
@@ -87,7 +108,7 @@ export default function AddBudget({
 
   return (
     <ModalWrapper onClose={onClose}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="flex justify-between items-center py-1 mb-5">
           <h2 className="preset-2 text-grey-900">Add New Budget</h2>
           <button onClick={onClose}>
@@ -103,26 +124,41 @@ export default function AddBudget({
           Choose a category to set a spending budget. These can help monitor
           spending.
         </p>
-        <div className="flex flex-col gap-1 mb-4">
+        <div className="flex flex-col gap-1">
           <label htmlFor="category" className="preset-5-bold text-grey-500">
             Budget Category
           </label>
-          <select
-            id="category"
-            name="category"
-            required
-            value={form.category}
-            onChange={handleChange}
-            className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white"
-          >
-            {uniqueCombinedCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+          <div className="relative">
+            <select
+              id="category"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none"
+            >
+              <option disabled hidden value="">
+                Select category
               </option>
-            ))}
-          </select>
+              {uniqueCombinedCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <Icon
+              className="absolute inset-y-0 right-5 my-auto flex items-center pointer-events-none"
+              icon="ph:caret-down-fill"
+              width="16"
+              height="16"
+            />
+          </div>
+          <div className="h-4">
+            {formError.category && (
+              <p className="text-red-500 preset-4-bold">{formError.category}</p>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-1 mb-4">
+        <div className="flex flex-col gap-1">
           <label htmlFor="maximum" className="preset-5-bold text-grey-500">
             Maximum Spend
           </label>
@@ -134,13 +170,17 @@ export default function AddBudget({
             required
             value={form.maximum}
             onChange={handleChange}
-            className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white"
+            className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none"
           />
+          <div className="h-4">
+            {formError.maximum && (
+              <p className="text-red-500 preset-4-bold">{formError.maximum}</p>
+            )}
+          </div>
         </div>
-
-        <div className="flex flex-col gap-1 mb-5 relative" ref={dropdownRef}>
+        <div className="flex flex-col gap-1 mb-1 relative" ref={dropdownRef}>
           <label htmlFor="theme" className="preset-5-bold text-grey-500">
-            Theme
+            Color Tag
           </label>
           <button
             type="button"
@@ -148,41 +188,62 @@ export default function AddBudget({
             className="flex justify-between items-center preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white"
           >
             <div className="flex items-center gap-2">
-              <div
-                className="w-5 h-5 rounded-full"
-                style={{ backgroundColor: form.theme }}
-              ></div>
-              <span>
-                {themes.find((t) => t.theme === form.theme)?.color ||
-                  "Select a theme"}
-              </span>
+              {form.theme ? (
+                <>
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: form.theme }}
+                  ></div>
+                  <span className="preset-4 text-grey-900">
+                    {themes.find((t) => t.theme === form.theme)?.color}
+                  </span>
+                </>
+              ) : (
+                <span className="text-beige-500">Select color</span>
+              )}
             </div>
-            <Icon icon="ph:caret-down-fill" width="11" height="6" />
+            <Icon icon="ph:caret-down-fill" width="16" height="16" />
           </button>
           {isDropdownOpen && (
             <ul className="flex flex-col max-h-72 overflow-y-auto divide-y divide-grey-100 bg-white border-beige-500 border rounded-lg mt-[-5px]">
               {themes.map((theme) => (
                 <li
-                  key={theme.id}
-                  className="flex items-center gap-3 py-3 mx-5"
+                  key={theme._id}
+                  className={`flex items-center gap-3 py-3 mx-5 ${
+                    usedThemes.includes(theme.theme) ? "opacity-50" : ""
+                  }`}
                   onClick={() => {
+                    if (usedThemes.includes(theme.theme)) return;
                     setForm((prev) => ({ ...prev, theme: theme.theme }));
                     setIsDropdownOpen(false);
                     if (onThemeSelect) onThemeSelect(theme.theme);
                   }}
                 >
                   <div
-                    className="w-4 h-4 rounded-full"
+                    className="min-w-4 h-4 rounded-full"
                     style={{ backgroundColor: theme.theme }}
                   ></div>
-                  <p className="preset-4 text-grey-900">{theme.color}</p>
+                  <div className="preset-4 text-grey-900 flex justify-between items-center w-full">
+                    <p>{theme.color}</p>
+                    {usedThemes.includes(theme.theme) && (
+                      <span className="preset-5">Already used</span>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
           )}
+          <div className="h-4">
+            {formError.theme && (
+              <p className="text-red-500 preset-4-bold">{formError.theme}</p>
+            )}
+          </div>
         </div>
-
-        <input type="submit" value="Add Budget"></input>
+        <input
+          className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg"
+          type="submit"
+          value="Add Budget"
+        ></input>
       </form>
     </ModalWrapper>
   );

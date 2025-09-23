@@ -4,7 +4,7 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Budgets() {
-  const { fetchBudgets, fetchTransactions, budgets, transactions, error } =
+  const { fetchBudgets, fetchTransactions, fetchThemes, budgets, transactions, error } =
     useDataStore();
   const [showModal, setShowModal] = useState(false);
   const [selectBudget, setSelectBudget] = useState(null);
@@ -12,7 +12,8 @@ export default function Budgets() {
   useEffect(() => {
     fetchBudgets();
     fetchTransactions();
-  }, [fetchBudgets, fetchTransactions]);
+    fetchThemes();
+  }, [fetchBudgets, fetchTransactions, fetchThemes]);
 
   const lastFilledTransactionDate = new Date(
     Math.max(...transactions.map((t) => new Date(t.date)))
@@ -64,6 +65,7 @@ export default function Budgets() {
               categories={categories}
               onClose={() => setShowModal(false)}
               onThemeSelect={handleThemeChange}
+              budgets={budgets}
             ></AddBudget>
           )}
         </>
