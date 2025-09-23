@@ -134,7 +134,7 @@ export default function AddBudget({
               name="category"
               value={form.category}
               onChange={handleChange}
-              className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none"
+              className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none cursor-pointer"
             >
               <option disabled hidden value="">
                 Select category
@@ -170,7 +170,7 @@ export default function AddBudget({
             required
             value={form.maximum}
             onChange={handleChange}
-            className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none"
+            className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none cursor-pointer"
           />
           <div className="h-4">
             {formError.maximum && (
@@ -185,7 +185,7 @@ export default function AddBudget({
           <button
             type="button"
             onClick={() => setIsDropdownOpen((prev) => !prev)}
-            className="flex justify-between items-center preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white"
+            className="flex justify-between items-center preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white cursor-pointer"
           >
             <div className="flex items-center gap-2">
               {form.theme ? (
@@ -206,31 +206,32 @@ export default function AddBudget({
           </button>
           {isDropdownOpen && (
             <ul className="flex flex-col max-h-72 overflow-y-auto divide-y divide-grey-100 bg-white border-beige-500 border rounded-lg mt-[-5px]">
-              {themes.map((theme) => (
-                <li
-                  key={theme._id}
-                  className={`flex items-center gap-3 py-3 mx-5 ${
-                    usedThemes.includes(theme.theme) ? "opacity-50" : ""
-                  }`}
-                  onClick={() => {
-                    if (usedThemes.includes(theme.theme)) return;
-                    setForm((prev) => ({ ...prev, theme: theme.theme }));
-                    setIsDropdownOpen(false);
-                    if (onThemeSelect) onThemeSelect(theme.theme);
-                  }}
-                >
-                  <div
-                    className="min-w-4 h-4 rounded-full"
-                    style={{ backgroundColor: theme.theme }}
-                  ></div>
-                  <div className="preset-4 text-grey-900 flex justify-between items-center w-full">
-                    <p>{theme.color}</p>
-                    {usedThemes.includes(theme.theme) && (
-                      <span className="preset-5">Already used</span>
-                    )}
-                  </div>
-                </li>
-              ))}
+              {themes.sort((a, b) => usedThemes.includes(b.theme) - usedThemes.includes(a.theme))
+                .map((theme) => (
+                  <li
+                    key={theme._id}
+                    className={`flex items-center gap-3 mt-3 pb-3 mx-5 ${
+                      usedThemes.includes(theme.theme) ? "opacity-50 cursor-default" : "cursor-pointer"
+                    }`}
+                    onClick={() => {
+                      if (usedThemes.includes(theme.theme)) return;
+                      setForm((prev) => ({ ...prev, theme: theme.theme }));
+                      setIsDropdownOpen(false);
+                      if (onThemeSelect) onThemeSelect(theme.theme);
+                    }}
+                  >
+                    <div
+                      className="min-w-4 h-4 rounded-full"
+                      style={{ backgroundColor: theme.theme }}
+                    ></div>
+                    <div className="preset-4 text-grey-900 flex justify-between items-center w-full">
+                      <p>{theme.color}</p>
+                      {usedThemes.includes(theme.theme) && (
+                        <span className="preset-5">Already used</span>
+                      )}
+                    </div>
+                  </li>
+                ))}
             </ul>
           )}
           <div className="h-4">
@@ -239,11 +240,10 @@ export default function AddBudget({
             )}
           </div>
         </div>
-        <input
-          className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg"
+        <button
+          className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg cursor-pointer"
           type="submit"
-          value="Add Budget"
-        ></input>
+        >Add Budget</button>
       </form>
     </ModalWrapper>
   );
