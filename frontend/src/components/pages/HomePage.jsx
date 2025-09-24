@@ -60,37 +60,41 @@ export default function HomePage() {
       .filter((transaction) => transaction.amount < 0)
       .reduce((sum, transaction) => sum + transaction.amount, 0) * -1;
 
-  const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
+  function getBudgetPercentages(budgets) {
+    const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
 
-  const budgetSpent = budgets.map((budget) => {
-    const spentAmount =
-      transactions
-        .filter(
-          (t) =>
-            t.category === budget.category &&
-            t.amount < 0 &&
-            new Date(t.date).getMonth() === lastFilledMonth &&
-            new Date(t.date).getFullYear() === lastFilledYear
-        )
-        .reduce((sum, t) => sum + t.amount, 0) * -1;
+    return budgets.map((budget) => {
+      const percentage = totalBudget ? (budget.maximum / totalBudget) * 100 : 0;
+      return { ...budget, percentage };
+    });
+  }
 
-    const percentage = totalBudget ? (spentAmount / totalBudget) * 100 : 0;
-    return { ...budget, spent: spentAmount, percentage };
-  });
+  function getConicGradient(budgetSpent) {
+    let startAngle = 0;
+    return budgetSpent
+      .map((b) => {
+        const endAngle = startAngle + b.percentage * 3.6;
+        const grad = `${b.theme} ${startAngle}deg ${endAngle}deg`;
+        startAngle = endAngle;
+        return grad;
+      })
+      .join(", ");
+  }
 
-  const colors = budgets.map((b) => b.theme);
-
-  const gradientString = budgetSpent
-    .map((b, i) => {
-      const start = budgetSpent
-        .slice(0, i)
-        .reduce((acc, prev) => acc + prev.percentage, 0);
-      const end = start + b.percentage;
-      return `${colors[i % colors.length]} ${start * 3.6}deg ${end * 3.6}deg`;
-    })
-    .join(", ");
-
-  const spentTotal = budgetSpent.reduce((acc, b) => acc + b.spent, 0);
+  function getInnerGradient(budgetSpent, lightenHex) {
+    let startAngle = 0;
+    return budgetSpent
+      .map((b) => {
+        const endAngle = startAngle + b.percentage * 3.6;
+        const grad = `${lightenHex(
+          b.theme,
+          0.5
+        )} ${startAngle}deg ${endAngle}deg`;
+        startAngle = endAngle;
+        return grad;
+      })
+      .join(", ");
+  }
 
   function lightenHex(hex, percent) {
     let num = parseInt(hex.replace("#", ""), 16);
@@ -104,6 +108,35 @@ export default function HomePage() {
 
     return `rgb(${r},${g},${b})`;
   }
+
+  const budgetSpent = getBudgetPercentages(
+    budgets,
+    transactions,
+    lastFilledMonth,
+    lastFilledYear
+  );
+  
+  const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
+
+  const spentTotal = budgets
+    .map((budget) => {
+      const spentAmount =
+        transactions
+          .filter(
+            (t) =>
+              t.category === budget.category &&
+              t.amount < 0 &&
+              new Date(t.date).getMonth() === lastFilledMonth &&
+              new Date(t.date).getFullYear() === lastFilledYear
+          )
+          .reduce((sum, t) => sum + t.amount, 0) * -1;
+
+      return spentAmount;
+    })
+    .reduce((acc, val) => acc + val, 0);
+
+  const gradientString = getConicGradient(budgetSpent);
+  const innerGradientString = getInnerGradient(budgetSpent, lightenHex);
 
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -256,29 +289,17 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="mt-7 md:mt-12 md:flex md:gap-4">
-            <div className="mx-auto relative w-[240px] rounded-full">
+            <div className="mx-auto relative w-[240px] h-[240px] rounded-full">
               <div
                 className="aspect-square rounded-full"
                 style={{ background: `conic-gradient(${gradientString})` }}
               ></div>
               <div
-                className="absolute z-10 inset-1/8 aspect-square rounded-full p-2.5"
-                style={{
-                  background: `conic-gradient(${budgetSpent
-                    .map((b, i) => {
-                      const start = budgetSpent
-                        .slice(0, i)
-                        .reduce((acc, prev) => acc + prev.percentage, 0);
-                      const end = start + b.percentage;
-                      const color = colors[i % colors.length];
-                      const lightColor = lightenHex(color, 0.5);
-                      return `${lightColor} ${start * 3.6}deg ${end * 3.6}deg`;
-                    })
-                    .join(", ")})`,
-                }}
+                className="absolute z-10 inset-8 aspect-square rounded-full p-2.5"
+                style={{ background: `conic-gradient(${innerGradientString})` }}
               >
                 <div className="aspect-square rounded-full bg-white flex items-center justify-center text-center">
-                  <p className="text-balance preset-1 text-grey-900">
+                  <p className="text-balance text-center preset-1 text-grey-900">
                     ${spentTotal.toFixed(0)}
                     <span className="preset-5 text-grey-500">
                       {" "}
@@ -288,6 +309,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
             <div className="grid grid-cols-2 mt-4 mb-2 gap-4 md:mt-0 md:mb-0 md:py-2.5 md:grid-cols-1">
               {budgets.map((budget) => (
                 <article key={budget._id} className="flex gap-4">
