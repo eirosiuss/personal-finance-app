@@ -53,7 +53,7 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
       <nav
         className={`${
           sidebarMinimized ? "lg:w-[88px]" : "lg:w-[300px]"
-        } w-full lg:flex lg:justify-between fixed z-20 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl lg:transition-all lg:duration-700`}
+        } w-full lg:flex lg:justify-between fixed z-60 bottom-0 bg-grey-900 rounded-t-lg lg:flex-col lg:top-0 lg:left-0 lg:h-full  lg:rounded-t-none lg:rounded-r-2xl lg:transition-all lg:duration-700`}
       >
         <div className="w-full">
           <div className="hidden lg:block py-10 pl-8 pb-16">
