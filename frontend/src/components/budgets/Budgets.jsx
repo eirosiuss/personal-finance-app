@@ -123,8 +123,8 @@ export default function Budgets() {
         </>
       </header>
 
-      <div className="bg-white rounded-xl py-6">
-        <div className="pt-5 pb-12">
+      <div className="bg-white rounded-xl py-6 md:py-8 md:flex md:items-center md:px-8 md:justify-between">
+        <div className="pt-5 pb-12 md:pb-5 md:flex-1">
           <div className="mx-auto relative w-[240px] h-[240px] rounded-full">
             <div
               className="aspect-square rounded-full"
@@ -147,7 +147,7 @@ export default function Budgets() {
           </div>
         </div>
 
-        <div className="px-5">
+        <div className="px-5 md:flex-1 md:px-0">
           <h2 className="preset-2 text-grey-900 pb-6">Spending Summary</h2>
           <div className="divide-y divide-grey-100">
             {budgetSpent.map((b) => (
@@ -167,7 +167,7 @@ export default function Budgets() {
                     ${b.spent.toFixed(2)}
                   </p>
                   <p className="preset-5 text-grey-500">
-                    ${b.maximum.toFixed(2)}
+                   of ${b.maximum.toFixed(2)}
                   </p>
                 </div>
               </article>
@@ -181,7 +181,7 @@ export default function Budgets() {
         const latest = getLatestTransactions(b.category);
 
         return (
-          <div key={b._id} className="py-6 px-5 bg-white rounded-xl my-6 last:mb-19">
+          <div key={b._id} className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28">
             <div className="flex items-center relative">
               <div
                 className="h-4 w-4 rounded-full"
@@ -243,7 +243,7 @@ export default function Budgets() {
               </div>
             </div>
 
-            <div className="bg-beige-100 p-4 rounded-xl">
+            <div className="bg-beige-100 p-4 md:p-5 rounded-xl">
               <h3 className="preset-3 text-grey-900 pb-5">Latest Spending</h3>
               {/* task */}
               {/* <p>See All</p> */}
