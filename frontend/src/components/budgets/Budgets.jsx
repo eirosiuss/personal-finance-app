@@ -102,8 +102,8 @@ export default function Budgets() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="mx-auto px-4 md:px-10">
-      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center">
+    <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-[428px_auto]">
+      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2">
         <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
         <>
           <button
@@ -123,8 +123,8 @@ export default function Budgets() {
         </>
       </header>
 
-      <div className="bg-white rounded-xl py-6 md:py-8 md:flex md:items-center md:px-8 md:justify-between">
-        <div className="pt-5 pb-12 md:pb-5 md:flex-1">
+      <div className="bg-white rounded-xl py-6 md:py-8 md:flex md:items-center md:px-8 md:justify-between lg:flex-col">
+        <div className="pt-5 pb-12 md:pb-5 md:flex-1 lg:flex-auto">
           <div className="mx-auto relative w-[240px] h-[240px] rounded-full">
             <div
               className="aspect-square rounded-full"
@@ -147,9 +147,9 @@ export default function Budgets() {
           </div>
         </div>
 
-        <div className="px-5 md:flex-1 md:px-0">
+        <div className="px-5 md:flex-1 md:px-0 lg:flex-auto lg:w-full lg:mt-8">
           <h2 className="preset-2 text-grey-900 pb-6">Spending Summary</h2>
-          <div className="divide-y divide-grey-100">
+          <div className="divide-y divide-grey-100 lg:flex lg:flex-col lg:justify-between">
             {budgetSpent.map((b) => (
               <article
                 key={b._id}
@@ -181,7 +181,7 @@ export default function Budgets() {
         const latest = getLatestTransactions(b.category);
 
         return (
-          <div key={b._id} className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28">
+          <div key={b._id} className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2">
             <div className="flex items-center relative">
               <div
                 className="h-4 w-4 rounded-full"
@@ -229,15 +229,15 @@ export default function Budgets() {
                     className="h-full w-1 rounded-lg"
                   ></div>
                   <div>
-                    <p>Spent</p>
-                    <p>${b.spent.toFixed(2)}</p>
+                    <p className="preset-5 text-grey-500">Spent</p>
+                    <p className="preset-4-bold text-grey-900">${b.spent.toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="flex gap-4 w-full">
                   <div className="h-full w-1 rounded-lg bg-beige-100"></div>
                   <div>
-                    <p>Remaining</p>
-                    <p>${remaining > 0 ? remaining.toFixed(2) : 0}</p>
+                    <p className="preset-5 text-grey-500">Remaining</p>
+                    <p className="preset-4-bold text-grey-900">${remaining > 0 ? remaining.toFixed(2) : 0}</p>
                   </div>
                 </div>
               </div>
