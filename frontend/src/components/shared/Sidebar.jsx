@@ -93,7 +93,7 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
             </NavLink>
           </li> */}
             <li
-              className="cursor-pointer py-2 px-5 h-10 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start"
+              className="cursor-pointer px-5 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start"
               onClick={hangleLogout}
             >
               <button className="text-grey-300 group-hover:text-grey-100">

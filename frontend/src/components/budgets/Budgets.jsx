@@ -102,8 +102,8 @@ export default function Budgets() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-[428px_auto]">
-      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2">
+    <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-[428px_auto] lg:gap-6 lg:mb-8">
+      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
         <>
           <button
@@ -181,7 +181,7 @@ export default function Budgets() {
         const latest = getLatestTransactions(b.category);
 
         return (
-          <div key={b._id} className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2">
+          <div key={b._id} className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2 lg:my-0 lg:last:mb-0">
             <div className="flex items-center relative">
               <div
                 className="h-4 w-4 rounded-full"

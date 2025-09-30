@@ -15,6 +15,8 @@ export default function AddBudget({
     maximum: "",
     theme: "",
   });
+  
+  const { addBudget, themes, error } = useDataStore();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -44,7 +46,6 @@ export default function AddBudget({
     };
   }, []);
 
-  const { addBudget, themes, error } = useDataStore();
 
   const uniqueCategories = [
     ...new Set(transactions.map((t) => t.category)),
@@ -167,7 +168,6 @@ export default function AddBudget({
             id="maximum"
             name="maximum"
             placeholder="$ e.g. 2000"
-            required
             value={form.maximum}
             onChange={handleChange}
             className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none cursor-pointer"
