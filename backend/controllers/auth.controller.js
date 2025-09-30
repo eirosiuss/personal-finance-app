@@ -4,11 +4,13 @@ import { User } from "../models/User.js";
 import { Data } from "../models/Data.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import {
-  sendVerificationEmail,
+  // sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetEmail,
   sendResetSuccessEmail,
 } from "../mailtrap/emails.js";
+
+import {sendVerificationEmail} from "../mailgun/emails.js"
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
