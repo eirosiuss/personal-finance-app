@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import FormData from "form-data";
 import Mailgun from "mailgun.js";
-import { VERIFICATION_EMAIL_TEMPLATE } from "./emailTemplates.js";
 dotenv.config();
 
 const mailgun = new Mailgun(FormData);
@@ -12,6 +11,11 @@ const mg = mailgun.client({
 });
 
 export const sendVerificationEmail = async (email, name, verificationToken) => {
+
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      throw new Error('Missing Mailgun configuration');
+    }
+    
   try {
     const data = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
       from: process.env.MAILGUN_FROM,
@@ -25,7 +29,11 @@ export const sendVerificationEmail = async (email, name, verificationToken) => {
     });
     console.log("Email sent successfully:", data);
   } catch (error) {
-    console.error("Error sending verification email", error);
+    console.error("Error details:", {
+      message: error.message,
+      status: error.status,
+      details: error.details
+    });
     throw new Error(`Error sending verification email: ${error}`);
   }
 };
