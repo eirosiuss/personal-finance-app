@@ -19,7 +19,7 @@ export const sendVerificationEmail = async (email, name, verificationToken) => {
       subject: "Verify Your Email",
       template: "verification email",
       "h:X-Mailgun-Variables": JSON.stringify({
-        verification_code: verificationToken,
+        verificationCode: verificationToken,
         name: name,
       }),
     });
@@ -38,7 +38,7 @@ export const sendWelcomeEmail = async (email, name) => {
       subject: "Welcome to Personal Finance App",
       template: "welcome email",
       "h:X-Mailgun-Variables": JSON.stringify({
-        Company_name: "Personal Finance App",
+        companyName: "Personal Finance App",
         name: name,
       }),
     });
@@ -75,9 +75,6 @@ export const sendResetSuccessEmail = async (email) => {
       to: email,
       subject: "Password Reset Successful",
       template: "password reset successful",
-      "h:X-Mailgun-Variables": JSON.stringify({
-        test: "test",
-      }),
     });
     console.log("Email sent successfully:", data);
   } catch (error) {
