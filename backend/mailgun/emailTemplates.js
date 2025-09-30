@@ -11,7 +11,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
         <td align="center">
           <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:6px; padding:20px;">
             <tr>
-              <td style="padding-top:10px; font-size:22px; font-weight:bold;">Hello, thank you for signing up!</td>
+              <td style="padding-top:10px; font-size:22px; font-weight:bold;">Hello, {name} thank you for signing up!</td>
             </tr>
             <tr>
               <td style="padding-top:15px; font-size:12px; color:#777;">

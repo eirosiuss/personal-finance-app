@@ -3,14 +3,13 @@ import crypto from "crypto";
 import { User } from "../models/User.js";
 import { Data } from "../models/Data.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+
 import {
-  // sendVerificationEmail,
+  sendVerificationEmail,
   sendWelcomeEmail,
   sendPasswordResetEmail,
   sendResetSuccessEmail,
-} from "../mailtrap/emails.js";
-
-import {sendVerificationEmail} from "../mailgun/emails.js"
+} from "../mailgun/emails.js";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -34,7 +33,7 @@ export const signup = async (req, res) => {
 
     generateTokenAndSetCookie(res, user._id);
 
-    await sendVerificationEmail(user.email, verificationToken);
+    await sendVerificationEmail(user.email, user.name, verificationToken);
 
     res.status(201).json({
       success: true,
@@ -202,7 +201,6 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
-
 
 export const resetPassword = async (req, res) => {
   try {
