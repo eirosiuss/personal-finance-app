@@ -4,9 +4,79 @@ import Input from "../shared/Input.jsx";
 import { Icon } from "@iconify/react";
 
 export default function Transactions() {
-  const { fetchTransactions, transactions, error } = useDataStore();
+  const { fetchTransactions, transactions, uploadTransactions, error } =
+    useDataStore();
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const parseCsv = async (file) => {
+    const textRaw = await file.text();
+    const text = textRaw.replace(/^\uFEFF/, "");
+    const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
+    if (lines.length < 2) return [];
+
+    const delimiter = lines[0].includes("\t") ? "\t" : ",";
+    const headers = lines[0]
+      .split(delimiter)
+      .map((h) => h.trim().toLowerCase());
+
+    const amountIdx = headers.indexOf("amount");
+    const dateIdx = headers.indexOf("date");
+    const categoryIdx = headers.indexOf("category");
+    const recurringIdx = headers.indexOf("recurring");
+    const recipientIdx = headers.indexOf("recipient");
+
+    const incomeCategories = new Set([
+      "salary/income",
+      "rental income",
+      "pension",
+      "gifts",
+      "income",
+      "salary",
+      "interest",
+    ]);
+
+    const parsed = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(delimiter);
+      if (!cols.length) continue;
+
+      const rawAmount = (cols[amountIdx] || "0").toString().replace(",", ".");
+      const category = (cols[categoryIdx] || "General").trim();
+      const isIncome = incomeCategories.has(category.trim().toLowerCase());
+      const amountNumber = Number(rawAmount);
+      const signedAmount = isIncome
+        ? Math.abs(amountNumber)
+        : -Math.abs(amountNumber);
+
+      const rawDate = (cols[dateIdx] || "").trim();
+      const isoDate = rawDate
+        ? new Date(rawDate).toISOString()
+        : new Date().toISOString();
+
+      parsed.push({
+        name: (cols[recipientIdx] || "Unknown").trim(),
+        category,
+        date: isoDate,
+        amount: signedAmount,
+        recurring: (cols[recurringIdx] || "").trim().toLowerCase() === "true",
+      });
+    }
+    return parsed.filter((t) => t.name && !Number.isNaN(t.amount));
+  };
+
+  const handleFileChange = (e) => setSelectedFile(e.target.files[0] || null);
+
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+    const parsed = await parseCsv(selectedFile);
+    if (!parsed.length) return;
+    await uploadTransactions(parsed);
+    await fetchTransactions();
+    setSelectedFile(null);
+  };
 
   useEffect(() => {
     fetchTransactions();
@@ -100,8 +170,23 @@ export default function Transactions() {
 
   return (
     <div className="mx-auto px-4 md:px-10">
-      <header className="mt-6 mb-8 md:mt-8">
+      <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Transactions</h1>
+        <div className="">
+          <input
+            className="border border-beige-500 rounded-lg px-3 py-2 text-grey-300 cursor-pointer w-20"
+            accept=".csv"
+            type="file"
+            onChange={handleFileChange}
+          />
+          <button
+            className="bg-grey-900 preset-4-bold text-white px-4 py-4 rounded-xl cursor-pointer"
+            onClick={handleUpload}
+            disabled={!selectedFile}
+          >
+            Upload
+          </button>
+        </div>
       </header>
 
       <div className="bg-white rounded-xl py-6 mb-20 px-5 md:px-8 md:py-8">

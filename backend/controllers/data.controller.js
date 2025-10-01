@@ -12,6 +12,44 @@ export const transactions = async (req, res) => {
   }
 };
 
+export const uploadTransactions = async (req, res) => {
+  try {
+    const { transactions: uploaded } = req.body;
+
+    if (!Array.isArray(uploaded)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid payload: transactions array is required" });
+    }
+
+    const sanitized = uploaded
+      .filter((t) => t && typeof t === "object")
+      .map((t) => ({
+        name: t.name,
+        category: t.category,
+        date: t.date ? new Date(t.date) : new Date(),
+        amount: Number(t.amount),
+        recurring: Boolean(t.recurring),
+      }))
+      .filter((t) =>
+        t.name && t.category && !Number.isNaN(t.amount) && t.date instanceof Date
+      );
+
+    let data = await Data.findOne({ user: req.userId });
+    if (!data) {
+      data = new Data({ user: req.userId, transactions: sanitized });
+    } else {
+      data.transactions.push(...sanitized);
+    }
+
+    await data.save();
+    res.status(200).json(data.transactions);
+  } catch (error) {
+    console.error("Error uploading transactions:", error);
+    res.status(500).send("Failed to upload transactions");
+  }
+};
+
 export const budgets = async (req, res) => {
   try {
     const data = await Data.findOne({ user: req.userId });

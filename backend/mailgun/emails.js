@@ -11,20 +11,6 @@ const mg = mailgun.client({
 });
 
 export const sendVerificationEmail = async (email, name, verificationToken) => {
-
-    console.log('Environment check:', {
-      MAILGUN_DOMAIN: process.env.MAILGUN_DOMAIN,
-      MAILGUN_FROM: process.env.MAILGUN_FROM,
-      MAILGUN_API_KEY_EXISTS: !!process.env.MAILGUN_API_KEY,
-      NODE_ENV: process.env.NODE_ENV
-    });
-
-        console.log('WOULD SEND EMAIL:', {
-      to: email,
-      name: name,
-      verificationToken: verificationToken
-    });
-
   try {
     const data = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
       from: process.env.MAILGUN_FROM,

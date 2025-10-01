@@ -70,6 +70,21 @@ export const useDataStore = create((set) => ({
     }
   },
 
+  uploadTransactions: async (transactions) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/transactions/upload`, {
+        transactions,
+      });
+      set({ transactions: res.data });
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message || "Failed to upload transactions",
+      });
+    }
+  },
+
   addBudget: async (budget) => {
     set({ error: null });
     try {
