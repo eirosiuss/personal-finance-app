@@ -74,6 +74,22 @@ export const verifyEmail = async (req, res) => {
       transactions: [],
       budgets: [],
       pots: [],
+      themes: [
+        { theme: "#277C78", color: "Green" },
+        { theme: "#F2CDAC", color: "Yellow" },
+        { theme: "#82C9D7", color: "Cyan" },
+        { theme: "#626070", color: "Navy" },
+        { theme: "#C94736", color: "Red" },
+        { theme: "#826CB0", color: "Purple" },
+        { theme: "#597C7C", color: "Turquoise" },
+        { theme: "#93674F", color: "Brown" },
+        { theme: "#934F6F", color: "Magenta" },
+        { theme: "#3F82B2", color: "Blue" },
+        { theme: "#97A0AC", color: "Grey" },
+        { theme: "#7F9161", color: "Army" },
+        { theme: "#CAB361", color: "Gold" },
+        { theme: "#BE6C49", color: "Orange" }
+      ],
     });
 
     await sendWelcomeEmail(user.email, user.name);

@@ -15,7 +15,7 @@ export default function AddBudget({
     maximum: "",
     theme: "",
   });
-  
+
   const { addBudget, themes, error } = useDataStore();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -45,7 +45,6 @@ export default function AddBudget({
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
-
 
   const uniqueCategories = [
     ...new Set(transactions.map((t) => t.category)),
@@ -206,12 +205,18 @@ export default function AddBudget({
           </button>
           {isDropdownOpen && (
             <ul className="flex flex-col max-h-72 overflow-y-auto divide-y divide-grey-100 bg-white border-beige-500 border rounded-lg mt-[-5px]">
-              {themes.sort((a, b) => usedThemes.includes(b.theme) - usedThemes.includes(a.theme))
+              {themes
+                .sort(
+                  (a, b) =>
+                    usedThemes.includes(b.theme) - usedThemes.includes(a.theme)
+                )
                 .map((theme) => (
                   <li
-                    key={theme._id}
+                    key={theme.theme}
                     className={`flex items-center gap-3 mt-3 pb-3 mx-5 ${
-                      usedThemes.includes(theme.theme) ? "opacity-50 cursor-default" : "cursor-pointer"
+                      usedThemes.includes(theme.theme)
+                        ? "opacity-50 cursor-default"
+                        : "cursor-pointer"
                     }`}
                     onClick={() => {
                       if (usedThemes.includes(theme.theme)) return;
@@ -243,7 +248,9 @@ export default function AddBudget({
         <button
           className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg cursor-pointer"
           type="submit"
-        >Add Budget</button>
+        >
+          Add Budget
+        </button>
       </form>
     </ModalWrapper>
   );

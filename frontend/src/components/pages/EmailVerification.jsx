@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
-import toast from "react-hot-toast";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import Logo from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import Input from "../shared/Input.jsx";
@@ -51,7 +50,6 @@ const EmailVerification = () => {
     try {
       await verifyEmail(verificationCode);
       navigate("/");
-      toast.success("Email verified successfully!");
     } catch (error) {
       console.log(error);
     }
