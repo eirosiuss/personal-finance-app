@@ -11,22 +11,209 @@ export default function Transactions() {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
+  const categorize = (name = "", details = "") => {
+    const text = `${name} ${details}`.toLowerCase();
+
+    if (text.includes("arenda") || text.includes("rent")) return "Housing";
+
+    if (
+      text.includes("elektrum") ||
+      text.includes("ignitis") ||
+      text.includes("vandens") ||
+      text.includes("vandenys") ||
+      text.includes("šilumos") ||
+      text.includes("silumos") ||
+      text.includes("tele2") ||
+      text.includes("plunges bustas")
+    )
+      return "Utilities";
+
+    if (
+      text.includes("maxima") ||
+      text.includes("lidl") ||
+      text.includes("iki ") ||
+      text.includes("iki,") ||
+      text.includes("rimi") ||
+      text.includes("bites bistro") ||
+      text.includes("bistro") ||
+      text.includes("vaistine")
+    )
+      return text.includes("vaistine") ? "Healthcare" : "Food & Groceries";
+
+    if (
+      text.includes("judu") ||
+      text.includes("viada") ||
+      text.includes("ltg link") ||
+      text.includes("uber") ||
+      text.includes("bolt")
+    )
+      return "Transportation";
+
+    if (
+      text.includes("paskolos") ||
+      text.includes("palūkanos") ||
+      text.includes("palukanos")
+    )
+      return "Debt Payments";
+
+    if (text.includes("savings") || text.includes("taup")) return "Savings";
+
+    if (
+      text.includes("periodinis investavimas") ||
+      text.includes("investav") ||
+      text.includes("pensij") ||
+      text.includes("fund") ||
+      text.includes("robur")
+    )
+      return "Investments & Retirement";
+
+    if (
+      text.includes("vaistine") ||
+      text.includes("klinika") ||
+      text.includes("medic")
+    )
+      return "Healthcare";
+
+    if (text.includes("draudim")) return "Insurance";
+
+    if (
+      text.includes("pietus") ||
+      text.includes("kavine") ||
+      text.includes("cafe") ||
+      text.includes("restaurant") ||
+      text.includes("restoranas")
+    )
+      return "Dining Out";
+
+    if (
+      text.includes("mokykl") ||
+      text.includes("university") ||
+      text.includes("darzel")
+    )
+      return "Education & Childcare";
+
+    if (
+      text.includes("gimtadienio dovana") ||
+      text.includes("gimtadienis") ||
+      text.includes("dovana") ||
+      text.includes("donation") ||
+      text.includes("auka")
+    )
+      return "Gifts & Donations";
+
+    if (
+      text.includes("hotel") ||
+      text.includes("booking") ||
+      text.includes("airbnb") ||
+      text.includes("kelion")
+    )
+      return "Travel & Vacations";
+
+    if (
+      text.includes("aliexpress") ||
+      text.includes("gym") ||
+      text.includes("sportpoint") ||
+      text.includes("contribee")
+    )
+      return "Personal Spending";
+
+    return "Miscellaneous / Buffer";
+  };
+
   const parseCsv = async (file) => {
     const textRaw = await file.text();
     const text = textRaw.replace(/^\uFEFF/, "");
     const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
     if (lines.length < 2) return [];
 
-    const delimiter = lines[0].includes("\t") ? "\t" : ",";
-    const headers = lines[0]
-      .split(delimiter)
-      .map((h) => h.trim().toLowerCase());
+    const stripDiacritics = (s) =>
+      (s || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
 
-    const amountIdx = headers.indexOf("amount");
-    const dateIdx = headers.indexOf("date");
+    const splitRow = (line, d) => {
+      const result = [];
+      let current = "";
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (ch === d && !inQuotes) {
+          result.push(current);
+          current = "";
+        } else {
+          current += ch;
+        }
+      }
+      result.push(current);
+      return result;
+    };
+
+    const candidates = [",", ";", "\t", "|"];
+    const delimiter = candidates
+      .map((d) => ({
+        d,
+        c: (lines[0].match(new RegExp(`\\${d}`, "g")) || []).length,
+      }))
+      .sort((a, b) => b.c - a.c)[0].d;
+
+    const headersRaw = splitRow(lines[0], delimiter);
+    const headers = headersRaw.map((h) => stripDiacritics(h));
+
+    const isSwedbankFormat =
+      (headers.includes("account no") ||
+        headers.includes("sąskaitos nr.") ||
+        headers.includes("saskaitos nr.")) &&
+      (headers.includes("date") || headers.includes("data")) &&
+      (headers.includes("beneficiary") ||
+        headers.includes("gavėjas") ||
+        headers.includes("gavejas")) &&
+      (headers.includes("amount") || headers.includes("suma")) &&
+      headers.includes("d/k");
+
+    const amountIdx = (() => {
+      let idx = headers.indexOf("amount");
+      if (idx < 0) idx = headers.indexOf("suma");
+      return idx;
+    })();
+    const dateIdx = (() => {
+      let idx = headers.indexOf("date");
+      if (idx < 0) idx = headers.indexOf("data");
+      return idx;
+    })();
     const categoryIdx = headers.indexOf("category");
     const recurringIdx = headers.indexOf("recurring");
     const recipientIdx = headers.indexOf("recipient");
+    const nameIdx = (() => {
+      let idx = headers.indexOf("beneficiary");
+      if (idx < 0) idx = headers.indexOf("gavejas");
+      if (idx < 0) idx = recipientIdx;
+      return idx;
+    })();
+    const detailsIdx = (() => {
+      let idx = headers.indexOf("details");
+      if (idx < 0) idx = headers.indexOf("paaiskinimai");
+      return idx;
+    })();
+    const dkIdx = headers.indexOf("d/k");
+
+    const headerFailed =
+      amountIdx < 0 || dateIdx < 0 || (nameIdx ?? -1) < 0 || dkIdx < 0;
+    const positionalFallback = (cols) => ({
+      date: cols[2],
+      name: cols[3],
+      details: cols[4],
+      amount: cols[5],
+      dk: cols[7],
+    });
 
     const incomeCategories = new Set([
       "salary/income",
@@ -40,29 +227,75 @@ export default function Transactions() {
 
     const parsed = [];
     for (let i = 1; i < lines.length; i++) {
-      const cols = lines[i].split(delimiter);
+      const cols = splitRow(lines[i], delimiter);
       if (!cols.length) continue;
 
-      const rawAmount = (cols[amountIdx] || "0").toString().replace(",", ".");
-      const category = (cols[categoryIdx] || "General").trim();
-      const isIncome = incomeCategories.has(category.trim().toLowerCase());
-      const amountNumber = Number(rawAmount);
-      const signedAmount = isIncome
-        ? Math.abs(amountNumber)
-        : -Math.abs(amountNumber);
+      if (isSwedbankFormat) {
+        const sw =
+          headerFailed && cols.length >= 8 ? positionalFallback(cols) : null;
+        const rawDate = (sw ? sw.date : cols[dateIdx] || "").trim();
+        const rawName = (sw ? sw.name : cols[nameIdx] || "").trim();
+        const rawDetails =
+          (sw ? sw.details : detailsIdx >= 0 ? cols[detailsIdx] : "")?.trim() ||
+          "";
+        const rawAmountStr = (
+          (sw ? sw.amount : cols[amountIdx]) || "0"
+        ).replace(",", ".");
+        const dk = ((sw ? sw.dk : cols[dkIdx]) || "").trim().toUpperCase();
 
-      const rawDate = (cols[dateIdx] || "").trim();
-      const isoDate = rawDate
-        ? new Date(rawDate).toISOString()
-        : new Date().toISOString();
+        const skipRowText = `${rawName} ${rawDetails}`.toLowerCase();
+        if (
+          skipRowText.includes("opening balance") ||
+          skipRowText.includes("closing balance") ||
+          skipRowText.includes("turnover") ||
+          skipRowText.includes("likutis pradžiai") ||
+          skipRowText.includes("likutis pradziai") ||
+          skipRowText.includes("likutis pabaigai") ||
+          skipRowText.includes("apyvarta")
+        )
+          continue;
 
-      parsed.push({
-        name: (cols[recipientIdx] || "Unknown").trim(),
-        category,
-        date: isoDate,
-        amount: signedAmount,
-        recurring: (cols[recurringIdx] || "").trim().toLowerCase() === "true",
-      });
+        const amountNumber = Number(rawAmountStr);
+        const signedAmount =
+          dk === "K" ? Math.abs(amountNumber) : -Math.abs(amountNumber);
+        const isoDate = rawDate
+          ? new Date(rawDate).toISOString()
+          : new Date().toISOString();
+        const category = categorize(rawName, rawDetails);
+
+        parsed.push({
+          name: rawName || (rawDetails || "").slice(0, 60) || "Unknown",
+          category,
+          date: isoDate,
+          amount: signedAmount,
+          recurring: false,
+        });
+      } else {
+        const rawAmount = (cols[amountIdx] || "0").toString().replace(",", ".");
+        const providedCategory = (cols[categoryIdx] || "").trim();
+        const amountNumber = Number(rawAmount);
+        const rawDate = (cols[dateIdx] || "").trim();
+        const isoDate = rawDate
+          ? new Date(rawDate).toISOString()
+          : new Date().toISOString();
+        const name = (cols[recipientIdx] || cols[nameIdx] || "Unknown").trim();
+        const details = (cols[detailsIdx] || "").trim();
+        const inferredCategory = providedCategory || categorize(name, details);
+        const isIncome = incomeCategories.has(
+          inferredCategory.trim().toLowerCase()
+        );
+        const signedAmount = isIncome
+          ? Math.abs(amountNumber)
+          : -Math.abs(amountNumber);
+
+        parsed.push({
+          name,
+          category: inferredCategory,
+          date: isoDate,
+          amount: signedAmount,
+          recurring: (cols[recurringIdx] || "").trim().toLowerCase() === "true",
+        });
+      }
     }
     return parsed.filter((t) => t.name && !Number.isNaN(t.amount));
   };
