@@ -2,18 +2,16 @@ import { useEffect, useState } from "react";
 import { useDataStore } from "../../store/dataStore.js";
 import AddPot from "./AddPot.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
+import { Icon } from "@iconify/react";
+import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 
 export default function Pots() {
-  const {
-    fetchPots,
-    fetchThemes,
-    pots,
-    error,
-    depositPot,
-    withdrawPot,
-  } = useDataStore();
+  const { fetchPots, fetchThemes, pots, error, depositPot, withdrawPot } =
+    useDataStore();
   const [amounts, setAmounts] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [selectPot, setSelectPot] = useState(null);
+  const [mode, setMode] = useState("menu");
 
   useEffect(() => {
     fetchPots();
@@ -31,19 +29,56 @@ export default function Pots() {
             + Add New Pot
           </ButtonPrimary>
           {showModal && (
-            <AddPot pots={pots} 
-             onClose={() => setShowModal(false)} />
+            <AddPot pots={pots} onClose={() => setShowModal(false)} />
           )}
         </>
       </header>
-      {pots.map((pot, index) => (
-        <article key={index} className="bg-white rounded-xl p-6 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="preset-3 text-grey-900">{pot.name}</h3>
-            <span className="preset-4-bold text-grey-900">
-              ${Number(pot.total).toFixed(2)}
-            </span>
+      {pots.map((pot) => (
+        <article
+          key={pot._id}
+          className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2 lg:my-0 lg:last:mb-0"
+        >
+          <div className="flex items-center relative">
+            <div
+              className="h-4 w-4 rounded-full"
+              style={{ backgroundColor: pot.theme }}
+            ></div>
+            <h3 className="ml-4 preset-2 text-grey-900">{pot.name}</h3>
+            <button className="ml-auto" onClick={() => setSelectPot(pot)}>
+              <Icon
+                className="text-grey-300"
+                icon="ph:dots-three-outline-fill"
+                width="16"
+                height="16"
+              />
+            </button>
+            {selectPot?._id === pot._id && (
+              <ModalEditDelete
+                pot={selectPot}
+                onClose={() => setSelectPot(null)}
+                mode={mode}
+                setMode={setMode}
+              >
+                <div className="flex flex-col divide-y divide-grey-100">
+                  <button
+                    className="preset-4 text-grey-900 pb-3 text-left "
+                    onClick={() => setMode("editPot")}
+                  >
+                    Edit pot
+                  </button>
+                  <button
+                    className="preset-4 text-red pt-3 text-left"
+                    onClick={() => setMode("deletePot")}
+                  >
+                    Delete pot
+                  </button>
+                </div>
+              </ModalEditDelete>
+            )}
           </div>
+          <span className="preset-4-bold text-grey-900">
+            ${Number(pot.total).toFixed(2)}
+          </span>
           <div className="w-full h-3 bg-grey-100 rounded">
             <div
               className="h-3 rounded"
