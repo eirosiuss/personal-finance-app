@@ -1,10 +1,9 @@
-const ButtonPrimary = (props ) => {
+const ButtonPrimary = ({ className = "", ...props }) => {
   return (
     <button
-      className=
-        "preset-4-bold text-white cursor-pointer w-full mt-8 mb-8 py-4 rounded-lg bg-grey-900 hover:bg-grey-500"
+      className={`bg-grey-900 preset-4-bold text-white px-4 py-4 rounded-xl cursor-pointer hover:bg-grey-500 ${className}`}
       {...props}
-    ></button>
+    />
   );
 };
 

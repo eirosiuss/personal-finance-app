@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDataStore } from "../../store/dataStore.js";
 import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
+import ButtonPrimary from "../shared/ButtonPrimary.jsx"
 import { Icon } from "@iconify/react";
 
 export default function Budgets() {
@@ -106,12 +107,11 @@ export default function Budgets() {
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
         <>
-          <button
-            className="bg-grey-900 preset-4-bold text-white px-4 py-4 rounded-xl cursor-pointer"
+          <ButtonPrimary
             onClick={() => setShowModal(true)}
           >
             + Add New Budget
-          </button>
+          </ButtonPrimary>
           {showModal && (
             <AddBudget
               transactions={transactions}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDataStore } from "../../store/dataStore.js";
 import Input from "../shared/Input.jsx";
+import ButtonPrimary from "../shared/ButtonPrimary.jsx"
 import { Icon } from "@iconify/react";
 
 export default function Transactions() {
@@ -405,20 +406,19 @@ export default function Transactions() {
     <div className="mx-auto px-4 md:px-10">
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Transactions</h1>
-        <div className="">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center">
           <input
             className="border border-beige-500 rounded-lg px-3 py-2 text-grey-300 cursor-pointer w-20"
             accept=".csv"
             type="file"
             onChange={handleFileChange}
           />
-          <button
-            className="bg-grey-900 preset-4-bold text-white px-4 py-4 rounded-xl cursor-pointer"
+          <ButtonPrimary
             onClick={handleUpload}
             disabled={!selectedFile}
           >
             Upload
-          </button>
+          </ButtonPrimary>
         </div>
       </header>
 

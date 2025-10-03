@@ -4,19 +4,14 @@ import { useDataStore } from "../../store/dataStore";
 import { Icon } from "@iconify/react";
 import Input from "../shared/Input.jsx";
 
-export default function AddBudget({
-  onClose,
-  transactions,
-  categories,
-  budgets,
-}) {
+export default function AddPot({ pots, onClose }) {
   const [form, setForm] = useState({
-    category: "",
-    maximum: "",
+    name: "",
+    target: "",
     theme: "",
   });
 
-  const { addBudget, themes, error } = useDataStore();
+  const { addPot, themes, error } = useDataStore();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -37,20 +32,7 @@ export default function AddBudget({
     };
   }, []);
 
-  const uniqueCategories = [
-    ...new Set(transactions.map((t) => t.category)),
-    ...categories,
-  ];
-  const counts = uniqueCategories.reduce((acc, val) => {
-    acc[val] = (acc[val] || 0) + 1;
-    return acc;
-  }, {});
-
-  const uniqueCombinedCategories = Object.keys(counts).filter(
-    (key) => counts[key] === 1
-  );
-
-  const usedThemes = budgets.map((budget) => budget.theme);
+  const usedThemes = pots.map((pot) => pot.theme);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,11 +42,11 @@ export default function AddBudget({
 
   const validate = () => {
     const errors = {};
-    if (!form.category) {
-      errors.category = "Please select budget category";
+    if (!form.name) {
+      errors.name = "Please add pot name";
     }
-    if (!form.maximum) {
-      errors.maximum = "Please enter maximum spending";
+    if (!form.target) {
+      errors.target = "Please add target";
     }
     if (!form.theme) {
       errors.theme = "Please select color tag";
@@ -81,13 +63,13 @@ export default function AddBudget({
     }
 
     try {
-      await addBudget(form);
+      await addPot(form);
     } catch (error) {
       console.error(error);
       return;
     }
 
-    setForm({ category: "", maximum: "", theme: "" });
+    setForm({ name: "", target: "", theme: "" });
     onClose();
   };
 
@@ -97,7 +79,7 @@ export default function AddBudget({
     <ModalWrapper onClose={onClose}>
       <form onSubmit={handleSubmit} noValidate>
         <div className="flex justify-between items-center py-1 mb-5">
-          <h2 className="preset-2 text-grey-900">Add New Budget</h2>
+          <h2 className="preset-2 text-grey-900">Add New Pot</h2>
           <button onClick={onClose}>
             <Icon
               icon="ph:x-circle"
@@ -108,58 +90,42 @@ export default function AddBudget({
           </button>
         </div>
         <p className="preset-4 text-grey-500 mb-5">
-          Choose a category to set a spending budget. These can help monitor
-          spending.
+          Create a pot to set savings targets. These can help keep you on track
+          as you save for special purchases.
         </p>
         <div className="flex flex-col gap-1">
-          <label htmlFor="category" className="preset-5-bold text-grey-500">
-            Budget Category
+          <label htmlFor="name" className="preset-5-bold text-grey-500">
+            Pot Name
           </label>
-          <div className="relative">
-            <select
-              id="category"
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="preset-4 border border-beige-500 w-full rounded-lg px-5 py-3 text-grey-900 bg-white appearance-none cursor-pointer"
-            >
-              <option disabled hidden value="">
-                Select category
-              </option>
-              {uniqueCombinedCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-            <Icon
-              className="absolute inset-y-0 right-5 my-auto flex items-center pointer-events-none"
-              icon="ph:caret-down-fill"
-              width="16"
-              height="16"
-            />
-          </div>
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="e.g. Holiday"
+            value={form.name}
+            onChange={handleChange}
+          />
           <div className="h-4">
-            {formError.category && (
-              <p className="text-red-500 preset-4-bold">{formError.category}</p>
+            {formError.name && (
+              <p className="text-red-500 preset-4-bold">{formError.name}</p>
             )}
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="maximum" className="preset-5-bold text-grey-500">
-            Maximum Spend
+          <label htmlFor="target" className="preset-5-bold text-grey-500">
+            Target
           </label>
           <Input
             type="number"
-            id="maximum"
-            name="maximum"
+            id="target"
+            name="target"
             placeholder="$ e.g. 2000"
-            value={form.maximum}
+            value={form.target}
             onChange={handleChange}
           />
           <div className="h-4">
-            {formError.maximum && (
-              <p className="text-red-500 preset-4-bold">{formError.maximum}</p>
+            {formError.target && (
+              <p className="text-red-500 preset-4-bold">{formError.target}</p>
             )}
           </div>
         </div>
@@ -235,7 +201,7 @@ export default function AddBudget({
           className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg cursor-pointer"
           type="submit"
         >
-          Add Budget
+          Add Pot
         </button>
       </form>
     </ModalWrapper>

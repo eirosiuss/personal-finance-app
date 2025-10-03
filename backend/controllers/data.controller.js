@@ -72,6 +72,50 @@ export const pots = async (req, res) => {
   }
 };
 
+export const depositToPot = async (req, res) => {
+  try {
+    const { name, amount } = req.body;
+    const deposit = Number(amount);
+    if (!name || Number.isNaN(deposit) || deposit <= 0)
+      return res.status(400).json({ message: "Invalid pot name or amount" });
+
+    const data = await Data.findOne({ user: req.userId });
+    if (!data) return res.status(404).json({ message: "Pots not found" });
+    const pot = data.pots.find((p) => p.name === name);
+    if (!pot) return res.status(404).json({ message: "Pot not found" });
+
+    const newTotal = (Number(pot.total) || 0) + deposit;
+    pot.total = Math.min(newTotal, Number(pot.target) || newTotal);
+    await data.save();
+    res.status(200).json(data.pots);
+  } catch (error) {
+    console.error("Error depositing to pot:", error);
+    res.status(500).send("Failed to deposit to pot");
+  }
+};
+
+export const withdrawFromPot = async (req, res) => {
+  try {
+    const { name, amount } = req.body;
+    const withdrawal = Number(amount);
+    if (!name || Number.isNaN(withdrawal) || withdrawal <= 0)
+      return res.status(400).json({ message: "Invalid pot name or amount" });
+
+    const data = await Data.findOne({ user: req.userId });
+    if (!data) return res.status(404).json({ message: "Pots not found" });
+    const pot = data.pots.find((p) => p.name === name);
+    if (!pot) return res.status(404).json({ message: "Pot not found" });
+
+    const newTotal = (Number(pot.total) || 0) - withdrawal;
+    pot.total = Math.max(newTotal, 0);
+    await data.save();
+    res.status(200).json(data.pots);
+  } catch (error) {
+    console.error("Error withdrawing from pot:", error);
+    res.status(500).send("Failed to withdraw from pot");
+  }
+};
+
 export const themes = async (req, res) => {
   try {
     const availableThemes = [

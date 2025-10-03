@@ -6,7 +6,7 @@ import MainLayout from "./components/shared/MainLayout.jsx";
 import HomePage from "./components/pages/HomePage.jsx";
 import Transactions from "./components/pages/Transactions.jsx";
 import Budgets from "./components/budgets/Budgets.jsx";
-import Pots from "./components/pages/Pots.jsx";
+import Pots from "./components/pots/Pots.jsx";
 import LoadingSpinner from "./components/shared/LoadingSpinner.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
 import ResetPassword from "./components/pages/ResetPassword.jsx";

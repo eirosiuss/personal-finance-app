@@ -28,6 +28,20 @@ export const useDataStore = create((set) => ({
     }
   },
 
+  uploadTransactions: async (transactions) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/transactions/upload`, {
+        transactions,
+      });
+      set({ transactions: res.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to upload transactions",
+      });
+    }
+  },
+
   fetchBudgets: async () => {
     set({ error: null });
     try {
@@ -38,6 +52,50 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to fetch budgets",
+      });
+    }
+  },
+
+  addBudget: async (budget) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/budgets/add`, budget);
+      set({
+        budgets: res.data,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to add budget",
+      });
+    }
+  },
+
+  deleteBudget: async (category) => {
+    set({ error: null });
+    try {
+      const res = await axios.delete(`${API_URL}/budgets/delete/${category}`);
+      set({
+        budgets: res.data.budgets,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to delete budget",
+      });
+    }
+  },
+
+  editBudget: async (oldCategory, updatedBudget) => {
+    set({ error: null });
+    try {
+      const res = await axios.put(`${API_URL}/budgets/edit/${oldCategory}`, {
+        newTitle: updatedBudget.newTitle,
+        newMaximum: updatedBudget.newMaximum,
+        newTheme: updatedBudget.newTheme,
+      });
+      set({ budgets: res.data.budgets });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to update budget",
       });
     }
   },
@@ -56,6 +114,47 @@ export const useDataStore = create((set) => ({
     }
   },
 
+  addPot: async (pot) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/pots/add`, pot);
+      set({
+        pots: res.data,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to add pot",
+      });
+    }
+  },
+
+  depositPot: async (name, amount) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/pots/deposit`, { name, amount });
+      set({ pots: res.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to deposit to pot",
+      });
+    }
+  },
+
+  withdrawPot: async (name, amount) => {
+    set({ error: null });
+    try {
+      const res = await axios.post(`${API_URL}/pots/withdraw`, {
+        name,
+        amount,
+      });
+      set({ pots: res.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to withdraw from pot",
+      });
+    }
+  },
+
   fetchThemes: async () => {
     set({ error: null });
     try {
@@ -66,65 +165,6 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to fetch themes",
-      });
-    }
-  },
-
-  uploadTransactions: async (transactions) => {
-    set({ error: null });
-    try {
-      const res = await axios.post(`${API_URL}/transactions/upload`, {
-        transactions,
-      });
-      set({ transactions: res.data });
-    } catch (error) {
-      set({
-        error:
-          error.response?.data?.message || "Failed to upload transactions",
-      });
-    }
-  },
-
-  addBudget: async (budget) => {
-    set({ error: null });
-    try {
-      const res = await axios.post(`${API_URL}/add-budget`, budget);
-      set({
-        budgets: res.data,
-      });
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Failed to add budget",
-      });
-    }
-  },
-
-  deleteBudget: async (category) => {
-    set({ error: null });
-    try {
-      const res = await axios.delete(`${API_URL}/delete-budget/${category}`);
-      set({
-        budgets: res.data.budgets,
-      });
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Failed to delete budget",
-      });
-    }
-  },
-
-  editBudget: async (oldCategory, updatedBudget) => {
-    set({ error: null });
-    try {
-      const res = await axios.put(`${API_URL}/edit-budget/${oldCategory}`, {
-        newTitle: updatedBudget.newTitle,
-        newMaximum: updatedBudget.newMaximum,
-        newTheme: updatedBudget.newTheme,
-      });
-      set({ budgets: res.data.budgets });
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Failed to update budget",
       });
     }
   },

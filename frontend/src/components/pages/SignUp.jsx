@@ -165,7 +165,7 @@ export default function SignUp() {
                 {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
-            <ButtonPrimary type="submit" disabled={isLoading}>
+            <ButtonPrimary className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? "Signing Up..." : "Create Account"}
             </ButtonPrimary>
           </form>
