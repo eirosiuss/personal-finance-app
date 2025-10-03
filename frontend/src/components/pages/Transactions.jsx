@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDataStore } from "../../store/dataStore.js";
 import Input from "../shared/Input.jsx";
-import ButtonPrimary from "../shared/ButtonPrimary.jsx"
+import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import { Icon } from "@iconify/react";
 
 export default function Transactions() {
@@ -414,6 +414,7 @@ export default function Transactions() {
             onChange={handleFileChange}
           />
           <ButtonPrimary
+            className="max-w-fit"
             onClick={handleUpload}
             disabled={!selectedFile}
           >

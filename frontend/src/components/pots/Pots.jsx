@@ -25,7 +25,7 @@ export default function Pots() {
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Pots</h1>
         <>
-          <ButtonPrimary onClick={() => setShowModal(true)}>
+          <ButtonPrimary className="max-w-fit" onClick={() => setShowModal(true)}>
             + Add New Pot
           </ButtonPrimary>
           {showModal && (
@@ -55,7 +55,10 @@ export default function Pots() {
             {selectPot?._id === pot._id && (
               <ModalEditDelete
                 pot={selectPot}
-                onClose={() => setSelectPot(null)}
+                onClose={() => {
+                  setSelectPot(null);
+                  setMode("menu");
+                }}
                 mode={mode}
                 setMode={setMode}
               >

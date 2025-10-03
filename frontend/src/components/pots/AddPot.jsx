@@ -3,6 +3,7 @@ import ModalWrapper from "../shared/ModalWrapper";
 import { useDataStore } from "../../store/dataStore";
 import { Icon } from "@iconify/react";
 import Input from "../shared/Input.jsx";
+import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 
 export default function AddPot({ pots, onClose }) {
   const [form, setForm] = useState({
@@ -197,12 +198,10 @@ export default function AddPot({ pots, onClose }) {
             )}
           </div>
         </div>
-        <button
-          className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg cursor-pointer"
-          type="submit"
+        <ButtonPrimary
         >
           Add Pot
-        </button>
+        </ButtonPrimary>
       </form>
     </ModalWrapper>
   );

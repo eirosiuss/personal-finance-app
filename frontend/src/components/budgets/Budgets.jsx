@@ -108,7 +108,7 @@ export default function Budgets() {
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
         <>
-          <ButtonPrimary onClick={() => setShowModal(true)}>
+          <ButtonPrimary className="max-w-fit" onClick={() => setShowModal(true)}>
             + Add New Budget
           </ButtonPrimary>
           {showModal && (

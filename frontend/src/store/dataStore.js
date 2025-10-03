@@ -70,20 +70,6 @@ export const useDataStore = create((set) => ({
     }
   },
 
-  deleteBudget: async (category) => {
-    set({ error: null });
-    try {
-      const res = await axios.delete(`${API_URL}/budgets/delete/${category}`);
-      set({
-        budgets: res.data.budgets,
-      });
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Failed to delete budget",
-      });
-    }
-  },
-
   editBudget: async (oldCategory, updatedBudget) => {
     set({ error: null });
     try {
@@ -96,6 +82,20 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to update budget",
+      });
+    }
+  },
+
+  deleteBudget: async (category) => {
+    set({ error: null });
+    try {
+      const res = await axios.delete(`${API_URL}/budgets/delete/${category}`);
+      set({
+        budgets: res.data.budgets,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to delete budget",
       });
     }
   },
@@ -124,6 +124,22 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to add pot",
+      });
+    }
+  },
+
+    editPot: async (oldPot, updatedPot) => {
+    set({ error: null });
+    try {
+      const res = await axios.put(`${API_URL}/budgets/edit/${oldPot}`, {
+        newName: updatedPot.newTitle,
+        newTarget: updatedPot.newMaximum,
+        newTheme: updatedPot.newTheme,
+      });
+      set({ pots: res.data.pots });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to update pots",
       });
     }
   },

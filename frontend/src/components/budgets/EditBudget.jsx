@@ -2,6 +2,7 @@ import ModalWrapper from "../shared/ModalWrapper";
 import { useState, useRef, useEffect } from "react";
 import { useDataStore } from "../../store/dataStore";
 import { Icon } from "@iconify/react";
+import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 
 export default function EditBudget({
   budget,
@@ -28,19 +29,10 @@ export default function EditBudget({
         setIsDropdownOpen(false);
       }
     }
-
-    function handleEscape(e) {
-      if (e.key === "Escape") {
-        setIsDropdownOpen(false);
-      }
-    }
-
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
@@ -216,7 +208,6 @@ export default function EditBudget({
                       if (usedThemes.includes(theme.theme)) return;
                       setForm((prev) => ({ ...prev, theme: theme.theme }));
                       setIsDropdownOpen(false);
-                      if (onThemeSelect) onThemeSelect(theme.theme);
                     }}
                   >
                     <div
@@ -239,12 +230,7 @@ export default function EditBudget({
             )}
           </div>
         </div>
-        <button
-          className="bg-grey-900 text-white preset-4-bold mx-auto block w-full py-4 rounded-lg cursor-pointer"
-          type="submit"
-        >
-          Save Changes
-        </button>
+        <ButtonPrimary>Save Changes</ButtonPrimary>
       </form>
     </ModalWrapper>
   );
