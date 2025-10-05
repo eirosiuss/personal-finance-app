@@ -23,7 +23,7 @@ export default function Pots() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-[428px_auto] lg:gap-6 lg:mb-8">
+    <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-2 lg:gap-6 lg:mb-8">
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Pots</h1>
         <>
@@ -41,7 +41,7 @@ export default function Pots() {
       {pots.map((pot) => (
         <article
           key={pot._id}
-          className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2 lg:my-0 lg:last:mb-0"
+          className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:my-0 lg:last:mb-0"
         >
           <div className="flex items-center relative mb-10">
             <div
