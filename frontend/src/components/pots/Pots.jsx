@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useDataStore } from "../../store/dataStore.js";
 import AddPot from "./AddPot.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
+import ButtonSecondary from "../shared/ButtonSecondary.jsx";
 import { Icon } from "@iconify/react";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
+import Input from "../shared/Input.jsx"
 
 export default function Pots() {
   const { fetchPots, fetchThemes, pots, error, depositPot, withdrawPot } =
@@ -41,7 +43,7 @@ export default function Pots() {
           key={pot._id}
           className="py-6 px-5 md:p-8 bg-white rounded-xl my-6 last:mb-19 md:last:mb-28 lg:col-2 lg:my-0 lg:last:mb-0"
         >
-          <div className="flex items-center relative">
+          <div className="flex items-center relative mb-10">
             <div
               className="h-4 w-4 rounded-full"
               style={{ backgroundColor: pot.theme }}
@@ -82,12 +84,15 @@ export default function Pots() {
               </ModalEditDelete>
             )}
           </div>
-          <span className="preset-4-bold text-grey-900">
-            ${(Number(pot.total) || 0).toFixed(2)}
-          </span>
-          <div className="w-full h-3 bg-grey-100 rounded">
+          <div className="flex justify-between items-center mb-4">
+            <p className="preset-4 text-grey-500">Total Saved</p>
+            <p className="preset-1 text-grey-900">
+              ${(Number(pot.total) || 0).toFixed(2)}
+            </p>
+          </div>
+          <div className="w-full h-2 bg-beige-100 rounded mb-3">
             <div
-              className="h-3 rounded"
+              className="h-2 rounded"
               style={{
                 width: `${Math.min(
                   (Number(pot.total) / Math.max(Number(pot.target) || 1, 1)) *
@@ -98,31 +103,28 @@ export default function Pots() {
               }}
             ></div>
           </div>
-          <div className="flex items-center justify-between mt-2 text-grey-500 preset-5">
-            <p>
+          <div className="flex items-center justify-between text-grey-500 mb-8">
+            <p className="preset-5-bold">
               {Math.min(
-                ((Number(pot.total) || 0) / Math.max(Number(pot.target) || 1, 1)) *
+                ((Number(pot.total) || 0) /
+                  Math.max(Number(pot.target) || 1, 1)) *
                   100,
                 100
               ).toFixed(2)}
               %
             </p>
-            <p>Target of ${Number(pot.target).toFixed(2)}</p>
+            <p className="preset-5">Target of ${Number(pot.target).toFixed(2)}</p>
           </div>
-          <div className="mt-4 flex gap-3 items-center">
-            <input
+                      <Input noValidate
               type="number"
-              min="0"
-              step="0.01"
               placeholder="Amount"
-              className="border border-beige-500 rounded-lg px-3 py-2 w-32"
               value={amounts[pot.name] || ""}
               onChange={(e) =>
                 setAmounts({ ...amounts, [pot.name]: e.target.value })
               }
             />
-            <button
-              className="bg-grey-900 preset-4-bold text-white px-4 py-2 rounded-xl cursor-pointer"
+          <div className="flex items-center justify-between mt-4 mb-3.5 gap-4">
+            <ButtonSecondary
               onClick={async () => {
                 const value = Number(amounts[pot.name]);
                 if (!value || value <= 0) return;
@@ -131,9 +133,8 @@ export default function Pots() {
               }}
             >
               + Add Money
-            </button>
-            <button
-              className="border border-beige-500 preset-4-bold text-grey-900 px-4 py-2 rounded-xl cursor-pointer"
+            </ButtonSecondary>
+            <ButtonSecondary
               onClick={async () => {
                 const value = Number(amounts[pot.name]);
                 if (!value || value <= 0) return;
@@ -142,7 +143,7 @@ export default function Pots() {
               }}
             >
               Withdraw
-            </button>
+            </ButtonSecondary>
           </div>
         </article>
       ))}
