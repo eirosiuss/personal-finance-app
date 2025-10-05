@@ -25,7 +25,10 @@ export default function Pots() {
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
         <h1 className="preset-1 text-grey-900 my-2">Pots</h1>
         <>
-          <ButtonPrimary className="max-w-fit" onClick={() => setShowModal(true)}>
+          <ButtonPrimary
+            className="max-w-fit"
+            onClick={() => setShowModal(true)}
+          >
             + Add New Pot
           </ButtonPrimary>
           {showModal && (
@@ -80,7 +83,7 @@ export default function Pots() {
             )}
           </div>
           <span className="preset-4-bold text-grey-900">
-            ${Number(pot.total).toFixed(2)}
+            ${(Number(pot.total) || 0).toFixed(2)}
           </span>
           <div className="w-full h-3 bg-grey-100 rounded">
             <div
@@ -98,7 +101,7 @@ export default function Pots() {
           <div className="flex items-center justify-between mt-2 text-grey-500 preset-5">
             <p>
               {Math.min(
-                (Number(pot.total) / Math.max(Number(pot.target) || 1, 1)) *
+                ((Number(pot.total) || 0) / Math.max(Number(pot.target) || 1, 1)) *
                   100,
                 100
               ).toFixed(2)}

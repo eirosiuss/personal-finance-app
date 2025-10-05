@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import DeleteBudget from "../budgets/DeleteBudget";
 import EditBudget from "../budgets/EditBudget";
 import EditPot from "../pots/EditPot"
+import DeletePot from "../pots/DeletePot"
 
 const ModalEditDelete = ({ budget, categories, transactions, onClose, children, mode, pot }) => {
 
@@ -39,6 +40,13 @@ const ModalEditDelete = ({ budget, categories, transactions, onClose, children, 
 
       {mode === "editPot" && (
         <EditPot
+          pot={pot}
+          onClose={onClose}
+        />
+      )}
+
+      {mode === "deletePot" && (
+        <DeletePot
           pot={pot}
           onClose={onClose}
         />

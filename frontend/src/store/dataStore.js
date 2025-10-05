@@ -114,7 +114,7 @@ export const useDataStore = create((set) => ({
     }
   },
 
-  addPot: async (pot) => {
+  addPot: async (pot) => {  
     set({ error: null });
     try {
       const res = await axios.post(`${API_URL}/pots/add`, pot);
@@ -128,7 +128,7 @@ export const useDataStore = create((set) => ({
     }
   },
 
-    editPot: async (oldPot, updatedPot) => {
+  editPot: async (oldPot, updatedPot) => {
     set({ error: null });
     try {
       const res = await axios.put(`${API_URL}/budgets/edit/${oldPot}`, {
@@ -140,6 +140,20 @@ export const useDataStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Failed to update pots",
+      });
+    }
+  },
+
+  deletePot: async (name) => {
+    set({ error: null });
+    try {
+      const res = await axios.delete(`${API_URL}/pots/delete/${name}`);
+      set({
+        pot: res.data.pot,
+      });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Failed to delete pot",
       });
     }
   },

@@ -5,12 +5,14 @@ import {
   uploadTransactions,
   budgets,
   pots,
+  addPot,
   themes,
   addBudget,
   deleteBudget,
   editBudget,
   depositToPot,
   withdrawFromPot,
+  deletePot
 } from "../controllers/data.controller.js";
 
 const router = express.Router();
@@ -27,6 +29,8 @@ router.put("/budgets/edit/:oldCategory", verifyToken, editBudget);
 router.get("/themes", verifyToken, themes);
 
 router.get("/pots", verifyToken, pots);
+router.post("/pots/add", verifyToken, addPot);
+router.delete("/pots/delete/:name", verifyToken, deletePot);
 router.post("/pots/deposit", verifyToken, depositToPot);
 router.post("/pots/withdraw", verifyToken, withdrawFromPot);
 

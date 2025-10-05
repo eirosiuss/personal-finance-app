@@ -10,7 +10,6 @@ import Pots from "./components/pots/Pots.jsx";
 import LoadingSpinner from "./components/shared/LoadingSpinner.jsx";
 import ForgotPassword from "./components/pages/ForgotPassword.jsx";
 import ResetPassword from "./components/pages/ResetPassword.jsx";
-import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore.js";
 import { useEffect } from "react";
 
@@ -98,7 +97,6 @@ export default function App() {
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-      <Toaster />
     </>
   );
 }

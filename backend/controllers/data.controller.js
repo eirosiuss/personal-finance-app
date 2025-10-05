@@ -61,6 +61,71 @@ export const budgets = async (req, res) => {
   }
 };
 
+export const addBudget = async (req, res) => {
+  try {
+    let data = await Data.findOne({ user: req.userId });
+    if (!data) {
+      data = new Data({ user: req.userId, budgets: [req.body] });
+    } else {
+      data.budgets.push(req.body);
+    }
+    await data.save();
+    res.status(200).json(data?.budgets);
+  } catch (error) {
+    console.error("Error adding new budget: ", error);
+    res.status(500).send("Failed to add new budget");
+  }
+};
+
+export const deleteBudget = async (req, res) => {
+  const category = req.params.category;
+  try {
+    const updatedData = await Data.findOneAndUpdate(
+      { user: req.userId },
+      { $pull: { budgets: { category: category } } },
+      { new: true }
+    );
+    if (!updatedData)
+      return res.status(404).json({ message: "Budget not found" });
+    res
+      .status(200)
+      .json({ message: "Budget deleted", budgets: updatedData.budgets });
+  } catch (error) {
+    console.error("Error deleting budget:", error);
+    res.status(500).send("Failed to delete budget");
+  }
+};
+
+export const editBudget = async (req, res) => {
+  const { newTitle, newMaximum, newTheme } = req.body;
+  const { oldCategory } = req.params;
+
+  try {
+    const updatedData = await Data.findOneAndUpdate(
+      { "budgets.category": oldCategory, user: req.userId },
+      {
+        $set: {
+          "budgets.$.category": newTitle,
+          "budgets.$.maximum": newMaximum,
+          "budgets.$.theme": newTheme,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedData) {
+      return res.status(404).json({ message: "Budget not found" });
+    }
+    res.status(200).json({
+      message: "Budget updated",
+      budgets: updatedData.budgets,
+    });
+  } catch (error) {
+    console.error("Error updating budget:", error);
+    res.status(500).send("Error updating budget");
+  }
+};
+
 export const pots = async (req, res) => {
   try {
     const data = await Data.findOne({ user: req.userId });
@@ -69,6 +134,42 @@ export const pots = async (req, res) => {
   } catch (error) {
     console.error("Error fetching pots:", error);
     res.status(500).send("Failed to fetch pots");
+  }
+};
+
+export const addPot = async (req, res) => {
+  try {
+    let data = await Data.findOne({ user: req.userId });
+    if (!data) {
+      data = new Data({ user: req.userId, pots: [req.body] });
+    } else {
+      data.pots.push(req.body);
+    }
+    await data.save();
+    res.status(200).json(data?.pots);
+  } catch (error) {
+    console.error("Error adding new pot: ", error);
+    res.status(500).send("Failed to add new pot");
+  }
+};
+
+export const deletePot = async (req, res) => {
+  const name = req.params.name;
+  
+  try {
+    const updatedData = await Data.findOneAndUpdate(
+      { user: req.userId },
+      { $pull: { pots: { name: name } } },
+      { new: true }
+    );
+    if (!updatedData)
+      return res.status(404).json({ message: "Pot not found" });
+    res
+      .status(200)
+      .json({ message: "Pot deleted", pots: updatedData.pots });
+  } catch (error) {
+    console.error("Error deleting pot:", error);
+    res.status(500).send("Failed to delete pot");
   }
 };
 
@@ -138,70 +239,5 @@ export const themes = async (req, res) => {
   } catch (error) {
     console.error("Error fetching themes:", error);
     res.status(500).send("Failed to fetch themes");
-  }
-};
-
-export const addBudget = async (req, res) => {
-  try {
-    let data = await Data.findOne({ user: req.userId });
-    if (!data) {
-      data = new Data({ user: req.userId, budgets: [req.body] });
-    } else {
-      data.budgets.push(req.body);
-    }
-    await data.save();
-    res.status(200).json(data?.budgets);
-  } catch (error) {
-    console.error("Error adding new budget: ", error);
-    res.status(500).send("Failed to add new budget");
-  }
-};
-
-export const deleteBudget = async (req, res) => {
-  const category = req.params.category;
-  try {
-    const updatedData = await Data.findOneAndUpdate(
-      { user: req.userId },
-      { $pull: { budgets: { category: category } } },
-      { new: true }
-    );
-    if (!updatedData)
-      return res.status(404).json({ message: "Budget not found" });
-    res
-      .status(200)
-      .json({ message: "Budget deleted", budgets: updatedData.budgets });
-  } catch (error) {
-    console.error("Error deleting budget:", error);
-    res.status(500).send("Failed to delete budget");
-  }
-};
-
-export const editBudget = async (req, res) => {
-  const { newTitle, newMaximum, newTheme } = req.body;
-  const { oldCategory } = req.params;
-
-  try {
-    const updatedData = await Data.findOneAndUpdate(
-      { "budgets.category": oldCategory, user: req.userId },
-      {
-        $set: {
-          "budgets.$.category": newTitle,
-          "budgets.$.maximum": newMaximum,
-          "budgets.$.theme": newTheme,
-        },
-      },
-      { new: true }
-    );
-
-    if (!updatedData) {
-      return res.status(404).json({ message: "Budget not found" });
-    }
-    res.status(200).json({
-      message: "Budget updated",
-      budgets: updatedData.budgets,
-    });
-  } catch (error) {
-    console.error("Error updating budget:", error);
-    res.status(500).send("Error updating budget");
   }
 };
