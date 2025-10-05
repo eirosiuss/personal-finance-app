@@ -481,12 +481,12 @@ export default function Transactions() {
                     ></div>
 
                     <select
-                      size={8}
+                      // size={8}
                       id="sort"
                       name="sort"
                       value={selectedSort}
                       onChange={handleSort}
-                      className="w-30 h-64 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
+                      className="w-30 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
                     >
                       <option
                         className="border-b border-b-grey-100 pb-3 mb-3"
@@ -561,9 +561,9 @@ export default function Transactions() {
                     ></div>
                     <select
                       value={selectedCategory}
-                      size={8}
+                      // size={8}
                       onChange={handleCategoryChange}
-                      className="w-fit h-64 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
+                      className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
                     >
                       <option
                         className="border-b border-b-grey-100 pb-3 mb-3"
