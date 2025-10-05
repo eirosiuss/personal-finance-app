@@ -12,7 +12,8 @@ import {
   editBudget,
   depositToPot,
   withdrawFromPot,
-  deletePot
+  deletePot,
+  editPot
 } from "../controllers/data.controller.js";
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.get("/themes", verifyToken, themes);
 router.get("/pots", verifyToken, pots);
 router.post("/pots/add", verifyToken, addPot);
 router.delete("/pots/delete/:name", verifyToken, deletePot);
+router.put("/pots/edit/:oldPot", verifyToken, editPot);
 router.post("/pots/deposit", verifyToken, depositToPot);
 router.post("/pots/withdraw", verifyToken, withdrawFromPot);
 

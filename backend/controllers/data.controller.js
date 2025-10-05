@@ -173,6 +173,36 @@ export const deletePot = async (req, res) => {
   }
 };
 
+export const editPot = async (req, res) => {
+  const { newName, newTarget, newTheme } = req.body;
+  const { oldPot } = req.params;
+  
+  try {
+    const updatedData = await Data.findOneAndUpdate(
+      { "pots.name": oldPot, user: req.userId },
+      {
+        $set: {
+          "pots.$.name": newName,
+          "pots.$.target": newTarget,
+          "pots.$.theme": newTheme,
+        },
+      },
+      { new: true }
+    );    
+
+    if (!updatedData) {
+      return res.status(404).json({ message: "Pot not found" });
+    }
+    res.status(200).json({
+      message: "Pot updated",
+      pots: updatedData.pots,
+    });
+  } catch (error) {
+    console.error("Error updating pot:", error);
+    res.status(500).send("Error updating pot");
+  }
+};
+
 export const depositToPot = async (req, res) => {
   try {
     const { name, amount } = req.body;

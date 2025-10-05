@@ -198,7 +198,7 @@ export default function EditBudget({
                 )
                 .map((theme) => (
                   <li
-                    key={theme._id}
+                    key={theme.theme}
                     className={`flex items-center gap-3 mt-3 pb-3 mx-5 ${
                       usedThemes.includes(theme.theme)
                         ? "opacity-50 cursor-default"

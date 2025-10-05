@@ -131,9 +131,9 @@ export const useDataStore = create((set) => ({
   editPot: async (oldPot, updatedPot) => {
     set({ error: null });
     try {
-      const res = await axios.put(`${API_URL}/budgets/edit/${oldPot}`, {
-        newName: updatedPot.newTitle,
-        newTarget: updatedPot.newMaximum,
+      const res = await axios.put(`${API_URL}/pots/edit/${oldPot}`, {
+        newName: updatedPot.newName,
+        newTarget: updatedPot.newTarget,
         newTheme: updatedPot.newTheme,
       });
       set({ pots: res.data.pots });

@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import Input from "../shared/Input.jsx"
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 
-export default function EditBudget({ pot, onClose }) {
+export default function EditPot({ pot, onClose }) {
   const [form, setForm] = useState({
     name: pot.name,
     target: pot.target,
@@ -63,7 +63,7 @@ export default function EditBudget({ pot, onClose }) {
     }
 
     try {
-      await editPot(pot.category, {
+      await editPot(pot.name, {
         newName: form.name,
         newTarget: Number(form.target),
         newTheme: form.theme,
@@ -166,7 +166,7 @@ export default function EditBudget({ pot, onClose }) {
                 )
                 .map((theme) => (
                   <li
-                    key={theme._id}
+                    key={theme.theme}
                     className={`flex items-center gap-3 mt-3 pb-3 mx-5 ${
                       usedThemes.includes(theme.theme)
                         ? "opacity-50 cursor-default"
@@ -176,7 +176,6 @@ export default function EditBudget({ pot, onClose }) {
                       if (usedThemes.includes(theme.theme)) return;
                       setForm((prev) => ({ ...prev, theme: theme.theme }));
                       setIsDropdownOpen(false);
-                      if (onThemeSelect) onThemeSelect(theme.theme);
                     }}
                   >
                     <div
