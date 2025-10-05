@@ -94,8 +94,8 @@ export default function App() {
           <Route path="/transactions" element={<Transactions />}></Route>
           <Route path="/budgets" element={<Budgets />}></Route>
           <Route path="/pots" element={<Pots />}></Route>
+          <Route path="*" element={<Navigate to="/home-page" replace />} />
         </Route>
-        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>
   );
