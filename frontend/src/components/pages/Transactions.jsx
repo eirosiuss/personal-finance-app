@@ -476,50 +476,72 @@ export default function Transactions() {
                 {showSortingOptions && (
                   <>
                     <div
-                      className="fixed inset-0 bg-black/50 z-0"
+                      className="fixed inset-0 bg-black/50 z-40"
                       onClick={() => setShowSortingOptions(false)}
                     ></div>
 
-                    <select
-                      // size={8}
-                      id="sort"
-                      name="sort"
-                      value={selectedSort}
-                      onChange={handleSort}
-                      className="w-30 px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
-                    >
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="latest"
+                    <div className="w-30 px-5 absolute left-1/2 -translate-x-1/2 top-28 z-50 bg-white rounded-lg text-grey-900 preset-4">
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("latest");
+                          filterTransactions(searchValue, selectedCategory, "latest");
+                          setShowSortingOptions(false);
+                        }}
                       >
                         Latest
-                      </option>
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="oldest"
+                      </div>
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("oldest");
+                          filterTransactions(searchValue, selectedCategory, "oldest");
+                          setShowSortingOptions(false);
+                        }}
                       >
                         Oldest
-                      </option>
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="a-to-z"
+                      </div>
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("a-to-z");
+                          filterTransactions(searchValue, selectedCategory, "a-to-z");
+                          setShowSortingOptions(false);
+                        }}
                       >
                         A to Z
-                      </option>
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="z-to-a"
+                      </div>
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("z-to-a");
+                          filterTransactions(searchValue, selectedCategory, "z-to-a");
+                          setShowSortingOptions(false);
+                        }}
                       >
                         Z to A
-                      </option>
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="highest"
+                      </div>
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("highest");
+                          filterTransactions(searchValue, selectedCategory, "highest");
+                          setShowSortingOptions(false);
+                        }}
                       >
                         Highest
-                      </option>
-                      <option value="lowest">Lowest</option>
-                    </select>
+                      </div>
+                      <div
+                        className="border-b border-b-grey-100 py-3"
+                        onClick={() => {
+                          setSelectedSort("lowest");
+                          filterTransactions(searchValue, selectedCategory, "lowest");
+                          setShowSortingOptions(false);
+                        }}
+                      >
+                        Lowest
+                      </div>
+                    </div>
                   </>
                 )}
               </button>
@@ -556,31 +578,34 @@ export default function Transactions() {
                 {showCategoryOptions && (
                   <>
                     <div
-                      className="fixed inset-0 bg-black/50 z-0"
+                      className="fixed inset-0 bg-black/50 z-40"
                       onClick={() => setShowCategoryOptions(false)}
                     ></div>
-                    <select
-                      value={selectedCategory}
-                      // size={8}
-                      onChange={handleCategoryChange}
-                      className="w-fit px-5 pt-3 absolute left-1/2 -translate-x-1/2 top-28 z-10 bg-white rounded-lg text-grey-900 preset-4"
-                    >
-                      <option
-                        className="border-b border-b-grey-100 pb-3 mb-3"
-                        value="All Transactions"
+                    <div className="w-fit px-5 absolute left-1/2 -translate-x-1/2 top-28 z-50 bg-white rounded-lg text-grey-900 preset-4">
+                      <div
+                        className="px-4 py-3 border-b border-grey-100 cursor-pointer hover:bg-grey-50"
+                        onClick={() => {
+                          setSelectedCategory("All Transactions");
+                          filterTransactions(searchValue, "All Transactions", selectedSort);
+                          setShowCategoryOptions(false);
+                        }}
                       >
                         All Transactions
-                      </option>
+                      </div>
                       {uniqueCategories.map((cat, index) => (
-                        <option
-                          className="border-b border-b-grey-100 pb-3 mb-3 last:border-b-0 last:mb-0"
+                        <div
                           key={index}
-                          value={cat}
+                          className="px-4 py-3 border-b border-grey-100 last:border-b-0"
+                          onClick={() => {
+                            setSelectedCategory(cat);
+                            filterTransactions(searchValue, cat, selectedSort);
+                            setShowCategoryOptions(false);
+                          }}
                         >
                           {cat}
-                        </option>
+                        </div>
                       ))}
-                    </select>
+                    </div>
                   </>
                 )}
               </button>
