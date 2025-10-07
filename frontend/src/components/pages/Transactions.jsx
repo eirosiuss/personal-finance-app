@@ -63,8 +63,7 @@ export default function Transactions() {
       text.includes("periodinis investavimas") ||
       text.includes("investav") ||
       text.includes("pensij") ||
-      text.includes("fund") ||
-      text.includes("robur")
+      text.includes("fund")
     )
       return "Investments & Retirement";
 
@@ -111,9 +110,7 @@ export default function Transactions() {
       return "Travel & Vacations";
 
     if (
-      text.includes("aliexpress") ||
       text.includes("gym") ||
-      text.includes("sportpoint") ||
       text.includes("contribee")
     )
       return "Personal Spending";
