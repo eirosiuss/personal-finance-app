@@ -3,7 +3,7 @@
 A modern, full-stack personal finance management application that helps you track your money, set budgets, and save for your future goals.
 
 ## 🌐 Live Demo
-Check out the live version here: [Personal Finance App](https://personal-finance-app-e2pb.onrender.com/login)
+Check out the live version here: [Personal Finance App](https://personal-finance-app-e2pb.onrender.com)
 
 ## 🧪 Testing the Application
 
