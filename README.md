@@ -93,7 +93,7 @@ This application is designed to give you control over your personal finances. It
 - **Nodemon** - Development server auto-restart
 - **Cross-env** - Environment variable management
 
-### ## Future Improvements / Planned Features
+### Future Improvements / Planned Features
 - Integration with [Fintable](https://fintable.io/) for automated financial data syncing and analysis
 - Improve web accessibility 
 - Add dark mode option
