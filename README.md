@@ -3,7 +3,7 @@
 A modern, full-stack personal finance management application that helps you track your money, set budgets, and save for your future goals.
 
 ## 🌐 Live Demo
-Check out the live version here: [Personal Finance App](https://personal-finance-app-e2pb.onrender.com/login)
+Check out the live version here: [Personal Finance App](https://personal-finance-app-e2pb.onrender.com)
 
 ## 🧪 Testing the Application
 
@@ -93,7 +93,7 @@ This application is designed to give you control over your personal finances. It
 - **Nodemon** - Development server auto-restart
 - **Cross-env** - Environment variable management
 
-### ## Future Improvements / Planned Features
+### Future Improvements / Planned Features
 - Integration with [Fintable](https://fintable.io/) for automated financial data syncing and analysis
 - Improve web accessibility 
 - Add dark mode option
