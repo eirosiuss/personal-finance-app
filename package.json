@@ -30,11 +30,6 @@
     "mongoose": "^8.18.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@vitest/ui": "^4.0.8",
-    "jsdom": "^27.2.0",
-    "nodemon": "^3.1.10",
-    "vitest": "^4.0.8"
+    "nodemon": "^3.1.10"
   }
 }
