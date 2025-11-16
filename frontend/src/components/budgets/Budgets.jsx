@@ -4,6 +4,7 @@ import AddBudget from "./AddBudget.jsx";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import { Icon } from "@iconify/react";
+import Header from "../shared/Header.jsx";
 
 export default function Budgets() {
   const {
@@ -106,9 +107,12 @@ export default function Budgets() {
   return (
     <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-[428px_auto] lg:gap-6 lg:mb-8">
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
-        <h1 className="preset-1 text-grey-900 my-2">Budgets</h1>
+        <Header className="my-2" title="Budgets"></Header>
         <>
-          <ButtonPrimary className="max-w-fit" onClick={() => setShowModal(true)}>
+          <ButtonPrimary
+            className="max-w-fit"
+            onClick={() => setShowModal(true)}
+          >
             + Add New Budget
           </ButtonPrimary>
           {showModal && (

@@ -6,6 +6,7 @@ import { useAuthStore } from "../../store/authStore.js";
 import LogoLogin from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import { Icon } from "@iconify/react";
+import Header from "../shared/Header.jsx";
 
 const Login = () => {
   const { login, isLoading, error } = useAuthStore();
@@ -89,7 +90,7 @@ const Login = () => {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <h2 className="preset-1 text-grey-900">Login</h2>
+          <Header title='Login'></Header>
           <form onSubmit={handleLogin} noValidate>
             <div className="w-full mt-8">
               <label className="preset-5-bold text-grey-500" htmlFor="email">

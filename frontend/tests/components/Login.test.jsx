@@ -1,9 +1,10 @@
 // itr
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
-import Login from "../../src/components/pages/Login.jsx";
-import SignUp from "../../src/components/pages/SignUp.jsx";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import Login from "../../src/components/auth/Login.jsx";
+import HomePage from "../../src/components/homePage/HomePage.jsx";
+import { useAuthStore } from "../../src/store/authStore.js";
 
 const renderLogin = () =>
   render(
@@ -13,7 +14,7 @@ const renderLogin = () =>
   );
 
 describe("Login Component", () => {
-  it("should render login component", () => {
+  it("should render header", () => {
     renderLogin();
     expect(screen.getByRole("heading", { name: /login/i })).toBeInTheDocument();
   });
@@ -30,7 +31,9 @@ describe("Login Component", () => {
 
   it("should allow to type into email and password inputs", async () => {
     renderLogin();
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByRole("textbox", {
+      name: /email/i,
+    });
     const passwordInput = screen.getByLabelText(/password/i);
 
     await userEvent.type(emailInput, "a");
@@ -39,10 +42,12 @@ describe("Login Component", () => {
     expect(passwordInput.value).toBe("a");
   });
 
-  it("should show-hide error message when email input is filled-empty", async () => {
+  it("should show error message when email input is empty", async () => {
     renderLogin();
     const loginButton = screen.getByRole("button", { name: /login/i });
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByRole("textbox", {
+      name: /email/i,
+    });
     await userEvent.clear(emailInput);
     expect(
       screen.queryByText(/^please enter your email$/i)
@@ -51,7 +56,7 @@ describe("Login Component", () => {
     expect(screen.getByText(/^please enter your email$/i)).toBeInTheDocument();
   });
 
-  it("should show-hide error message when password input is filled-empty", async () => {
+  it("should show error message when password input is empty", async () => {
     renderLogin();
     const loginButton = screen.getByRole("button", { name: /login/i });
     const passwordInput = screen.getByLabelText(/password/i);
@@ -64,4 +69,9 @@ describe("Login Component", () => {
       screen.getByText(/^please enter your password$/i)
     ).toBeInTheDocument();
   });
+
+it("redirects to home page after successful login", async () => {
+
+});
+
 });

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import LogoSignUp from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import { Icon } from "@iconify/react";
+import Header from "../shared/Header.jsx";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ export default function SignUp() {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <h2 className="preset-1 text-grey-900">Sign Up</h2>
+          <Header title="Sign Up"></Header>
           <form onSubmit={handleSignUp} noValidate>
             <div className="w-full mt-8">
               <label className="preset-5-bold text-grey-500" htmlFor="name">
@@ -165,7 +166,11 @@ export default function SignUp() {
                 {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
-            <ButtonPrimary className="w-full" type="submit" disabled={isLoading}>
+            <ButtonPrimary
+              className="w-full"
+              type="submit"
+              disabled={isLoading}
+            >
               {isLoading ? "Signing Up..." : "Create Account"}
             </ButtonPrimary>
           </form>

@@ -4,6 +4,7 @@ import { useAuthStore } from "../../store/authStore.js";
 import { useDataStore } from "../../store/dataStore.js";
 import formData from "../../utils/date.js";
 import { Icon } from "@iconify/react";
+import Header from "../shared/Header.jsx";
 
 export default function HomePage() {
   const { user } = useAuthStore();
@@ -115,7 +116,7 @@ export default function HomePage() {
     lastFilledMonth,
     lastFilledYear
   );
-  
+
   const totalBudget = budgets.reduce((sum, b) => sum + b.maximum, 0);
 
   const spentTotal = budgets
@@ -144,7 +145,7 @@ export default function HomePage() {
     <div className="px-4 mx-auto my-6 md:px-10 md:my-8">
       <div className="mb-8">
         <header className="mb-8">
-          <h1 className="preset-1 text-balance mb-8">Overview</h1>
+          <Header className="mb-8 text-balance" title="Overview"></Header>
           <p className="preset-4 text-balance px-5 py-6 bg-white rounded-xl w-fit">
             Welcome back, {user?.name}!
             <span className="block">

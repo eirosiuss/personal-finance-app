@@ -3,6 +3,7 @@ import { useDataStore } from "../../store/dataStore.js";
 import Input from "../shared/Input.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import { Icon } from "@iconify/react";
+import Header from "../shared/Header.jsx";
 
 export default function Transactions() {
   const { fetchTransactions, transactions, uploadTransactions, error } =
@@ -109,10 +110,7 @@ export default function Transactions() {
     )
       return "Travel & Vacations";
 
-    if (
-      text.includes("gym") ||
-      text.includes("contribee")
-    )
+    if (text.includes("gym") || text.includes("contribee"))
       return "Personal Spending";
 
     return "Miscellaneous / Buffer";
@@ -402,7 +400,7 @@ export default function Transactions() {
   return (
     <div className="mx-auto px-4 md:px-10">
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
-        <h1 className="preset-1 text-grey-900 my-2">Transactions</h1>
+        <Header className="my-2" title="Transactions"></Header>
         <div className="flex flex-col gap-2 md:flex-row md:items-center">
           <input
             className="border border-beige-500 rounded-lg px-3 py-2 text-grey-300 cursor-pointer w-20"
@@ -482,7 +480,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("latest");
-                          filterTransactions(searchValue, selectedCategory, "latest");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "latest"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -492,7 +494,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("oldest");
-                          filterTransactions(searchValue, selectedCategory, "oldest");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "oldest"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -502,7 +508,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("a-to-z");
-                          filterTransactions(searchValue, selectedCategory, "a-to-z");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "a-to-z"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -512,7 +522,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("z-to-a");
-                          filterTransactions(searchValue, selectedCategory, "z-to-a");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "z-to-a"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -522,7 +536,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("highest");
-                          filterTransactions(searchValue, selectedCategory, "highest");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "highest"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -532,7 +550,11 @@ export default function Transactions() {
                         className="border-b border-b-grey-100 py-3"
                         onClick={() => {
                           setSelectedSort("lowest");
-                          filterTransactions(searchValue, selectedCategory, "lowest");
+                          filterTransactions(
+                            searchValue,
+                            selectedCategory,
+                            "lowest"
+                          );
                           setShowSortingOptions(false);
                         }}
                       >
@@ -583,7 +605,11 @@ export default function Transactions() {
                         className="px-4 py-3 border-b border-grey-100 cursor-pointer hover:bg-grey-50"
                         onClick={() => {
                           setSelectedCategory("All Transactions");
-                          filterTransactions(searchValue, "All Transactions", selectedSort);
+                          filterTransactions(
+                            searchValue,
+                            "All Transactions",
+                            selectedSort
+                          );
                           setShowCategoryOptions(false);
                         }}
                       >

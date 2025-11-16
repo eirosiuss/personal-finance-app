@@ -5,7 +5,8 @@ import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import ButtonSecondary from "../shared/ButtonSecondary.jsx";
 import { Icon } from "@iconify/react";
 import ModalEditDelete from "../shared/ModalEditDelete.jsx";
-import Input from "../shared/Input.jsx"
+import Input from "../shared/Input.jsx";
+import Header from "../shared/Header.jsx";
 
 export default function Pots() {
   const { fetchPots, fetchThemes, pots, error, depositPot, withdrawPot } =
@@ -25,7 +26,7 @@ export default function Pots() {
   return (
     <div className="mx-auto px-4 md:px-10 lg:grid lg:grid-cols-2 lg:gap-6 lg:mb-8">
       <header className="mt-6 mb-8 md:mt-8 flex justify-between items-center lg:col-span-2 lg:mb-2">
-        <h1 className="preset-1 text-grey-900 my-2">Pots</h1>
+        <Header className="my-2" title="Pots"></Header>
         <>
           <ButtonPrimary
             className="max-w-fit"
@@ -113,16 +114,19 @@ export default function Pots() {
               ).toFixed(2)}
               %
             </p>
-            <p className="preset-5">Target of ${Number(pot.target).toFixed(2)}</p>
+            <p className="preset-5">
+              Target of ${Number(pot.target).toFixed(2)}
+            </p>
           </div>
-                      <Input noValidate
-              type="number"
-              placeholder="Amount"
-              value={amounts[pot.name] || ""}
-              onChange={(e) =>
-                setAmounts({ ...amounts, [pot.name]: e.target.value })
-              }
-            />
+          <Input
+            noValidate
+            type="number"
+            placeholder="Amount"
+            value={amounts[pot.name] || ""}
+            onChange={(e) =>
+              setAmounts({ ...amounts, [pot.name]: e.target.value })
+            }
+          />
           <div className="flex items-center justify-between mt-4 mb-3.5 gap-4">
             <ButtonSecondary
               onClick={async () => {

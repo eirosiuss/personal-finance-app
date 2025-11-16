@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import Logo from "../../../src/assets/images/login-and-signup-illustration-image.svg";
+import Header from "../shared/Header.jsx";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -80,7 +81,7 @@ const ResetPassword = () => {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <h2 className="preset-1 text-grey-900">Reset Password</h2>
+          <Header title='Reset Password'></Header>
           <form className="w-full mt-8" onSubmit={handleSubmit}>
             <Input
               type="password"

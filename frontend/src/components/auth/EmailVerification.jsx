@@ -5,6 +5,7 @@ import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import Logo from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import Input from "../shared/Input.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
+import Header from "../shared/Header.jsx";
 
 const EmailVerification = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -94,7 +95,7 @@ const EmailVerification = () => {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <h2 className="preset-1 text-grey-900">Verify Your Email</h2>
+          <Header title="Verify Your Email"></Header>
           <form onSubmit={handleSubmit}>
             <div className="w-full mt-8">
               <p className="preset-5-bold text-grey-500">

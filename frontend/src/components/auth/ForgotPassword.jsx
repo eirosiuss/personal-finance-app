@@ -63,7 +63,7 @@ const ForgotPassword = () => {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <h2 className="preset-1 text-grey-900">Forgot Password</h2>
+          <Header title="Forgot Password"></Header>
           {!isSubmitted ? (
             <>
               <form onSubmit={handleSubmit} noValidate>
@@ -87,7 +87,11 @@ const ForgotPassword = () => {
                     )}
                   </div>
                 </div>
-                <ButtonPrimary className="w-full" type="submit" disabled={isLoading}>
+                <ButtonPrimary
+                  className="w-full"
+                  type="submit"
+                  disabled={isLoading}
+                >
                   {isLoading ? "Sending..." : "Send Reset Link"}
                 </ButtonPrimary>
               </form>
@@ -105,8 +109,9 @@ const ForgotPassword = () => {
           ) : (
             <div className="w-full mt-8">
               <p className="preset-4 text-grey-900">
-                If an account exists for <span className="preset-4-bold">{email}</span>, you will receive a password
-                reset link shortly.
+                If an account exists for{" "}
+                <span className="preset-4-bold">{email}</span>, you will receive
+                a password reset link shortly.
               </p>
               <p className="preset-4 text-grey-500 mt-8">
                 Back to{" "}
