@@ -105,6 +105,7 @@ export default function SignUp() {
                 Name
               </label>
               <Input
+                id="name"
                 type="text"
                 name="name"
                 value={formData.name}
@@ -121,6 +122,7 @@ export default function SignUp() {
                 Email
               </label>
               <Input
+                id="email"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -140,6 +142,7 @@ export default function SignUp() {
               </label>
               <div className="relative">
                 <Input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
