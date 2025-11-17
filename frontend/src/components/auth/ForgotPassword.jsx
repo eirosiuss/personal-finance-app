@@ -5,6 +5,7 @@ import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import Input from "../shared/Input.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
 import Logo from "../../../src/assets/images/login-and-signup-illustration-image.svg";
+import Header from "../shared/Header.jsx";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
