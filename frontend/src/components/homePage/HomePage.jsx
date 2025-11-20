@@ -148,9 +148,9 @@ export default function HomePage() {
           <Header className="mb-8 text-balance" title="Overview"></Header>
           <p className="preset-4 text-balance px-5 py-6 bg-white rounded-xl w-fit">
             Welcome back, {user?.name}!
-            <span className="block">
+            {/* <span className="block">
               Last Login: {formData(user.lastLogin)}
-            </span>
+            </span> */}
           </p>
         </header>
         <div className="mb-3 md:flex md:gap-6">

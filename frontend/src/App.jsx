@@ -10,93 +10,114 @@ import Pots from "./components/pots/Pots.jsx";
 import LoadingSpinner from "./components/shared/LoadingSpinner.jsx";
 import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 import ResetPassword from "./components/auth/ResetPassword.jsx";
-import { useAuthStore } from "./store/authStore.js";
+import { useAuthStore, useDispatch } from "./context/AuthContext.jsx";
 import { useEffect } from "react";
 
-//protect routes that require authentication
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+import axios from "axios";
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? `${import.meta.env.VITE_BACKEND_URL}/api/auth`
+    : "/api/auth";
+axios.defaults.withCredentials = true;
 
-  if (!isAuthenticated) {
+const ProtectedRoute = ({ children }) => {
+  const authStore = useAuthStore();
+
+  if (!authStore.isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.isVerified) {
+  if (!authStore.user.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
   return children;
 };
 
-//redirect authenticated users to home page
 const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
-  if (isAuthenticated && user.isVerified) {
+  const authStore = useAuthStore();
+  if (authStore.isAuthenticated && authStore.user.isVerified) {
     return <Navigate to="/home-page" replace />;
   }
   return children;
 };
 
 export default function App() {
-  const { isCheckingAuth, checkAuth } = useAuthStore();
-
+  const dispatch = useDispatch();
   useEffect(() => {
+    const checkAuth = async () => {
+      dispatch({
+        type: "checked_auth",
+        isCheckingAuth: true,
+        isAuthenticated: false,
+      });
+      try {
+        const response = await axios.get(`${API_URL}/check-auth`);
+        dispatch({
+          type: "checked_auth",
+          user: response.data.user,
+          isCheckingAuth: false,
+          isAuthenticated: true,
+        });
+      } catch (error) {
+        dispatch({
+          type: "checked_auth",
+          isCheckingAuth: false,
+          isAuthenticated: false,
+        });
+      }
+    };
     checkAuth();
-  }, [checkAuth]);
-
-  if (isCheckingAuth) return <LoadingSpinner />;
+  }, []);
 
   return (
-    <>
-      <Routes>
-        <Route
-          path="/signup"
-          element={
-            <RedirectAuthenticatedUser>
-              <SignUp />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <RedirectAuthenticatedUser>
-              <Login />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route path="/verify-email" element={<EmailVerification />} />
-        <Route
-          path="/forgot-password"
-          element={
-            <RedirectAuthenticatedUser>
-              <ForgotPassword />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          path="/reset-password/:token"
-          element={
-            <RedirectAuthenticatedUser>
-              <ResetPassword />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/" element={<Navigate to="/home-page" replace />} />
-          <Route path="/home-page" element={<HomePage />} />
-          <Route path="/transactions" element={<Transactions />}></Route>
-          <Route path="/budgets" element={<Budgets />}></Route>
-          <Route path="/pots" element={<Pots />}></Route>
-          <Route path="*" element={<Navigate to="/home-page" replace />} />
-        </Route>
-      </Routes>
-    </>
+    <Routes>
+      <Route
+        path="/signup"
+        element={
+          <RedirectAuthenticatedUser>
+            <SignUp />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <RedirectAuthenticatedUser>
+            <Login />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route path="/verify-email" element={<EmailVerification />} />
+      <Route
+        path="/forgot-password"
+        element={
+          <RedirectAuthenticatedUser>
+            <ForgotPassword />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        path="/reset-password/:token"
+        element={
+          <RedirectAuthenticatedUser>
+            <ResetPassword />
+          </RedirectAuthenticatedUser>
+        }
+      />
+      <Route
+        element={
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/" element={<Navigate to="/home-page" replace />} />
+        <Route path="/home-page" element={<HomePage />} />
+        <Route path="/transactions" element={<Transactions />}></Route>
+        <Route path="/budgets" element={<Budgets />}></Route>
+        <Route path="/pots" element={<Pots />}></Route>
+        <Route path="*" element={<Navigate to="/home-page" replace />} />
+      </Route>
+    </Routes>
   );
 }

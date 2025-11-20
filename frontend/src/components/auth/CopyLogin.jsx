@@ -2,43 +2,28 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../shared/Input.jsx";
 import ButtonPrimary from "../shared/ButtonPrimary.jsx";
+import { useAuthStore } from "../../store/authStore.js";
 import LogoLogin from "../../../src/assets/images/login-and-signup-illustration-image.svg";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import { Icon } from "@iconify/react";
 import Header from "../shared/Header.jsx";
-import { useDispatch } from "../../context/AuthContext.jsx";
-
-import axios from "axios";
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? `${import.meta.env.VITE_BACKEND_URL}/api/auth`
-    : "/api/auth";
-axios.defaults.withCredentials = true;
 
 const Login = () => {
-  const dispatch = useDispatch();
-  
+  const { login, isLoading, error } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const [formErrors, setFormErrors] = useState({
-    email: null,
-    password: null,
-  });
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   const handleChange = (e) => {
-    dispatch({
-      type: "reset_error",
-    });
+    useAuthStore.setState({ error: null });
+    setEmailError(null);
+    setPasswordError(null);
     const name = e.target.name;
     const value = e.target.value;
-    setFormErrors({
-      ...formErrors,
-      [name]: null,
-    });
     setFormData({
       ...formData,
       [name]: value,
@@ -52,44 +37,27 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (!formData.email && !formData.password) {
-      setFormErrors({
-        email: "Please enter your email",
-        password: "Please enter your password",
-      });
+      setEmailError("Please enter your email");
+      setPasswordError("Please enter your password");
       return;
     } else if (!formData.email) {
-      setFormErrors({
-        email: "Please enter your email",
-      });
+      setEmailError("Please enter your email");
       return;
     } else if (!validateEmail(formData.email)) {
-      setFormErrors({
-        email: "Please enter a valid email address",
-      });
+      setEmailError("Please enter a valid email address");
       return;
     } else if (!formData.password) {
-      setFormErrors({
-        password: "Please enter your password",
-      });
+      setPasswordError("Please enter your password");
       return;
     }
-    dispatch({
-      type: "added_loading",
-    });
-    try {
-      const response = await axios.post(`${API_URL}/login`, formData);
-      dispatch({
-        type: "logged_in",
-        user: response.data.user,
-      });
-    } catch (error) {
-      dispatch({
-        type: "added_error",
-        error: error.response?.data?.message || "Error logging up",
-      });
-    }
+
+    useAuthStore.setState({ isLoading: true });
+
+    await login(formData.email, formData.password);
   };
+
   return (
     <>
       <div className="bg-grey-900 h-16 block lg:hidden rounded-b-xl relative">
@@ -122,7 +90,7 @@ const Login = () => {
           </div>
         </div>
         <div className="m-auto w-[560px] p-8 bg-white rounded-xl max-sm:m-5">
-          <Header title="Login"></Header>
+          <Header title='Login'></Header>
           <form onSubmit={handleLogin} noValidate>
             <div className="w-full mt-8">
               <label className="preset-5-bold text-grey-500" htmlFor="email">
@@ -136,8 +104,8 @@ const Login = () => {
                 onChange={handleChange}
               />
               <div className="h-4">
-                {formErrors && (
-                  <p className="text-red-500 preset-4-bold">{formErrors.email}</p>
+                {emailError && (
+                  <p className="text-red-500 preset-4-bold">{emailError}</p>
                 )}
               </div>
             </div>
@@ -166,12 +134,10 @@ const Login = () => {
                 </button>
               </div>
               <div className="h-4">
-                {formErrors && (
-                  <p className="text-red-500 preset-4-bold">
-                    {formErrors.password}
-                  </p>
+                {passwordError && (
+                  <p className="text-red-500 preset-4-bold">{passwordError}</p>
                 )}
-                {/* {error && <p className="text-red-500 preset-4-bold">{error}</p>} */}
+                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
             <Link
@@ -180,13 +146,8 @@ const Login = () => {
             >
               Forgot password?
             </Link>
-            <ButtonPrimary
-              className="w-full"
-              type="submit"
-              // disabled={isLoading}
-            >
-              {/* {isLoading ? "Loading..." : "Login"} */}
-              Login
+            <ButtonPrimary className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? "Loading..." : "Login"}
             </ButtonPrimary>
           </form>
           <p className="preset-4 text-grey-500 text-center">
