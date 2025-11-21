@@ -45,11 +45,6 @@ export default function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const checkAuth = async () => {
-      dispatch({
-        type: "checked_auth",
-        isCheckingAuth: true,
-        isAuthenticated: false,
-      });
       try {
         const response = await axios.get(`${API_URL}/check-auth`);
         dispatch({
@@ -61,6 +56,7 @@ export default function App() {
       } catch (error) {
         dispatch({
           type: "checked_auth",
+          user: null,
           isCheckingAuth: false,
           isAuthenticated: false,
         });

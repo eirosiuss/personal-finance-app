@@ -6,18 +6,12 @@ import LogoLogin from "../../../src/assets/images/login-and-signup-illustration-
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import { Icon } from "@iconify/react";
 import Header from "../shared/Header.jsx";
-import { useDispatch } from "../../context/AuthContext.jsx";
-
-import axios from "axios";
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? `${import.meta.env.VITE_BACKEND_URL}/api/auth`
-    : "/api/auth";
-axios.defaults.withCredentials = true;
+import { useDispatch, useAuthStore } from "../../context/AuthContext.jsx";
 
 const Login = () => {
   const dispatch = useDispatch();
-  
+  const { login } = useAuthStore();
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -74,21 +68,7 @@ const Login = () => {
       });
       return;
     }
-    dispatch({
-      type: "added_loading",
-    });
-    try {
-      const response = await axios.post(`${API_URL}/login`, formData);
-      dispatch({
-        type: "logged_in",
-        user: response.data.user,
-      });
-    } catch (error) {
-      dispatch({
-        type: "added_error",
-        error: error.response?.data?.message || "Error logging up",
-      });
-    }
+    login(formData);
   };
   return (
     <>
@@ -137,7 +117,9 @@ const Login = () => {
               />
               <div className="h-4">
                 {formErrors && (
-                  <p className="text-red-500 preset-4-bold">{formErrors.email}</p>
+                  <p className="text-red-500 preset-4-bold">
+                    {formErrors.email}
+                  </p>
                 )}
               </div>
             </div>
