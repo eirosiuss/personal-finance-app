@@ -10,60 +10,37 @@ import Pots from "./components/pots/Pots.jsx";
 import LoadingSpinner from "./components/shared/LoadingSpinner.jsx";
 import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 import ResetPassword from "./components/auth/ResetPassword.jsx";
-import { useAuthStore, useDispatch } from "./context/AuthContext.jsx";
+import { useAuthStore } from "./context/AuthContext.jsx";
 import { useEffect } from "react";
 
-import axios from "axios";
-const API_URL =
-  import.meta.env.MODE === "development"
-    ? `${import.meta.env.VITE_BACKEND_URL}/api/auth`
-    : "/api/auth";
-axios.defaults.withCredentials = true;
-
 const ProtectedRoute = ({ children }) => {
-  const authStore = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
-  if (!authStore.isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!authStore.user.isVerified) {
+  if (!user?.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
   return children;
 };
 
 const RedirectAuthenticatedUser = ({ children }) => {
-  const authStore = useAuthStore();
-  if (authStore.isAuthenticated && authStore.user.isVerified) {
+  const { isAuthenticated, user } = useAuthStore();
+  if (isAuthenticated && user?.isVerified) {
     return <Navigate to="/home-page" replace />;
   }
   return children;
 };
 
 export default function App() {
-  const dispatch = useDispatch();
+  const { checkAuth, isLoading } = useAuthStore();
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/check-auth`);
-        dispatch({
-          type: "checked_auth",
-          user: response.data.user,
-          isCheckingAuth: false,
-          isAuthenticated: true,
-        });
-      } catch (error) {
-        dispatch({
-          type: "checked_auth",
-          user: null,
-          isCheckingAuth: false,
-          isAuthenticated: false,
-        });
-      }
-    };
     checkAuth();
   }, []);
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Routes>
@@ -83,7 +60,14 @@ export default function App() {
           </RedirectAuthenticatedUser>
         }
       />
-      <Route path="/verify-email" element={<EmailVerification />} />
+      <Route
+        path="/verify-email"
+        element={
+          <RedirectAuthenticatedUser>
+            <EmailVerification />
+          </RedirectAuthenticatedUser>
+        }
+      />
       <Route
         path="/forgot-password"
         element={

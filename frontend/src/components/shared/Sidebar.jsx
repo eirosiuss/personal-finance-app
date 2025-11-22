@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore.js";
+import { useAuthStore } from "../../context/AuthContext.jsx";
 import { Icon } from "@iconify/react";
 import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import LogoFinanceSmall from "../../../src/assets/images/logo-small.svg";
 
 const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
   const { logout } = useAuthStore();
-  const hangleLogout = () => {
+  const handleLogout = () => {
     logout();
   };
 
@@ -94,7 +94,7 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
           </li> */}
             <li
               className="cursor-pointer px-5 md:w-[104px] md:flex md:flex-col md:items-center md:py-0 md:px-10 lg:flex-row lg:gap-4 lg:w-full group lg:py-4 lg:px-0 lg:justify-start"
-              onClick={hangleLogout}
+              onClick={handleLogout}
             >
               <button className="text-grey-300 group-hover:text-grey-100">
                 <Icon
@@ -114,8 +114,6 @@ const Sidebar = ({ sidebarMinimized, setSidebarMinimized }) => {
             </li>
           </ul>
         </div>
-
-        {/* task add spin on click */}
         <div
           onClick={() => setSidebarMinimized(!sidebarMinimized)}
           className={`${

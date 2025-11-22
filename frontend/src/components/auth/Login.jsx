@@ -7,17 +7,16 @@ import LogoFinance from "../../../src/assets/images/logo-large.svg";
 import { Icon } from "@iconify/react";
 import Header from "../shared/Header.jsx";
 import { useDispatch, useAuthStore } from "../../context/AuthContext.jsx";
+import LoadingSpinner from "../shared/LoadingSpinner.jsx";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { login } = useAuthStore();
-
+  const { login, error, isLoading } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [formErrors, setFormErrors] = useState({
     email: null,
     password: null,
@@ -70,6 +69,9 @@ const Login = () => {
     }
     login(formData);
   };
+
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <>
       <div className="bg-grey-900 h-16 block lg:hidden rounded-b-xl relative">
@@ -153,7 +155,7 @@ const Login = () => {
                     {formErrors.password}
                   </p>
                 )}
-                {/* {error && <p className="text-red-500 preset-4-bold">{error}</p>} */}
+                {error && <p className="text-red-500 preset-4-bold">{error}</p>}
               </div>
             </div>
             <Link
@@ -162,12 +164,7 @@ const Login = () => {
             >
               Forgot password?
             </Link>
-            <ButtonPrimary
-              className="w-full"
-              type="submit"
-              // disabled={isLoading}
-            >
-              {/* {isLoading ? "Loading..." : "Login"} */}
+            <ButtonPrimary className="w-full" type="submit">
               Login
             </ButtonPrimary>
           </form>
