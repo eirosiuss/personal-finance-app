@@ -5,12 +5,15 @@ import Login from "../../../src/components/auth/Login.jsx";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import SignUp from "../../../src/components/auth/SignUp.jsx";
 import ForgotPassword from "../../../src/components/auth/ForgotPassword.jsx";
+import { AuthProvider } from "../../../src/context/AuthContext.jsx";
 
 const MockLogin = () => {
   return (
-    <MemoryRouter>
-      <Login />
-    </MemoryRouter>
+    <AuthProvider>
+      <MemoryRouter>
+        <Login />
+      </MemoryRouter>
+    </AuthProvider>
   );
 };
 
@@ -28,12 +31,14 @@ describe("Login component", () => {
   it("should render ForgotPassword component after pressing forgot-password link", async () => {
     const user = userEvent.setup();
     render(
-      <MemoryRouter initialEntries={["/login"]}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-        </Routes>
-      </MemoryRouter>
+      <AuthProvider>
+        <MemoryRouter initialEntries={["/login"]}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+          </Routes>
+        </MemoryRouter>
+      </AuthProvider>
     );
     const forgotPasswordLink = screen.getByRole("link", { name: /forgot/i });
     await user.click(forgotPasswordLink);
@@ -50,12 +55,14 @@ describe("Login component", () => {
   it("should render Signup component after pressing signup link", async () => {
     const user = userEvent.setup();
     render(
-      <MemoryRouter initialEntries={["/login"]}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Routes>
-      </MemoryRouter>
+      <AuthProvider>
+        <MemoryRouter initialEntries={["/login"]}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </MemoryRouter>
+      </AuthProvider>
     );
     const signUpLink = screen.getByRole("link", { name: /sign/i });
     await user.click(signUpLink);
@@ -68,7 +75,6 @@ describe("Login component", () => {
       name: /email/i,
     });
     const passwordInput = screen.getByLabelText(/password/i);
-
     await userEvent.type(emailInput, "a");
     await userEvent.type(passwordInput, "a");
     expect(emailInput.value).toBe("a");
